@@ -25,10 +25,10 @@ export default function Home() {
       
       <Header />
       
-      <main className="relative pt-28 pb-24 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
-        <div className="w-full mx-auto space-y-8">
+      <main className="relative pt-24 pb-24 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+        <div className="w-full mx-auto space-y-8" style={{ paddingTop: '80px' }}>
           {/* Stats Cards - Top Section */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 mt-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
             <div className="fade-in-up" style={{ animationDelay: "0.1s" }}>
               <TokenBalance />
             </div>
