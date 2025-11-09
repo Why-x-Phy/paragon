@@ -17,15 +17,27 @@ export async function POST(request: NextRequest) {
     // Prüfe auch NEXT_PUBLIC_ Variante für Fallback
     const secretKey = process.env.THIRDWEB_SECRET_KEY || process.env.NEXT_PUBLIC_THIRDWEB_SECRET_KEY;
     
+    // Debug: Log alle verfügbaren Env-Variablen (ohne Werte)
+    console.log("Environment Variables Check:", {
+      hasTHIRDWEB_SECRET_KEY: !!process.env.THIRDWEB_SECRET_KEY,
+      hasNEXT_PUBLIC_THIRDWEB_SECRET_KEY: !!process.env.NEXT_PUBLIC_THIRDWEB_SECRET_KEY,
+      secretKeyLength: secretKey?.length || 0,
+    });
+    
     if (!secretKey) {
-      console.error("THIRDWEB_SECRET_KEY nicht gefunden in:", {
-        THIRDWEB_SECRET_KEY: !!process.env.THIRDWEB_SECRET_KEY,
-        NEXT_PUBLIC_THIRDWEB_SECRET_KEY: !!process.env.NEXT_PUBLIC_THIRDWEB_SECRET_KEY,
-      });
+      // Versuche auch direkt aus .env.local zu lesen (falls Next.js es nicht lädt)
+      const allEnvKeys = Object.keys(process.env).filter(key => key.includes('THIRDWEB'));
+      console.error("THIRDWEB_SECRET_KEY nicht gefunden. Verfügbare Env-Vars:", allEnvKeys);
+      
       return NextResponse.json(
         { 
-          error: "Thirdweb Secret Key nicht konfiguriert. Bitte füge THIRDWEB_SECRET_KEY in .env.local hinzu.",
-          hint: "Der Secret Key sollte in .env.local als THIRDWEB_SECRET_KEY=... gesetzt werden."
+          error: "Thirdweb Secret Key nicht konfiguriert.",
+          hint: "Bitte füge THIRDWEB_SECRET_KEY=0EU34F-xx0uQJgJ7qmkrWH4uHonpSJ1_oBgtM44H8wEYgRhZJkbl6PNjhoORDGYXKy43ExExiqF65-xiHIcAag in .env.local hinzu und starte den Server neu.",
+          debug: {
+            hasTHIRDWEB_SECRET_KEY: !!process.env.THIRDWEB_SECRET_KEY,
+            hasNEXT_PUBLIC_THIRDWEB_SECRET_KEY: !!process.env.NEXT_PUBLIC_THIRDWEB_SECRET_KEY,
+            availableKeys: allEnvKeys,
+          }
         },
         { status: 500 }
       );
