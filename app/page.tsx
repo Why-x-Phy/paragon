@@ -27,20 +27,8 @@ export default function Home() {
       
       <main className="relative pt-32 pb-32 px-6 sm:px-8 lg:px-12 xl:px-16 2xl:px-24">
         <div className="w-full max-w-[1800px] mx-auto">
-          {/* Hero Section */}
-          <div className="text-center mb-32 mt-20 fade-in-up">
-            <div className="inline-block mb-10">
-              <h1 className="text-7xl sm:text-8xl md:text-9xl lg:text-[10rem] font-black text-white tracking-tight leading-none mb-6">
-                ⚡ Paragon AI
-              </h1>
-            </div>
-            <p className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-gray-300 font-light tracking-wide">
-              The On-Chain AI Chart Analyst
-            </p>
-          </div>
-
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20 mt-20">
             <div className="fade-in-up" style={{ animationDelay: "0.1s" }}>
               <TokenBalance />
             </div>
