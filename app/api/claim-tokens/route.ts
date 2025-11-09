@@ -62,12 +62,12 @@ export async function POST(request: NextRequest) {
               quantity, // _quantity
               "0x0000000000000000000000000000000000000000", // _currency (ETH/Base native)
               "0", // _pricePerToken (Claim Conditions bestimmen den Preis)
-              {
-                proof: [],
-                quantityLimitPerWallet: "0",
-                pricePerToken: "0",
-                currency: "0x0000000000000000000000000000000000000000",
-              }, // _allowlistProof
+              [
+                [], // proof: bytes32[] (empty array)
+                "0", // quantityLimitPerWallet: uint256
+                "0", // pricePerToken: uint256
+                "0x0000000000000000000000000000000000000000", // currency: address
+              ], // _allowlistProof as array
               "0x", // _data (empty bytes)
             ],
             value: "0", // ETH value (Claim Conditions bestimmen den Preis)
@@ -81,9 +81,29 @@ export async function POST(request: NextRequest) {
     const data = await response.json();
 
     if (!response.ok) {
-      console.error("Thirdweb API Error:", data);
+      console.error("Thirdweb API Error:", JSON.stringify(data, null, 2));
+      console.error("Request Body:", JSON.stringify({
+        calls: [{
+          contractAddress,
+          method: "function claim(...)",
+          params: [
+            walletAddress,
+            quantity,
+            "0x0000000000000000000000000000000000000000",
+            "0",
+            [[], "0", "0", "0x0000000000000000000000000000000000000000"],
+            "0x",
+          ],
+        }],
+        chainId,
+        from: walletAddress,
+      }, null, 2));
+      
       return NextResponse.json(
-        { error: data.error || "Fehler bei der Thirdweb API" },
+        { 
+          error: data.error?.message || data.error || "Fehler bei der Thirdweb API",
+          details: data.error?.details || data,
+        },
         { status: response.status }
       );
     }
