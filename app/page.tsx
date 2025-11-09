@@ -58,32 +58,32 @@ export default function Home() {
           </div>
 
           {/* Features Section */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-            <div className="glass rounded-xl p-8 border border-white/10 hover:border-white/20 transition-colors">
-              <div className="w-14 h-14 rounded-xl bg-white/10 flex items-center justify-center mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
+            <div className="glass rounded-xl p-10 border border-white/10 hover:border-white/20 transition-colors">
+              <div className="w-16 h-16 rounded-xl bg-white/10 flex items-center justify-center mb-6">
                 <span className="text-3xl">🔗</span>
               </div>
-              <h3 className="text-xl font-semibold text-white mb-3">Wallet-Login</h3>
+              <h3 className="text-xl font-semibold text-white mb-4">Wallet-Login</h3>
               <p className="text-sm text-gray-400 leading-relaxed">
                 Verbinde deine Wallet (Metamask, Rabby, Phantom) direkt über Thirdweb
               </p>
             </div>
 
-            <div className="glass rounded-xl p-8 border border-white/10 hover:border-white/20 transition-colors">
-              <div className="w-14 h-14 rounded-xl bg-white/10 flex items-center justify-center mb-6">
+            <div className="glass rounded-xl p-10 border border-white/10 hover:border-white/20 transition-colors">
+              <div className="w-16 h-16 rounded-xl bg-white/10 flex items-center justify-center mb-6">
                 <span className="text-3xl">💰</span>
               </div>
-              <h3 className="text-xl font-semibold text-white mb-3">Token-Bezahlung</h3>
+              <h3 className="text-xl font-semibold text-white mb-4">Token-Bezahlung</h3>
               <p className="text-sm text-gray-400 leading-relaxed">
                 Credits werden mit dem Paragon-Token (PARA) auf Base bezahlt
               </p>
             </div>
 
-            <div className="glass rounded-xl p-8 border border-white/10 hover:border-white/20 transition-colors">
-              <div className="w-14 h-14 rounded-xl bg-white/10 flex items-center justify-center mb-6">
+            <div className="glass rounded-xl p-10 border border-white/10 hover:border-white/20 transition-colors">
+              <div className="w-16 h-16 rounded-xl bg-white/10 flex items-center justify-center mb-6">
                 <span className="text-3xl">🧠</span>
               </div>
-              <h3 className="text-xl font-semibold text-white mb-3">AI Chart-Analyzer</h3>
+              <h3 className="text-xl font-semibold text-white mb-4">AI Chart-Analyzer</h3>
               <p className="text-sm text-gray-400 leading-relaxed">
                 KI-gestützte Analysen mit RSI, MACD, EMA und mehr
               </p>
@@ -91,7 +91,7 @@ export default function Home() {
           </div>
 
           {/* Disclaimer */}
-          <div className="glass rounded-xl p-6 border border-yellow-500/20 bg-yellow-500/5">
+          <div className="glass rounded-xl p-8 border border-yellow-500/20 bg-yellow-500/5">
             <div className="flex items-start gap-3">
               <span className="text-2xl">⚠️</span>
               <div>
