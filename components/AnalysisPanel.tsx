@@ -89,7 +89,7 @@ export default function AnalysisPanel({ credits, onAnalyze }: { credits: number;
   };
 
   return (
-    <div className="glass rounded-3xl p-8 border border-white/10 hover:border-white/20 transition-all h-full flex flex-col">
+    <div className="glass rounded-3xl p-8 border border-white/10 hover:border-white/20 transition-all h-full flex flex-col min-h-[700px]">
       <div className="mb-6">
         <div className="flex items-start justify-between mb-4">
           <div>

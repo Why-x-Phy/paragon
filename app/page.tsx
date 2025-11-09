@@ -38,14 +38,14 @@ export default function Home() {
           </div>
 
           {/* Main Content Grid - Chart and Analysis Side by Side */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch" style={{ minHeight: 'calc(100vh - 400px)' }}>
             {/* Chart Panel - Takes 8 columns */}
-            <div className="lg:col-span-8 fade-in-up" style={{ animationDelay: "0.3s" }}>
+            <div className="lg:col-span-8 fade-in-up h-full" style={{ animationDelay: "0.3s" }}>
               <ChartPanel />
             </div>
 
             {/* Analysis Panel - Takes 4 columns */}
-            <div className="lg:col-span-4 fade-in-up" style={{ animationDelay: "0.4s" }}>
+            <div className="lg:col-span-4 fade-in-up h-full" style={{ animationDelay: "0.4s" }}>
               <AnalysisPanel credits={credits} onAnalyze={handleAnalyze} />
             </div>
           </div>
