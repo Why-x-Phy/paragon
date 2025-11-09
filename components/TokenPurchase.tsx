@@ -25,7 +25,7 @@ export default function TokenPurchase() {
 
   if (!account) {
     return (
-      <div className="glass rounded-xl p-6 border border-white/10">
+      <div className="glass rounded-xl p-8 border border-white/10">
         <div className="text-center py-4">
           <p className="text-sm text-gray-400 mb-2">Bitte verbinde deine Wallet</p>
           <p className="text-xs text-gray-500">um Token-Pakete zu kaufen</p>
@@ -35,7 +35,7 @@ export default function TokenPurchase() {
   }
 
   return (
-    <div className="glass rounded-xl p-6 border border-white/10">
+    <div className="glass rounded-xl p-8 border border-white/10">
       <div className="mb-6">
         <h3 className="text-lg font-semibold text-white mb-1">Token kaufen</h3>
         <p className="text-sm text-gray-400">Wähle ein Paket und zahle mit Thirdweb Pay</p>
@@ -47,14 +47,14 @@ export default function TokenPurchase() {
             key={index}
             className={`relative rounded-lg p-5 border transition-all cursor-pointer ${
               selectedPackage === index
-                ? "border-indigo-500 bg-indigo-500/10 glow"
+                ? "border-white/30 bg-white/10"
                 : "border-white/10 bg-gray-900/50 hover:border-white/20"
-            } ${pkg.popular ? "ring-2 ring-purple-500/50" : ""}`}
+            } ${pkg.popular ? "ring-2 ring-white/20" : ""}`}
             onClick={() => setSelectedPackage(index)}
           >
             {pkg.popular && (
               <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                <span className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-xs font-semibold px-3 py-1 rounded-full">
+                <span className="bg-white/10 text-white text-xs font-semibold px-3 py-1 rounded-full border border-white/20">
                   Beliebt
                 </span>
               </div>
@@ -74,7 +74,7 @@ export default function TokenPurchase() {
               }}
               className={`w-full py-2.5 rounded-lg font-semibold transition-all ${
                 selectedPackage === index
-                  ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white glow-hover"
+                  ? "bg-white/10 text-white border border-white/20 hover:bg-white/20"
                   : "bg-gray-800 text-gray-300 hover:bg-gray-700"
               }`}
             >

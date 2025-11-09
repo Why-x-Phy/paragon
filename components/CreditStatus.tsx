@@ -33,9 +33,9 @@ export default function CreditStatus({ credits }: CreditStatusProps) {
   };
 
   return (
-    <div className="glass rounded-xl p-6 border border-white/10">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-sm font-medium text-gray-400">Credits</h3>
+    <div className="glass rounded-xl p-8 border border-white/10">
+      <div className="flex items-center justify-between mb-6">
+        <h3 className="text-base font-medium text-gray-400">Credits</h3>
         <span className={`text-xs font-semibold ${getStatusColor()}`}>
           {getStatusText()}
         </span>

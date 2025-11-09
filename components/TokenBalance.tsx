@@ -35,7 +35,7 @@ export default function TokenBalance() {
 
   if (!account) {
     return (
-      <div className="glass rounded-xl p-6 border border-white/10">
+      <div className="glass rounded-xl p-8 border border-white/10">
         <div className="text-center py-4">
           <p className="text-sm text-gray-400 mb-2">Bitte verbinde deine Wallet</p>
           <p className="text-xs text-gray-500">um deine Token-Balance zu sehen</p>
@@ -48,7 +48,7 @@ export default function TokenBalance() {
     <div className="glass rounded-xl p-6 border border-white/10">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-sm font-medium text-gray-400">Token Balance</h3>
-        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+        <div className="w-8 h-8 rounded-full bg-white/10 border border-white/20 flex items-center justify-center">
           <span className="text-xs font-bold text-white">PARA</span>
         </div>
       </div>

@@ -3,11 +3,11 @@
 :root {
   --background: #0a0a0a;
   --foreground: #ededed;
-  --primary: #6366f1;
-  --primary-dark: #4f46e5;
-  --accent: #8b5cf6;
-  --gradient-start: #6366f1;
-  --gradient-end: #8b5cf6;
+  --primary: #ffffff;
+  --primary-dark: #e5e5e5;
+  --accent: #3b82f6;
+  --gradient-start: #ffffff;
+  --gradient-end: #a3a3a3;
 }
 
 @theme inline {
@@ -52,7 +52,7 @@ body {
 
 /* Gradient Text */
 .gradient-text {
-  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+  background: linear-gradient(135deg, #ffffff, #a3a3a3);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -67,10 +67,10 @@ body {
 
 /* Glow Effect */
 .glow {
-  box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
 }
 
 .glow-hover:hover {
-  box-shadow: 0 0 30px rgba(99, 102, 241, 0.5);
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.15);
   transition: box-shadow 0.3s ease;
 }

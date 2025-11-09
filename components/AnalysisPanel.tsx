@@ -89,7 +89,7 @@ export default function AnalysisPanel({ credits, onAnalyze }: { credits: number;
   };
 
   return (
-    <div className="glass rounded-xl p-6 border border-white/10">
+    <div className="glass rounded-xl p-8 border border-white/10">
       <div className="flex items-center justify-between mb-6">
         <div>
           <h3 className="text-lg font-semibold text-white mb-1">KI-Analyse</h3>
@@ -109,7 +109,7 @@ export default function AnalysisPanel({ credits, onAnalyze }: { credits: number;
             className={`w-full py-4 rounded-lg font-semibold text-white transition-all ${
               !account || credits < 1 || isAnalyzing
                 ? "bg-gray-700 cursor-not-allowed"
-                : "bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 glow-hover"
+                : "bg-white/10 hover:bg-white/20 border border-white/20"
             }`}
           >
             {isAnalyzing ? (
@@ -175,7 +175,7 @@ export default function AnalysisPanel({ credits, onAnalyze }: { credits: number;
               handleAnalyze();
             }}
             disabled={!account || credits < 1 || isAnalyzing}
-            className="w-full py-3 rounded-lg font-semibold text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 transition-all glow-hover"
+            className="w-full py-3 rounded-lg font-semibold text-white bg-white/10 hover:bg-white/20 border border-white/20 transition-all"
           >
             Neue Analyse starten
           </button>
