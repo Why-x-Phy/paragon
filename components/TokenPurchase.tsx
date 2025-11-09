@@ -38,8 +38,13 @@ export default function TokenPurchase() {
         const response = await fetch("/api/claim-conditions");
         const data = await response.json();
         
+        console.log("Claim Conditions Response:", data);
+        
         if (data.success && data.claimCondition) {
+          console.log("Claim Condition loaded:", data.claimCondition);
           setClaimCondition(data.claimCondition);
+        } else {
+          console.error("Claim Conditions nicht erfolgreich:", data);
         }
       } catch (error) {
         console.error("Fehler beim Laden der Claim Conditions:", error);
@@ -98,27 +103,46 @@ export default function TokenPurchase() {
         console.log("Total price for", pkg.tokens, "tokens (ETH):", (pricePerToken * pkg.tokens).toFixed(6));
       }
       
-      // Bereite die claim Transaction vor
-      // claimTo berechnet den Preis automatisch basierend auf Claim Conditions
-      // Die quantity sollte die Anzahl der Tokens in wei sein
-      const transaction = await claimTo({
+      // Berechne den korrekten ETH-Wert basierend auf Claim Conditions
+      if (!claimConditionData.success || !claimConditionData.claimCondition) {
+        throw new Error("Konnte Claim Conditions nicht laden");
+      }
+      
+      const pricePerToken = parseFloat(claimConditionData.claimCondition.pricePerToken);
+      const totalPriceWei = BigInt(Math.floor(pricePerToken * pkg.tokens * 1e18));
+      
+      console.log("Price per token (ETH):", pricePerToken);
+      console.log("Total price (wei):", totalPriceWei.toString());
+      console.log("Total price (ETH):", (Number(totalPriceWei) / 1e18).toFixed(6));
+      
+      // Prüfe ob der Preis zu hoch ist
+      const totalPriceEth = Number(totalPriceWei) / 1e18;
+      if (totalPriceEth > 1000) {
+        throw new Error(`Der berechnete Preis ist extrem hoch: ${totalPriceEth.toFixed(2)} ETH. Bitte prüfe die Claim Conditions im Contract.`);
+      }
+      
+      // Bereite die claim Transaction vor mit prepareContractCall
+      // Verwende die claim Funktion direkt mit den korrekten Parametern
+      const transaction = prepareContractCall({
         contract,
-        to: account.address,
-        quantity: tokenAmountWei.toString(),
+        method: "function claim(address _receiver, uint256 _quantity, address _currency, uint256 _pricePerToken, (bytes32[] proof, uint256 quantityLimitPerWallet, uint256 pricePerToken, address currency) _allowlistProof, bytes _data) payable",
+        params: [
+          account.address, // _receiver
+          tokenAmountWei, // _quantity (in wei, als BigInt)
+          "0x0000000000000000000000000000000000000000", // _currency (ETH/Base native)
+          BigInt(0), // _pricePerToken (Claim Conditions bestimmen den Preis)
+          {
+            proof: [], // proof: bytes32[] (empty array)
+            quantityLimitPerWallet: BigInt(0), // quantityLimitPerWallet: uint256
+            pricePerToken: BigInt(0), // pricePerToken: uint256
+            currency: "0x0000000000000000000000000000000000000000", // currency: address
+          }, // _allowlistProof as object
+          "0x", // _data (empty bytes)
+        ],
+        value: totalPriceWei, // ETH-Wert in wei (als BigInt)
       });
       
       console.log("Transaction prepared:", transaction);
-      
-      // Prüfe den value der Transaction
-      if (transaction.value) {
-        const transactionValueEth = Number(transaction.value) / 1e18;
-        console.log("Transaction value (ETH):", transactionValueEth.toFixed(6));
-        
-        if (transactionValueEth > 1000) {
-          console.error("WARNUNG: Transaction value ist extrem hoch!", transactionValueEth);
-          alert(`WARNUNG: Der berechnete Preis ist extrem hoch: ${transactionValueEth.toFixed(2)} ETH\n\nBitte prüfe die Claim Conditions im Contract.`);
-        }
-      }
 
       // Sende die Transaction - MetaMask wird jetzt eine Signing-Anfrage zeigen
       sendTransaction(transaction, {
