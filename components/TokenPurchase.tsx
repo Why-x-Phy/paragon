@@ -120,17 +120,17 @@ export default function TokenPurchase() {
   }
 
   return (
-    <div className="glass rounded-2xl p-10 border border-white/10">
-      <div className="mb-10">
-        <h3 className="text-2xl font-bold text-white mb-3 tracking-tight">Token kaufen</h3>
-        <p className="text-base text-gray-400 font-medium">Wähle ein Paket und zahle mit Thirdweb Pay</p>
+    <div className="glass rounded-3xl p-8 border border-white/10 hover:border-white/20 transition-all">
+      <div className="mb-8">
+        <h3 className="text-xl font-bold text-white mb-2 tracking-tight">Token kaufen</h3>
+        <p className="text-sm text-gray-400 font-medium">Wähle ein Paket und zahle mit Thirdweb Pay</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {PACKAGES.map((pkg, index) => (
           <div
             key={index}
-            className={`relative premium-card rounded-3xl p-10 border transition-all cursor-pointer ${
+            className={`relative premium-card rounded-3xl p-8 border transition-all cursor-pointer ${
               selectedPackage === index
                 ? "border-white/40 bg-white/15 shadow-2xl scale-[1.02]"
                 : "border-white/10 bg-gray-900/30 hover:border-white/25 hover:bg-white/5"

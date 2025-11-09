@@ -17,27 +17,30 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-black">
-      <div className="fixed inset-0 bg-gradient-to-br from-gray-950 via-black to-gray-950 opacity-50" />
-      <div className="fixed inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.03),transparent_50%)]" />
+    <div className="min-h-screen bg-black relative overflow-hidden">
+      {/* Premium Background Effects */}
+      <div className="fixed inset-0 bg-gradient-to-br from-gray-950 via-black to-gray-950" />
+      <div className="fixed inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.05),transparent_50%)]" />
+      <div className="fixed inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(255,255,255,0.03),transparent_50%)]" />
+      
       <Header />
       
-      <main className="relative pt-24 pb-20 px-6 sm:px-8 lg:px-12 xl:px-16 2xl:px-20">
-        <div className="w-full">
+      <main className="relative pt-28 pb-24 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+        <div className="w-full max-w-[1920px] mx-auto">
           {/* Hero Section */}
-          <div className="text-center mb-32 mt-24 fade-in-up">
-            <div className="inline-block mb-12">
-              <h1 className="text-7xl md:text-8xl lg:text-9xl font-black text-white tracking-tight leading-none mb-6">
+          <div className="text-center mb-20 mt-16 fade-in-up">
+            <div className="inline-block mb-8">
+              <h1 className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black text-white tracking-tight leading-none mb-4">
                 ⚡ Paragon AI
               </h1>
             </div>
-            <p className="text-2xl md:text-3xl lg:text-4xl text-gray-300 mb-6 font-light tracking-wide">
+            <p className="text-xl sm:text-2xl md:text-3xl lg:text-4xl text-gray-300 font-light tracking-wide">
               The On-Chain AI Chart Analyst
             </p>
           </div>
 
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
             <div className="fade-in-up" style={{ animationDelay: "0.1s" }}>
               <TokenBalance />
             </div>
@@ -47,7 +50,7 @@ export default function Home() {
           </div>
 
           {/* Main Content Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-24">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-12">
             {/* Chart Panel - Takes 8 columns */}
             <div className="lg:col-span-8 fade-in-up" style={{ animationDelay: "0.3s" }}>
               <ChartPanel />
@@ -60,49 +63,49 @@ export default function Home() {
           </div>
 
           {/* Token Purchase Section */}
-          <div className="mb-24 fade-in-up" style={{ animationDelay: "0.5s" }}>
+          <div className="mb-12 fade-in-up" style={{ animationDelay: "0.5s" }}>
             <TokenPurchase />
           </div>
 
           {/* Features Section */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-24">
-            <div className="premium-card rounded-2xl p-12 fade-in-up" style={{ animationDelay: "0.6s" }}>
-              <div className="w-20 h-20 rounded-2xl bg-white/10 flex items-center justify-center mb-8 glow">
-                <span className="text-4xl">🔗</span>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <div className="premium-card rounded-3xl p-10 fade-in-up" style={{ animationDelay: "0.6s" }}>
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-white/15 to-white/5 flex items-center justify-center mb-6 glow border border-white/10">
+                <span className="text-3xl">🔗</span>
               </div>
-              <h3 className="text-2xl font-bold text-white mb-5">Wallet-Login</h3>
-              <p className="text-base text-gray-400 leading-relaxed">
+              <h3 className="text-xl font-bold text-white mb-4">Wallet-Login</h3>
+              <p className="text-sm text-gray-400 leading-relaxed">
                 Verbinde deine Wallet (Metamask, Rabby, Phantom) direkt über Thirdweb
               </p>
             </div>
 
-            <div className="premium-card rounded-2xl p-12 fade-in-up" style={{ animationDelay: "0.7s" }}>
-              <div className="w-20 h-20 rounded-2xl bg-white/10 flex items-center justify-center mb-8 glow">
-                <span className="text-4xl">💰</span>
+            <div className="premium-card rounded-3xl p-10 fade-in-up" style={{ animationDelay: "0.7s" }}>
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-white/15 to-white/5 flex items-center justify-center mb-6 glow border border-white/10">
+                <span className="text-3xl">💰</span>
               </div>
-              <h3 className="text-2xl font-bold text-white mb-5">Token-Bezahlung</h3>
-              <p className="text-base text-gray-400 leading-relaxed">
+              <h3 className="text-xl font-bold text-white mb-4">Token-Bezahlung</h3>
+              <p className="text-sm text-gray-400 leading-relaxed">
                 Credits werden mit dem Paragon-Token (PARA) auf Base bezahlt
               </p>
             </div>
 
-            <div className="premium-card rounded-2xl p-12 fade-in-up" style={{ animationDelay: "0.8s" }}>
-              <div className="w-20 h-20 rounded-2xl bg-white/10 flex items-center justify-center mb-8 glow">
-                <span className="text-4xl">🧠</span>
+            <div className="premium-card rounded-3xl p-10 fade-in-up" style={{ animationDelay: "0.8s" }}>
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-white/15 to-white/5 flex items-center justify-center mb-6 glow border border-white/10">
+                <span className="text-3xl">🧠</span>
               </div>
-              <h3 className="text-2xl font-bold text-white mb-5">AI Chart-Analyzer</h3>
-              <p className="text-base text-gray-400 leading-relaxed">
+              <h3 className="text-xl font-bold text-white mb-4">AI Chart-Analyzer</h3>
+              <p className="text-sm text-gray-400 leading-relaxed">
                 KI-gestützte Analysen mit RSI, MACD, EMA und mehr
               </p>
             </div>
           </div>
 
           {/* Disclaimer */}
-          <div className="glass rounded-xl p-8 border border-yellow-500/20 bg-yellow-500/5">
-            <div className="flex items-start gap-3">
-              <span className="text-2xl">⚠️</span>
+          <div className="glass rounded-2xl p-6 border border-yellow-500/20 bg-yellow-500/5">
+            <div className="flex items-start gap-4">
+              <span className="text-xl">⚠️</span>
               <div>
-                <h4 className="text-sm font-semibold text-yellow-400 mb-1">Disclaimer</h4>
+                <h4 className="text-sm font-semibold text-yellow-400 mb-2">Disclaimer</h4>
                 <p className="text-xs text-gray-400 leading-relaxed">
                   Paragon AI bietet keine Finanz- oder Anlageberatung. Alle Analysen sind 
                   algorithmisch generierte technische Einschätzungen. Trading erfolgt auf eigenes Risiko.
