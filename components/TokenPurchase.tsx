@@ -88,9 +88,19 @@ export default function TokenPurchase() {
 
       const data = await response.json();
 
+      // Log für Debugging
+      console.log("API Response:", data);
+
       if (!response.ok) {
-        const errorMsg = data.error || data.details?.message || "Fehler beim Token-Kauf";
+        const errorMsg = data.error || data.details?.message || data.details?.error?.message || "Fehler beim Token-Kauf";
         throw new Error(errorMsg);
+      }
+
+      // Prüfe auf pending Transaction
+      if (data.pending && data.taskId) {
+        alert(`Transaction wird verarbeitet. Task ID: ${data.taskId}`);
+        // Optional: Poll für Status
+        return;
       }
 
       if (data.success && data.transactionHash) {
@@ -99,7 +109,7 @@ export default function TokenPurchase() {
         window.location.reload();
       } else {
         console.error("Unexpected response structure:", data);
-        throw new Error(data.error || "Ungültige Antwort vom Server");
+        throw new Error(data.error || data.hint || "Ungültige Antwort vom Server");
       }
       
     } catch (error: any) {
