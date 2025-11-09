@@ -32,22 +32,38 @@ export default function AnalysisPanel({ credits, onAnalyze }: { credits: number;
 
     setIsAnalyzing(true);
     
-    // TODO: API Call zum Backend
-    // Simuliere Analyse für Demo
-    setTimeout(() => {
-      setAnalysis({
-        tendency: "Bullish",
-        risk: "mittel",
-        reasoning: "Der Markt zeigt starke Aufwärtstendenz mit erhöhtem Volumen. Die RSI liegt im überkauften Bereich, was auf fortgesetzte Stärke hindeutet. MACD zeigt positive Divergenz.",
-        indicators: {
-          rsi: 68.5,
-          macd: "Positiv",
-          ema: "Über EMA 50 & 200",
+    try {
+      // API Call zum Backend
+      const response = await fetch("/api/analyze", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
+        body: JSON.stringify({
+          market: "BTC/USDT", // TODO: Aus Chart-Panel übernehmen
+          walletAddress: account.address,
+        }),
       });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Fehler bei der Analyse");
+      }
+
+      const data = await response.json();
+      
+      if (data.success && data.analysis) {
+        setAnalysis(data.analysis);
+        onAnalyze(); // Credit wird abgezogen
+      } else {
+        throw new Error("Ungültige Antwort vom Server");
+      }
+    } catch (error) {
+      console.error("Analyse-Fehler:", error);
+      alert(error instanceof Error ? error.message : "Fehler bei der Analyse. Bitte versuche es erneut.");
+    } finally {
       setIsAnalyzing(false);
-      onAnalyze();
-    }, 2000);
+    }
   };
 
   const getTendencyColor = (tendency: string) => {
