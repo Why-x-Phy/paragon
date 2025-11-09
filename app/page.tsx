@@ -54,53 +54,6 @@ export default function Home() {
           <div className="fade-in-up" style={{ animationDelay: "0.5s" }}>
             <TokenPurchase />
           </div>
-
-          {/* Features Section */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            <div className="premium-card rounded-2xl p-6 fade-in-up" style={{ animationDelay: "0.6s" }}>
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-white/15 to-white/5 flex items-center justify-center mb-4 glow border border-white/10">
-                <span className="text-xl">🔗</span>
-              </div>
-              <h3 className="text-base font-bold text-white mb-2">Wallet Login</h3>
-              <p className="text-xs text-gray-400 leading-relaxed">
-                Connect your wallet (Metamask, Rabby, Phantom) directly via Thirdweb
-              </p>
-            </div>
-
-            <div className="premium-card rounded-2xl p-6 fade-in-up" style={{ animationDelay: "0.7s" }}>
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-white/15 to-white/5 flex items-center justify-center mb-4 glow border border-white/10">
-                <span className="text-xl">💰</span>
-              </div>
-              <h3 className="text-base font-bold text-white mb-2">Token Payment</h3>
-              <p className="text-xs text-gray-400 leading-relaxed">
-                Credits are paid with the Paragon Token (PARA) on Base
-              </p>
-            </div>
-
-            <div className="premium-card rounded-2xl p-6 fade-in-up" style={{ animationDelay: "0.8s" }}>
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-white/15 to-white/5 flex items-center justify-center mb-4 glow border border-white/10">
-                <span className="text-xl">🧠</span>
-              </div>
-              <h3 className="text-base font-bold text-white mb-2">AI Chart Analyzer</h3>
-              <p className="text-xs text-gray-400 leading-relaxed">
-                AI-powered analyses with RSI, MACD, EMA and more
-              </p>
-            </div>
-          </div>
-
-          {/* Disclaimer */}
-          <div className="glass rounded-xl p-4 border border-yellow-500/20 bg-yellow-500/5">
-            <div className="flex items-start gap-3">
-              <span className="text-base">⚠️</span>
-              <div>
-                <h4 className="text-xs font-semibold text-yellow-400 mb-1">Disclaimer</h4>
-                <p className="text-xs text-gray-400 leading-relaxed">
-                  Paragon AI does not provide financial or investment advice. All analyses are 
-                  algorithmically generated technical assessments. Trading is at your own risk.
-                </p>
-              </div>
-            </div>
-          </div>
         </div>
       </main>
     </div>
