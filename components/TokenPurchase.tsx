@@ -178,17 +178,17 @@ export default function TokenPurchase() {
   }
 
   return (
-    <div className="glass rounded-3xl p-8 border border-white/10 hover:border-white/20 transition-all">
-      <div className="mb-8">
-        <h3 className="text-2xl font-bold text-white mb-3 tracking-tight">Purchase Tokens</h3>
-        <p className="text-base text-gray-400 font-medium">Choose a package and pay with Thirdweb Pay</p>
+    <div className="glass rounded-2xl p-6 border border-white/10 hover:border-white/20 transition-all">
+      <div className="mb-6">
+        <h3 className="text-xl font-bold text-white mb-2 tracking-tight">Purchase Tokens</h3>
+        <p className="text-sm text-gray-400 font-medium">Choose a package and pay with Thirdweb Pay</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         {PACKAGES.map((pkg, index) => (
           <div
             key={index}
-            className={`relative premium-card rounded-3xl p-8 border transition-all cursor-pointer ${
+            className={`relative premium-card rounded-2xl p-6 border transition-all cursor-pointer ${
               selectedPackage === index
                 ? "border-white/40 bg-white/15 shadow-2xl scale-[1.02]"
                 : "border-white/10 bg-gray-900/30 hover:border-white/25 hover:bg-white/5"
@@ -202,24 +202,24 @@ export default function TokenPurchase() {
                 </span>
               </div>
             )}
-            <div className="text-center mb-6">
-              <div className="text-4xl font-extrabold text-white mb-2 tracking-tight">
+            <div className="text-center mb-5">
+              <div className="text-3xl font-extrabold text-white mb-1.5 tracking-tight">
                 {pkg.tokens.toLocaleString()}
               </div>
-              <div className="text-sm text-gray-400 font-medium">PARA Tokens</div>
+              <div className="text-xs text-gray-400 font-medium">PARA Tokens</div>
             </div>
-            <div className="text-center mb-6">
+            <div className="text-center mb-5">
               {isLoadingPrice ? (
                 <div className="flex items-center justify-center gap-2">
                   <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  <span className="text-sm text-gray-400">Loading price...</span>
+                  <span className="text-xs text-gray-400">Loading price...</span>
                 </div>
               ) : claimCondition ? (
                 <>
-                  <div className="text-3xl font-extrabold text-white mb-2">
+                  <div className="text-2xl font-extrabold text-white mb-1.5">
                     ${(parseFloat(claimCondition.pricePerTokenUsd) * pkg.tokens).toFixed(2)}
                   </div>
-                  <div className="text-sm text-gray-400 font-medium">
+                  <div className="text-xs text-gray-400 font-medium">
                     {(parseFloat(claimCondition.pricePerToken) * pkg.tokens).toFixed(6)} ETH
                   </div>
                   <div className="text-xs text-gray-500 mt-1">
@@ -227,7 +227,7 @@ export default function TokenPurchase() {
                   </div>
                 </>
               ) : (
-                <div className="text-sm text-gray-500">Price not available</div>
+                <div className="text-xs text-gray-500">Price not available</div>
               )}
             </div>
             <button
@@ -236,7 +236,7 @@ export default function TokenPurchase() {
                 handlePurchase(pkg);
               }}
               disabled={isPurchasing || isLoadingPrice || isSendingTransaction}
-              className={`w-full py-4 rounded-xl font-bold text-base transition-all ${
+              className={`w-full py-3 rounded-lg font-bold text-sm transition-all ${
                 selectedPackage === index
                   ? "bg-gradient-to-r from-white/20 to-white/10 text-white border-2 border-white/30 hover:from-white/30 hover:to-white/20 shadow-xl hover:shadow-2xl hover:scale-[1.02]"
                   : "bg-gradient-to-r from-gray-800 to-gray-900 text-gray-200 border border-gray-700 hover:from-gray-700 hover:to-gray-800"

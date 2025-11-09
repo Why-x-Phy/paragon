@@ -33,7 +33,7 @@ export default function CreditStatus({ credits }: CreditStatusProps) {
   };
 
   return (
-    <div className="glass rounded-3xl p-8 border border-white/10 hover:border-white/20 transition-all">
+    <div className="glass rounded-2xl p-6 border border-white/10 hover:border-white/20 transition-all">
       <div className="flex items-center justify-between mb-8">
         <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Credits</h3>
         <span className={`text-xs font-bold px-4 py-2 rounded-lg ${getStatusColor()} bg-opacity-10 border border-current border-opacity-20`}>

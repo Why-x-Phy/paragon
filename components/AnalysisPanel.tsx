@@ -89,29 +89,29 @@ export default function AnalysisPanel({ credits, onAnalyze }: { credits: number;
   };
 
   return (
-    <div className="glass rounded-3xl p-8 border border-white/10 hover:border-white/20 transition-all h-full flex flex-col min-h-[700px]">
-      <div className="mb-6">
-        <div className="flex items-start justify-between mb-4">
+    <div className="glass rounded-2xl p-6 border border-white/10 hover:border-white/20 transition-all h-full flex flex-col min-h-[600px]">
+      <div className="mb-5">
+        <div className="flex items-start justify-between mb-3">
           <div>
-            <h3 className="text-2xl font-bold text-white mb-2 tracking-tight">AI Analysis</h3>
-            <p className="text-sm text-gray-400 font-medium">Get a smart market assessment</p>
+            <h3 className="text-xl font-bold text-white mb-1.5 tracking-tight">AI Analysis</h3>
+            <p className="text-xs text-gray-400 font-medium">Get a smart market assessment</p>
           </div>
           <div className="text-right">
             <div className="text-xs text-gray-500 mb-1 font-medium">Cost</div>
-            <div className="text-xl font-extrabold text-white">1 Credit</div>
+            <div className="text-lg font-extrabold text-white">1 Credit</div>
           </div>
         </div>
       </div>
 
       <div className="flex-1 flex flex-col">
       {!analysis ? (
-        <div className="space-y-6 flex-1 flex flex-col justify-center">
-          <div className="bg-gray-900/30 rounded-xl p-6 border border-white/5">
-            <div className="text-center mb-4">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center border border-white/10">
-                <span className="text-3xl">🧠</span>
+        <div className="space-y-5 flex-1 flex flex-col justify-center">
+          <div className="bg-gray-900/30 rounded-lg p-5 border border-white/5">
+            <div className="text-center mb-3">
+              <div className="w-14 h-14 mx-auto mb-3 rounded-full bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center border border-white/10">
+                <span className="text-2xl">🧠</span>
               </div>
-              <h4 className="text-sm font-semibold text-white mb-2">Ready to Analyze</h4>
+              <h4 className="text-sm font-semibold text-white mb-1.5">Ready to Analyze</h4>
               <p className="text-xs text-gray-400">
                 Get AI-powered market insights with technical indicators
               </p>
@@ -120,7 +120,7 @@ export default function AnalysisPanel({ credits, onAnalyze }: { credits: number;
           <button
             onClick={handleAnalyze}
             disabled={!account || credits < 1 || isAnalyzing}
-            className={`w-full py-4 rounded-xl font-bold text-white transition-all ${
+            className={`w-full py-3 rounded-lg font-bold text-sm text-white transition-all ${
               !account || credits < 1 || isAnalyzing
                 ? "bg-gray-700 cursor-not-allowed opacity-50"
                 : "bg-gradient-to-r from-white/15 to-white/5 hover:from-white/25 hover:to-white/10 border border-white/20 shadow-lg hover:shadow-xl hover:scale-[1.02]"
