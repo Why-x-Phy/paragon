@@ -108,9 +108,30 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Thirdweb API gibt verschiedene Response-Strukturen zurück
+    // Prüfe alle möglichen Felder für transactionHash
+    const transactionHash = 
+      data.result?.transactionHash || 
+      data.transactionHash || 
+      data.txHash ||
+      data.hash ||
+      data.data?.transactionHash ||
+      data.data?.hash;
+
+    if (!transactionHash) {
+      console.error("No transaction hash in response:", JSON.stringify(data, null, 2));
+      return NextResponse.json(
+        { 
+          error: "Keine Transaction Hash in der API-Antwort erhalten",
+          details: data,
+        },
+        { status: 500 }
+      );
+    }
+
     return NextResponse.json({
       success: true,
-      transactionHash: data.result?.transactionHash || data.transactionHash,
+      transactionHash: transactionHash,
       data: data,
     });
   } catch (error) {

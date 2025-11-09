@@ -89,15 +89,15 @@ export default function AnalysisPanel({ credits, onAnalyze }: { credits: number;
   };
 
   return (
-    <div className="glass rounded-3xl p-8 border border-white/10 hover:border-white/20 transition-all">
-      <div className="flex items-center justify-between mb-8">
+    <div className="glass rounded-3xl p-10 border border-white/10 hover:border-white/20 transition-all">
+      <div className="flex items-center justify-between mb-10">
         <div>
-          <h3 className="text-xl font-bold text-white mb-2 tracking-tight">KI-Analyse</h3>
-          <p className="text-xs text-gray-400 font-medium">Erhalte eine smarte Markteinschätzung</p>
+          <h3 className="text-2xl font-bold text-white mb-3 tracking-tight">KI-Analyse</h3>
+          <p className="text-sm text-gray-400 font-medium">Erhalte eine smarte Markteinschätzung</p>
         </div>
         <div className="text-right">
           <div className="text-xs text-gray-500 mb-1 font-medium">Kosten</div>
-          <div className="text-lg font-extrabold text-white">1 Credit</div>
+          <div className="text-xl font-extrabold text-white">1 Credit</div>
         </div>
       </div>
 

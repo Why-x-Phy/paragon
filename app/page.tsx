@@ -25,22 +25,22 @@ export default function Home() {
       
       <Header />
       
-      <main className="relative pt-28 pb-24 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
-        <div className="w-full max-w-[1920px] mx-auto">
+      <main className="relative pt-32 pb-32 px-6 sm:px-8 lg:px-12 xl:px-16 2xl:px-24">
+        <div className="w-full max-w-[1800px] mx-auto">
           {/* Hero Section */}
-          <div className="text-center mb-20 mt-16 fade-in-up">
-            <div className="inline-block mb-8">
-              <h1 className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black text-white tracking-tight leading-none mb-4">
+          <div className="text-center mb-32 mt-20 fade-in-up">
+            <div className="inline-block mb-10">
+              <h1 className="text-7xl sm:text-8xl md:text-9xl lg:text-[10rem] font-black text-white tracking-tight leading-none mb-6">
                 ⚡ Paragon AI
               </h1>
             </div>
-            <p className="text-xl sm:text-2xl md:text-3xl lg:text-4xl text-gray-300 font-light tracking-wide">
+            <p className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-gray-300 font-light tracking-wide">
               The On-Chain AI Chart Analyst
             </p>
           </div>
 
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
             <div className="fade-in-up" style={{ animationDelay: "0.1s" }}>
               <TokenBalance />
             </div>
@@ -50,7 +50,7 @@ export default function Home() {
           </div>
 
           {/* Main Content Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-12">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-20">
             {/* Chart Panel - Takes 8 columns */}
             <div className="lg:col-span-8 fade-in-up" style={{ animationDelay: "0.3s" }}>
               <ChartPanel />
@@ -63,12 +63,12 @@ export default function Home() {
           </div>
 
           {/* Token Purchase Section */}
-          <div className="mb-12 fade-in-up" style={{ animationDelay: "0.5s" }}>
+          <div className="mb-20 fade-in-up" style={{ animationDelay: "0.5s" }}>
             <TokenPurchase />
           </div>
 
           {/* Features Section */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
             <div className="premium-card rounded-3xl p-10 fade-in-up" style={{ animationDelay: "0.6s" }}>
               <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-white/15 to-white/5 flex items-center justify-center mb-6 glow border border-white/10">
                 <span className="text-3xl">🔗</span>

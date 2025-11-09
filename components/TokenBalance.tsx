@@ -45,21 +45,21 @@ export default function TokenBalance() {
   }
 
   return (
-    <div className="glass rounded-3xl p-8 border border-white/10 hover:border-white/20 transition-all">
-      <div className="flex items-center justify-between mb-6">
+    <div className="glass rounded-3xl p-10 border border-white/10 hover:border-white/20 transition-all">
+      <div className="flex items-center justify-between mb-8">
         <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Token Balance</h3>
-        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-white/15 to-white/5 border border-white/20 flex items-center justify-center">
-          <span className="text-xs font-bold text-white">PARA</span>
+        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-white/15 to-white/5 border border-white/20 flex items-center justify-center shadow-lg">
+          <span className="text-sm font-bold text-white">PARA</span>
         </div>
       </div>
-      <div className="space-y-2">
-        <div className="flex items-baseline gap-2">
-          <span className="text-4xl font-extrabold text-white tracking-tight">
+      <div className="space-y-3">
+        <div className="flex items-baseline gap-3">
+          <span className="text-5xl font-extrabold text-white tracking-tight">
             {isLoading ? "..." : formattedBalance}
           </span>
-          <span className="text-base text-gray-400 font-medium">PARA</span>
+          <span className="text-lg text-gray-400 font-medium">PARA</span>
         </div>
-        <div className="text-xs text-gray-500 font-medium">
+        <div className="text-sm text-gray-500 font-medium">
           ≈ ${usdValue} USD
         </div>
       </div>
