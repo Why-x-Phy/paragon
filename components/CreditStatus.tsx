@@ -33,31 +33,31 @@ export default function CreditStatus({ credits }: CreditStatusProps) {
   };
 
   return (
-    <div className="glass rounded-xl p-8 border border-white/10">
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-base font-medium text-gray-400">Credits</h3>
-        <span className={`text-xs font-semibold ${getStatusColor()}`}>
+    <div className="glass rounded-2xl p-10 border border-white/10">
+      <div className="flex items-center justify-between mb-8">
+        <h3 className="text-lg font-semibold text-gray-300 uppercase tracking-wider text-xs">Credits</h3>
+        <span className={`text-sm font-bold px-3 py-1 rounded-lg ${getStatusColor()} bg-opacity-10`}>
           {getStatusText()}
         </span>
       </div>
-      <div className="space-y-3">
-        <div className="flex items-baseline gap-2">
-          <span className="text-3xl font-bold text-white">{credits}</span>
-          <span className="text-sm text-gray-400">verfügbar</span>
+      <div className="space-y-4">
+        <div className="flex items-baseline gap-3">
+          <span className="text-5xl font-extrabold text-white tracking-tight">{credits}</span>
+          <span className="text-lg text-gray-400 font-medium">verfügbar</span>
         </div>
-        <div className="w-full bg-gray-800 rounded-full h-2 overflow-hidden">
+        <div className="w-full bg-gray-800/50 rounded-full h-3 overflow-hidden shadow-inner">
           <div
-            className={`h-full rounded-full transition-all ${
+            className={`h-full rounded-full transition-all duration-500 ${
               credits >= 10
-                ? "bg-gradient-to-r from-green-500 to-emerald-500"
+                ? "bg-gradient-to-r from-green-500 to-emerald-500 shadow-lg shadow-green-500/30"
                 : credits >= 5
-                ? "bg-gradient-to-r from-yellow-500 to-orange-500"
-                : "bg-gradient-to-r from-red-500 to-pink-500"
+                ? "bg-gradient-to-r from-yellow-500 to-orange-500 shadow-lg shadow-yellow-500/30"
+                : "bg-gradient-to-r from-red-500 to-pink-500 shadow-lg shadow-red-500/30"
             }`}
             style={{ width: `${Math.min((credits / 20) * 100, 100)}%` }}
           />
         </div>
-        <p className="text-xs text-gray-500">
+        <p className="text-sm text-gray-500 font-medium">
           1 Analyse = 1 Credit
         </p>
       </div>
