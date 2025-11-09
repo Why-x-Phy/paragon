@@ -25,10 +25,10 @@ export default function Home() {
       
       <Header />
       
-      <main className="relative pt-24 pb-24 px-6 sm:px-8 lg:px-12 xl:px-16 2xl:px-24">
-        <div className="w-full max-w-[1600px] mx-auto">
+      <main className="relative pt-20 pb-20 px-4 sm:px-6 lg:px-8 xl:px-12">
+        <div className="w-full max-w-[1400px] mx-auto space-y-6">
           {/* Stats Cards - Top Section */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12 mt-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="fade-in-up" style={{ animationDelay: "0.1s" }}>
               <TokenBalance />
             </div>
@@ -37,51 +37,51 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Main Content Grid - Chart and Analysis */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-12">
-            {/* Chart Panel - Takes 8 columns */}
-            <div className="lg:col-span-8 fade-in-up" style={{ animationDelay: "0.3s" }}>
+          {/* Main Content Grid - Chart and Analysis Side by Side */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Chart Panel - Takes 2 columns */}
+            <div className="lg:col-span-2 fade-in-up" style={{ animationDelay: "0.3s" }}>
               <ChartPanel />
             </div>
 
-            {/* Analysis Panel - Takes 4 columns */}
-            <div className="lg:col-span-4 fade-in-up" style={{ animationDelay: "0.4s" }}>
+            {/* Analysis Panel - Takes 1 column */}
+            <div className="lg:col-span-1 fade-in-up" style={{ animationDelay: "0.4s" }}>
               <AnalysisPanel credits={credits} onAnalyze={handleAnalyze} />
             </div>
           </div>
 
           {/* Token Purchase Section */}
-          <div className="mb-12 fade-in-up" style={{ animationDelay: "0.5s" }}>
+          <div className="fade-in-up" style={{ animationDelay: "0.5s" }}>
             <TokenPurchase />
           </div>
 
           {/* Features Section */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-            <div className="premium-card rounded-3xl p-10 fade-in-up" style={{ animationDelay: "0.6s" }}>
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-white/15 to-white/5 flex items-center justify-center mb-6 glow border border-white/10">
-                <span className="text-3xl">🔗</span>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="premium-card rounded-3xl p-8 fade-in-up" style={{ animationDelay: "0.6s" }}>
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-white/15 to-white/5 flex items-center justify-center mb-5 glow border border-white/10">
+                <span className="text-2xl">🔗</span>
               </div>
-              <h3 className="text-xl font-bold text-white mb-4">Wallet Login</h3>
+              <h3 className="text-lg font-bold text-white mb-3">Wallet Login</h3>
               <p className="text-sm text-gray-400 leading-relaxed">
                 Connect your wallet (Metamask, Rabby, Phantom) directly via Thirdweb
               </p>
             </div>
 
-            <div className="premium-card rounded-3xl p-10 fade-in-up" style={{ animationDelay: "0.7s" }}>
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-white/15 to-white/5 flex items-center justify-center mb-6 glow border border-white/10">
-                <span className="text-3xl">💰</span>
+            <div className="premium-card rounded-3xl p-8 fade-in-up" style={{ animationDelay: "0.7s" }}>
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-white/15 to-white/5 flex items-center justify-center mb-5 glow border border-white/10">
+                <span className="text-2xl">💰</span>
               </div>
-              <h3 className="text-xl font-bold text-white mb-4">Token Payment</h3>
+              <h3 className="text-lg font-bold text-white mb-3">Token Payment</h3>
               <p className="text-sm text-gray-400 leading-relaxed">
                 Credits are paid with the Paragon Token (PARA) on Base
               </p>
             </div>
 
-            <div className="premium-card rounded-3xl p-10 fade-in-up" style={{ animationDelay: "0.8s" }}>
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-white/15 to-white/5 flex items-center justify-center mb-6 glow border border-white/10">
-                <span className="text-3xl">🧠</span>
+            <div className="premium-card rounded-3xl p-8 fade-in-up" style={{ animationDelay: "0.8s" }}>
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-white/15 to-white/5 flex items-center justify-center mb-5 glow border border-white/10">
+                <span className="text-2xl">🧠</span>
               </div>
-              <h3 className="text-xl font-bold text-white mb-4">AI Chart Analyzer</h3>
+              <h3 className="text-lg font-bold text-white mb-3">AI Chart Analyzer</h3>
               <p className="text-sm text-gray-400 leading-relaxed">
                 AI-powered analyses with RSI, MACD, EMA and more
               </p>
@@ -89,11 +89,11 @@ export default function Home() {
           </div>
 
           {/* Disclaimer */}
-          <div className="glass rounded-2xl p-6 border border-yellow-500/20 bg-yellow-500/5">
-            <div className="flex items-start gap-4">
-              <span className="text-xl">⚠️</span>
+          <div className="glass rounded-2xl p-5 border border-yellow-500/20 bg-yellow-500/5">
+            <div className="flex items-start gap-3">
+              <span className="text-lg">⚠️</span>
               <div>
-                <h4 className="text-sm font-semibold text-yellow-400 mb-2">Disclaimer</h4>
+                <h4 className="text-sm font-semibold text-yellow-400 mb-1">Disclaimer</h4>
                 <p className="text-xs text-gray-400 leading-relaxed">
                   Paragon AI does not provide financial or investment advice. All analyses are 
                   algorithmically generated technical assessments. Trading is at your own risk.
