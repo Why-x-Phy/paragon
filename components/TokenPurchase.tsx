@@ -1,9 +1,12 @@
 "use client";
 
-import { useActiveAccount, useActiveWalletChain, useSwitchActiveWalletChain } from "thirdweb/react";
+import { useActiveAccount, useActiveWalletChain, useSwitchActiveWalletChain, useSendTransaction } from "thirdweb/react";
 import { useState, useEffect } from "react";
-import { PARA_TOKEN_ADDRESS, BASE_CHAIN_ID } from "@/lib/thirdweb";
+import { client, PARA_TOKEN_ADDRESS, BASE_CHAIN_ID } from "@/lib/thirdweb";
 import { defineChain } from "thirdweb/chains";
+import { getContract } from "thirdweb/contract";
+import { prepareContractCall } from "thirdweb";
+import { claimTo } from "thirdweb/extensions/erc20";
 
 const baseChain = defineChain(BASE_CHAIN_ID);
 
@@ -48,6 +51,8 @@ export default function TokenPurchase() {
     loadClaimConditions();
   }, []);
 
+  const { mutate: sendTransaction, isPending: isSendingTransaction } = useSendTransaction();
+
   const handlePurchase = async (pkg: typeof PACKAGES[0]) => {
     if (!account) {
       alert("Bitte verbinde zuerst deine Wallet");
@@ -69,68 +74,36 @@ export default function TokenPurchase() {
     try {
       // Berechne die Anzahl der Tokens (in wei)
       // 1 Token = 1e18 wei
-      const tokenAmount = (BigInt(pkg.tokens) * BigInt(10 ** 18)).toString();
+      const tokenAmount = BigInt(pkg.tokens) * BigInt(10 ** 18);
 
-      // Verwende Thirdweb API für Contract Write
-      // Die API signiert die Transaction automatisch
-      const response = await fetch("/api/claim-tokens", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          walletAddress: account.address,
-          quantity: tokenAmount,
-          contractAddress: PARA_TOKEN_ADDRESS,
-          chainId: BASE_CHAIN_ID,
-        }),
+      // Erstelle Contract Instance
+      const contract = getContract({
+        client,
+        chain: baseChain,
+        address: PARA_TOKEN_ADDRESS,
       });
 
-      const data = await response.json();
+      // Bereite die claim Transaction vor
+      // claimTo erwartet die Parameter direkt im Options-Objekt
+      const transaction = await claimTo({
+        contract,
+        to: account.address,
+        quantity: tokenAmount.toString(),
+      });
 
-      // Log für Debugging - zeige die komplette Response
-      console.log("API Response:", data);
-      console.log("API Response (stringified):", JSON.stringify(data, null, 2));
-
-      if (!response.ok) {
-        const errorMsg = data.error || data.details?.message || data.details?.error?.message || "Fehler beim Token-Kauf";
-        console.error("API Error:", errorMsg);
-        console.error("Full Error Response:", data);
-        throw new Error(errorMsg);
-      }
-
-      // Prüfe auf pending Transaction mit Transaction ID
-      if (data.pending && data.transactionId) {
-        alert(`Transaction wurde erstellt. Transaction ID: ${data.transactionId}\n\nDie Transaction wird jetzt verarbeitet. Bitte warte auf Bestätigung.`);
-        // Optional: Poll für Status
-        // TODO: Implementiere Polling für Transaction Status
-        return;
-      }
-
-      // Prüfe auf pending Transaction mit Task ID
-      if (data.pending && data.taskId) {
-        alert(`Transaction wird verarbeitet. Task ID: ${data.taskId}`);
-        // Optional: Poll für Status
-        return;
-      }
-
-      if (data.success && data.transactionHash) {
-        alert(`Transaction erfolgreich! Hash: ${data.transactionHash}`);
-        // Optional: Reload Token Balance
-        window.location.reload();
-      } else {
-        // Zeige die komplette Response für Debugging
-        console.error("Unexpected response structure:", data);
-        console.error("Full Response:", JSON.stringify(data, null, 2));
-        
-        // Wenn wir die komplette Response haben, zeige sie dem User
-        if (data.fullResponse) {
-          console.error("Full API Response:", data.fullResponse);
-          alert(`Fehler: ${data.error || "Ungültige Antwort vom Server"}\n\nBitte prüfe die Console für Details.`);
-        } else {
-          throw new Error(data.error || data.hint || "Ungültige Antwort vom Server");
-        }
-      }
+      // Sende die Transaction - MetaMask wird jetzt eine Signing-Anfrage zeigen
+      sendTransaction(transaction, {
+        onSuccess: (result) => {
+          console.log("Transaction erfolgreich:", result);
+          alert(`Transaction erfolgreich! Hash: ${result.transactionHash}`);
+          // Optional: Reload Token Balance
+          window.location.reload();
+        },
+        onError: (error) => {
+          console.error("Transaction Fehler:", error);
+          alert(`Fehler beim Kauf: ${error.message || "Unbekannter Fehler"}`);
+        },
+      });
       
     } catch (error: any) {
       console.error("Purchase error:", error);
@@ -209,14 +182,14 @@ export default function TokenPurchase() {
                 e.stopPropagation();
                 handlePurchase(pkg);
               }}
-              disabled={isPurchasing || isLoadingPrice}
+              disabled={isPurchasing || isLoadingPrice || isSendingTransaction}
               className={`w-full py-5 rounded-2xl font-bold text-lg transition-all ${
                 selectedPackage === index
                   ? "bg-gradient-to-r from-white/20 to-white/10 text-white border-2 border-white/30 hover:from-white/30 hover:to-white/20 shadow-xl hover:shadow-2xl hover:scale-[1.02]"
                   : "bg-gradient-to-r from-gray-800 to-gray-900 text-gray-200 border border-gray-700 hover:from-gray-700 hover:to-gray-800"
               } ${isPurchasing || isLoadingPrice ? "opacity-50 cursor-not-allowed" : ""}`}
             >
-              {isPurchasing ? (
+              {isPurchasing || isSendingTransaction ? (
                 <span className="flex items-center justify-center gap-2">
                   <span className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin" />
                   Wird verarbeitet...
