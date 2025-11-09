@@ -1,7 +1,13 @@
 "use client";
 
-import { useActiveAccount } from "thirdweb/react";
+import { useActiveAccount, useActiveWalletChain, useSwitchActiveWalletChain } from "thirdweb/react";
 import { useState } from "react";
+import { client, PARA_TOKEN_ADDRESS, BASE_CHAIN_ID } from "@/lib/thirdweb";
+import { getContract } from "thirdweb/contract";
+import { defineChain } from "thirdweb/chains";
+import { prepareContractCall, sendTransaction } from "thirdweb";
+
+const baseChain = defineChain(BASE_CHAIN_ID);
 
 const PACKAGES = [
   { tokens: 1000, price: 10, label: "Starter" },
@@ -11,7 +17,10 @@ const PACKAGES = [
 
 export default function TokenPurchase() {
   const account = useActiveAccount();
+  const activeChain = useActiveWalletChain();
+  const switchChain = useSwitchActiveWalletChain();
   const [selectedPackage, setSelectedPackage] = useState<number | null>(null);
+  const [isPurchasing, setIsPurchasing] = useState(false);
 
   const handlePurchase = async (pkg: typeof PACKAGES[0]) => {
     if (!account) {
@@ -19,8 +28,53 @@ export default function TokenPurchase() {
       return;
     }
 
-    // TODO: Thirdweb Pay Integration
-    alert(`Kauf von ${pkg.tokens} PARA Tokens für $${pkg.price} wird implementiert...`);
+    // Prüfe ob auf Base Chain
+    if (activeChain?.id !== BASE_CHAIN_ID) {
+      try {
+        await switchChain(baseChain);
+      } catch (error) {
+        alert("Bitte wechsle zu Base Chain in deiner Wallet");
+        return;
+      }
+    }
+
+    setIsPurchasing(true);
+
+    try {
+      const contract = getContract({
+        client,
+        chain: baseChain,
+        address: PARA_TOKEN_ADDRESS,
+      });
+
+      // Berechne die Anzahl der Tokens (in wei)
+      // 1 Token = 1e18 wei
+      const tokenAmount = BigInt(pkg.tokens) * BigInt(10 ** 18);
+
+      // Erstelle den Claim Transaction - verwende claimTo vom Drop Contract
+      const transaction = prepareContractCall({
+        contract,
+        method: "function claimTo(address receiver, uint256 quantity) external payable",
+        params: [account.address, tokenAmount],
+      });
+
+      // Sende die Transaction
+      const result = await sendTransaction({
+        transaction,
+        account,
+      });
+
+      alert(`Transaction erfolgreich! Hash: ${result.transactionHash}`);
+      
+      // Optional: Warte auf Bestätigung
+      // await waitForReceipt({ client, chain: baseChain, transactionHash: result.transactionHash });
+      
+    } catch (error: any) {
+      console.error("Purchase error:", error);
+      alert(`Fehler beim Kauf: ${error.message || "Unbekannter Fehler"}`);
+    } finally {
+      setIsPurchasing(false);
+    }
   };
 
   if (!account) {
@@ -72,13 +126,21 @@ export default function TokenPurchase() {
                 e.stopPropagation();
                 handlePurchase(pkg);
               }}
-              className={`w-full py-2.5 rounded-lg font-semibold transition-all ${
+              disabled={isPurchasing}
+              className={`w-full py-4 rounded-xl font-bold text-lg transition-all ${
                 selectedPackage === index
-                  ? "bg-white/10 text-white border border-white/20 hover:bg-white/20"
+                  ? "bg-white/10 text-white border border-white/20 hover:bg-white/20 shadow-lg hover:shadow-xl hover:scale-[1.02]"
                   : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-              }`}
+              } ${isPurchasing ? "opacity-50 cursor-not-allowed" : ""}`}
             >
-              Kaufen
+              {isPurchasing ? (
+                <span className="flex items-center justify-center gap-2">
+                  <span className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                  Wird verarbeitet...
+                </span>
+              ) : (
+                "Kaufen"
+              )}
             </button>
           </div>
         ))}

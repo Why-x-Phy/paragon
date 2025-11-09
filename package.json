@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@thirdweb-dev/pay": "^0.1.8",
     "@thirdweb-dev/react": "^4.9.4",
     "@thirdweb-dev/sdk": "^4.0.99",
     "ethers": "^5.8.0",

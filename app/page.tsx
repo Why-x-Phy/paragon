@@ -17,28 +17,30 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900">
+    <div className="min-h-screen bg-black">
+      <div className="fixed inset-0 bg-gradient-to-br from-gray-950 via-black to-gray-950 opacity-50" />
+      <div className="fixed inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.03),transparent_50%)]" />
       <Header />
       
-      <main className="pt-20 pb-12 px-6 sm:px-8 lg:px-12 xl:px-16 2xl:px-24">
-        <div className="w-full">
+      <main className="relative pt-24 pb-20 px-6 sm:px-8 lg:px-16 xl:px-24 2xl:px-32">
+        <div className="max-w-[1600px] mx-auto w-full">
           {/* Hero Section */}
-          <div className="text-center mb-24 mt-20 fade-in-up">
-            <div className="inline-block mb-10">
-              <h1 className="text-8xl md:text-9xl font-extrabold gradient-text tracking-tight leading-none mb-4">
+          <div className="text-center mb-32 mt-24 fade-in-up">
+            <div className="inline-block mb-12">
+              <h1 className="text-8xl md:text-9xl lg:text-[10rem] font-black gradient-text tracking-tight leading-none mb-6">
                 ⚡ Paragon AI
               </h1>
             </div>
-            <p className="text-3xl md:text-4xl text-gray-200 mb-6 font-light tracking-wide">
+            <p className="text-3xl md:text-4xl lg:text-5xl text-white mb-8 font-light tracking-wide">
               The On-Chain AI Chart Analyst
             </p>
-            <p className="text-lg md:text-xl text-gray-400 max-w-4xl mx-auto leading-relaxed font-light">
+            <p className="text-lg md:text-xl lg:text-2xl text-gray-400 max-w-5xl mx-auto leading-relaxed font-light">
               KI-gestützte Marktanalysen powered by Thirdweb, Base, und Paragon AI Token (PARA)
             </p>
           </div>
 
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-24">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-32">
             <div className="fade-in-up" style={{ animationDelay: "0.1s" }}>
               <TokenBalance />
             </div>
@@ -48,7 +50,7 @@ export default function Home() {
           </div>
 
           {/* Main Content Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 mb-24">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-32">
             {/* Chart Panel - Takes 8 columns */}
             <div className="lg:col-span-8 fade-in-up" style={{ animationDelay: "0.3s" }}>
               <ChartPanel />
@@ -61,12 +63,12 @@ export default function Home() {
           </div>
 
           {/* Token Purchase Section */}
-          <div className="mb-24 fade-in-up" style={{ animationDelay: "0.5s" }}>
+          <div className="mb-32 fade-in-up" style={{ animationDelay: "0.5s" }}>
             <TokenPurchase />
           </div>
 
           {/* Features Section */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-24">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-32">
             <div className="premium-card rounded-2xl p-12 fade-in-up" style={{ animationDelay: "0.6s" }}>
               <div className="w-20 h-20 rounded-2xl bg-white/10 flex items-center justify-center mb-8 glow">
                 <span className="text-4xl">🔗</span>
