@@ -26,9 +26,9 @@ export default function Home() {
       <Header />
       
       <main className="relative pt-24 pb-24 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
-        <div className="w-full mx-auto space-y-8" style={{ paddingTop: '80px' }}>
+        <div className="w-full mx-auto space-y-10" style={{ paddingTop: '80px' }}>
           {/* Stats Cards - Top Section */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="fade-in-up" style={{ animationDelay: "0.1s" }}>
               <TokenBalance />
             </div>
@@ -38,7 +38,7 @@ export default function Home() {
           </div>
 
           {/* Main Content Grid - Chart and Analysis Side by Side */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
             {/* Chart Panel - Takes 8 columns */}
             <div className="lg:col-span-8 fade-in-up" style={{ animationDelay: "0.3s" }}>
               <ChartPanel />
@@ -56,7 +56,7 @@ export default function Home() {
           </div>
 
           {/* Features Section */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="premium-card rounded-3xl p-8 fade-in-up" style={{ animationDelay: "0.6s" }}>
               <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-white/15 to-white/5 flex items-center justify-center mb-5 glow border border-white/10">
                 <span className="text-2xl">🔗</span>

@@ -184,7 +184,7 @@ export default function TokenPurchase() {
         <p className="text-base text-gray-400 font-medium">Choose a package and pay with Thirdweb Pay</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {PACKAGES.map((pkg, index) => (
           <div
             key={index}
