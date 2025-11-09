@@ -1,17 +1,23 @@
 "use client";
 
 import { useActiveAccount, useActiveWalletChain, useSwitchActiveWalletChain } from "thirdweb/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PARA_TOKEN_ADDRESS, BASE_CHAIN_ID } from "@/lib/thirdweb";
 import { defineChain } from "thirdweb/chains";
 
 const baseChain = defineChain(BASE_CHAIN_ID);
 
 const PACKAGES = [
-  { tokens: 1000, price: 10, label: "Starter" },
-  { tokens: 5000, price: 50, label: "Pro", popular: true },
-  { tokens: 10000, price: 100, label: "Enterprise" },
+  { tokens: 1000, label: "Starter" },
+  { tokens: 5000, label: "Pro", popular: true },
+  { tokens: 10000, label: "Enterprise" },
 ];
+
+interface ClaimCondition {
+  pricePerToken: string;
+  pricePerTokenUsd: string;
+  currency: string;
+}
 
 export default function TokenPurchase() {
   const account = useActiveAccount();
@@ -19,6 +25,28 @@ export default function TokenPurchase() {
   const switchChain = useSwitchActiveWalletChain();
   const [selectedPackage, setSelectedPackage] = useState<number | null>(null);
   const [isPurchasing, setIsPurchasing] = useState(false);
+  const [claimCondition, setClaimCondition] = useState<ClaimCondition | null>(null);
+  const [isLoadingPrice, setIsLoadingPrice] = useState(true);
+
+  // Lade Claim Conditions beim Mount
+  useEffect(() => {
+    const loadClaimConditions = async () => {
+      try {
+        const response = await fetch("/api/claim-conditions");
+        const data = await response.json();
+        
+        if (data.success && data.claimCondition) {
+          setClaimCondition(data.claimCondition);
+        }
+      } catch (error) {
+        console.error("Fehler beim Laden der Claim Conditions:", error);
+      } finally {
+        setIsLoadingPrice(false);
+      }
+    };
+
+    loadClaimConditions();
+  }, []);
 
   const handlePurchase = async (pkg: typeof PACKAGES[0]) => {
     if (!account) {
@@ -98,43 +126,60 @@ export default function TokenPurchase() {
         <p className="text-base text-gray-400 font-medium">Wähle ein Paket und zahle mit Thirdweb Pay</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {PACKAGES.map((pkg, index) => (
           <div
             key={index}
-            className={`relative rounded-2xl p-8 border transition-all cursor-pointer ${
+            className={`relative premium-card rounded-3xl p-10 border transition-all cursor-pointer ${
               selectedPackage === index
-                ? "border-white/30 bg-white/10"
-                : "border-white/10 bg-gray-900/50 hover:border-white/20"
-            } ${pkg.popular ? "ring-2 ring-white/20" : ""}`}
+                ? "border-white/40 bg-white/15 shadow-2xl scale-[1.02]"
+                : "border-white/10 bg-gray-900/30 hover:border-white/25 hover:bg-white/5"
+            } ${pkg.popular ? "ring-2 ring-white/30 ring-offset-2 ring-offset-black" : ""}`}
             onClick={() => setSelectedPackage(index)}
           >
             {pkg.popular && (
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                <span className="bg-white/10 text-white text-xs font-semibold px-3 py-1 rounded-full border border-white/20">
-                  Beliebt
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
+                <span className="bg-gradient-to-r from-yellow-500/20 to-orange-500/20 text-yellow-300 text-xs font-bold px-4 py-1.5 rounded-full border border-yellow-500/30 shadow-lg backdrop-blur-sm">
+                  ⭐ Beliebt
                 </span>
               </div>
             )}
-            <div className="text-center mb-4">
-              <div className="text-2xl font-bold text-white mb-1">{pkg.tokens.toLocaleString()}</div>
-              <div className="text-sm text-gray-400">PARA Tokens</div>
+            <div className="text-center mb-6">
+              <div className="text-4xl font-extrabold text-white mb-2 tracking-tight">
+                {pkg.tokens.toLocaleString()}
+              </div>
+              <div className="text-sm text-gray-400 font-medium">PARA Tokens</div>
             </div>
-            <div className="text-center mb-4">
-              <div className="text-xl font-semibold text-white">${pkg.price}</div>
-              <div className="text-xs text-gray-500">USD</div>
+            <div className="text-center mb-6">
+              {isLoadingPrice ? (
+                <div className="flex items-center justify-center gap-2">
+                  <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  <span className="text-sm text-gray-400">Lade Preis...</span>
+                </div>
+              ) : claimCondition ? (
+                <>
+                  <div className="text-2xl font-bold text-white mb-1">
+                    ${(parseFloat(claimCondition.pricePerTokenUsd) * pkg.tokens).toFixed(2)}
+                  </div>
+                  <div className="text-xs text-gray-500">
+                    {parseFloat(claimCondition.pricePerToken) * pkg.tokens} ETH
+                  </div>
+                </>
+              ) : (
+                <div className="text-sm text-gray-500">Preis nicht verfügbar</div>
+              )}
             </div>
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 handlePurchase(pkg);
               }}
-              disabled={isPurchasing}
-              className={`w-full py-4 rounded-xl font-bold text-lg transition-all ${
+              disabled={isPurchasing || isLoadingPrice}
+              className={`w-full py-5 rounded-2xl font-bold text-lg transition-all ${
                 selectedPackage === index
-                  ? "bg-white/10 text-white border border-white/20 hover:bg-white/20 shadow-lg hover:shadow-xl hover:scale-[1.02]"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-              } ${isPurchasing ? "opacity-50 cursor-not-allowed" : ""}`}
+                  ? "bg-gradient-to-r from-white/20 to-white/10 text-white border-2 border-white/30 hover:from-white/30 hover:to-white/20 shadow-xl hover:shadow-2xl hover:scale-[1.02]"
+                  : "bg-gradient-to-r from-gray-800 to-gray-900 text-gray-200 border border-gray-700 hover:from-gray-700 hover:to-gray-800"
+              } ${isPurchasing || isLoadingPrice ? "opacity-50 cursor-not-allowed" : ""}`}
             >
               {isPurchasing ? (
                 <span className="flex items-center justify-center gap-2">

@@ -13,11 +13,20 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const secretKey = process.env.THIRDWEB_SECRET_KEY;
+    // Lade Secret Key aus Umgebungsvariablen
+    // Prüfe auch NEXT_PUBLIC_ Variante für Fallback
+    const secretKey = process.env.THIRDWEB_SECRET_KEY || process.env.NEXT_PUBLIC_THIRDWEB_SECRET_KEY;
     
     if (!secretKey) {
+      console.error("THIRDWEB_SECRET_KEY nicht gefunden in:", {
+        THIRDWEB_SECRET_KEY: !!process.env.THIRDWEB_SECRET_KEY,
+        NEXT_PUBLIC_THIRDWEB_SECRET_KEY: !!process.env.NEXT_PUBLIC_THIRDWEB_SECRET_KEY,
+      });
       return NextResponse.json(
-        { error: "Thirdweb Secret Key nicht konfiguriert" },
+        { 
+          error: "Thirdweb Secret Key nicht konfiguriert. Bitte füge THIRDWEB_SECRET_KEY in .env.local hinzu.",
+          hint: "Der Secret Key sollte in .env.local als THIRDWEB_SECRET_KEY=... gesetzt werden."
+        },
         { status: 500 }
       );
     }
