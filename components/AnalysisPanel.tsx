@@ -105,11 +105,22 @@ export default function AnalysisPanel({ credits, onAnalyze }: { credits: number;
 
       <div className="flex-1 flex flex-col">
       {!analysis ? (
-        <div className="space-y-4 flex-1 flex flex-col justify-center">
+        <div className="space-y-6 flex-1 flex flex-col justify-center">
+          <div className="bg-gray-900/30 rounded-xl p-6 border border-white/5">
+            <div className="text-center mb-4">
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center border border-white/10">
+                <span className="text-3xl">🧠</span>
+              </div>
+              <h4 className="text-sm font-semibold text-white mb-2">Ready to Analyze</h4>
+              <p className="text-xs text-gray-400">
+                Get AI-powered market insights with technical indicators
+              </p>
+            </div>
+          </div>
           <button
             onClick={handleAnalyze}
             disabled={!account || credits < 1 || isAnalyzing}
-            className={`w-full py-3 rounded-xl font-bold text-white transition-all ${
+            className={`w-full py-4 rounded-xl font-bold text-white transition-all ${
               !account || credits < 1 || isAnalyzing
                 ? "bg-gray-700 cursor-not-allowed opacity-50"
                 : "bg-gradient-to-r from-white/15 to-white/5 hover:from-white/25 hover:to-white/10 border border-white/20 shadow-lg hover:shadow-xl hover:scale-[1.02]"
@@ -117,7 +128,7 @@ export default function AnalysisPanel({ credits, onAnalyze }: { credits: number;
           >
             {isAnalyzing ? (
               <span className="flex items-center justify-center gap-2">
-                <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                 Analyzing...
               </span>
             ) : !account ? (

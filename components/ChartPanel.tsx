@@ -35,10 +35,11 @@ export default function ChartPanel() {
       
       <div className="w-full flex-1 min-h-[600px] rounded-2xl overflow-hidden bg-gray-900 border border-white/10 shadow-2xl">
         <iframe
-          src={`https://www.tradingview.com/widgetembed/?symbol=BINANCE:${selectedMarket.symbol}&interval=15&theme=dark&style=1&locale=en&toolbar_bg=%231a1a1a&enable_publishing=false&hide_top_toolbar=true&hide_legend=true&save_image=false&container_id=tradingview_${selectedMarket.symbol.replace("/", "")}`}
+          src={`https://www.tradingview.com/widgetembed/?symbol=BINANCE:${selectedMarket.symbol}&interval=15&theme=dark&style=1&locale=en&toolbar_bg=%231a1a1a&enable_publishing=false&hide_top_toolbar=true&hide_legend=true&hide_volume=true&save_image=false&container_id=tradingview_${selectedMarket.symbol.replace("/", "")}`}
           className="w-full h-full"
           frameBorder="0"
           title={`TradingView Chart ${selectedMarket.symbol}`}
+          allow="clipboard-write"
         />
       </div>
     </div>
