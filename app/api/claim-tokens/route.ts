@@ -113,17 +113,30 @@ export async function POST(request: NextRequest) {
     }
 
     // Thirdweb API gibt verschiedene Response-Strukturen zurück
-    // Die API gibt oft ein "result" Objekt zurück mit transactionHash oder transaction
+    // Die API kann ein Array von Results zurückgeben oder ein einzelnes Result
     let transactionHash = null;
     
-    // Prüfe verschiedene mögliche Strukturen
-    if (data.result) {
+    // Prüfe ob data.result ein Array ist (mehrere Calls)
+    if (Array.isArray(data.result)) {
+      // Nimm das erste Result
+      const firstResult = data.result[0];
+      transactionHash = 
+        firstResult?.transactionHash || 
+        firstResult?.hash ||
+        firstResult?.transaction?.hash ||
+        firstResult?.txHash ||
+        firstResult?.receipt?.transactionHash;
+    }
+    // Prüfe ob data.result ein Objekt ist
+    else if (data.result && typeof data.result === 'object') {
       transactionHash = 
         data.result.transactionHash || 
         data.result.hash ||
         data.result.transaction?.hash ||
         data.result.txHash ||
-        data.result.receipt?.transactionHash;
+        data.result.receipt?.transactionHash ||
+        data.result[0]?.transactionHash ||
+        data.result[0]?.hash;
     }
     
     // Fallback: Prüfe direkt im data Objekt
@@ -136,7 +149,9 @@ export async function POST(request: NextRequest) {
         data.receipt?.transactionHash ||
         data.data?.transactionHash ||
         data.data?.hash ||
-        data.data?.transaction?.hash;
+        data.data?.transaction?.hash ||
+        data.results?.[0]?.transactionHash ||
+        data.results?.[0]?.hash;
     }
 
     // Wenn immer noch kein Hash, könnte es ein async Response sein
@@ -153,11 +168,13 @@ export async function POST(request: NextRequest) {
 
     if (!transactionHash) {
       console.error("No transaction hash in response. Full response:", JSON.stringify(data, null, 2));
+      // Gib die komplette Response zurück, damit wir im Frontend debuggen können
       return NextResponse.json(
         { 
           error: "Keine Transaction Hash in der API-Antwort erhalten",
           details: data,
           hint: "Die API-Antwort könnte eine andere Struktur haben. Bitte prüfe die Console-Logs.",
+          fullResponse: data, // Für Debugging
         },
         { status: 500 }
       );

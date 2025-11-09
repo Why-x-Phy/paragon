@@ -88,11 +88,14 @@ export default function TokenPurchase() {
 
       const data = await response.json();
 
-      // Log für Debugging
+      // Log für Debugging - zeige die komplette Response
       console.log("API Response:", data);
+      console.log("API Response (stringified):", JSON.stringify(data, null, 2));
 
       if (!response.ok) {
         const errorMsg = data.error || data.details?.message || data.details?.error?.message || "Fehler beim Token-Kauf";
+        console.error("API Error:", errorMsg);
+        console.error("Full Error Response:", data);
         throw new Error(errorMsg);
       }
 
@@ -108,8 +111,17 @@ export default function TokenPurchase() {
         // Optional: Reload Token Balance
         window.location.reload();
       } else {
+        // Zeige die komplette Response für Debugging
         console.error("Unexpected response structure:", data);
-        throw new Error(data.error || data.hint || "Ungültige Antwort vom Server");
+        console.error("Full Response:", JSON.stringify(data, null, 2));
+        
+        // Wenn wir die komplette Response haben, zeige sie dem User
+        if (data.fullResponse) {
+          console.error("Full API Response:", data.fullResponse);
+          alert(`Fehler: ${data.error || "Ungültige Antwort vom Server"}\n\nBitte prüfe die Console für Details.`);
+        } else {
+          throw new Error(data.error || data.hint || "Ungültige Antwort vom Server");
+        }
       }
       
     } catch (error: any) {
