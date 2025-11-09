@@ -2,10 +2,8 @@
 
 import { useActiveAccount, useActiveWalletChain, useSwitchActiveWalletChain } from "thirdweb/react";
 import { useState } from "react";
-import { client, PARA_TOKEN_ADDRESS, BASE_CHAIN_ID } from "@/lib/thirdweb";
-import { getContract } from "thirdweb/contract";
+import { PARA_TOKEN_ADDRESS, BASE_CHAIN_ID } from "@/lib/thirdweb";
 import { defineChain } from "thirdweb/chains";
-import { prepareContractCall, sendTransaction } from "thirdweb";
 
 const baseChain = defineChain(BASE_CHAIN_ID);
 
@@ -41,33 +39,38 @@ export default function TokenPurchase() {
     setIsPurchasing(true);
 
     try {
-      const contract = getContract({
-        client,
-        chain: baseChain,
-        address: PARA_TOKEN_ADDRESS,
-      });
-
       // Berechne die Anzahl der Tokens (in wei)
       // 1 Token = 1e18 wei
-      const tokenAmount = BigInt(pkg.tokens) * BigInt(10 ** 18);
+      const tokenAmount = (BigInt(pkg.tokens) * BigInt(10 ** 18)).toString();
 
-      // Erstelle den Claim Transaction - verwende claimTo vom Drop Contract
-      const transaction = prepareContractCall({
-        contract,
-        method: "function claimTo(address receiver, uint256 quantity) external payable",
-        params: [account.address, tokenAmount],
+      // Verwende Thirdweb API für Contract Write
+      // Die API signiert die Transaction automatisch
+      const response = await fetch("/api/claim-tokens", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          walletAddress: account.address,
+          quantity: tokenAmount,
+          contractAddress: PARA_TOKEN_ADDRESS,
+          chainId: BASE_CHAIN_ID,
+        }),
       });
 
-      // Sende die Transaction
-      const result = await sendTransaction({
-        transaction,
-        account,
-      });
+      const data = await response.json();
 
-      alert(`Transaction erfolgreich! Hash: ${result.transactionHash}`);
-      
-      // Optional: Warte auf Bestätigung
-      // await waitForReceipt({ client, chain: baseChain, transactionHash: result.transactionHash });
+      if (!response.ok) {
+        throw new Error(data.error || "Fehler beim Token-Kauf");
+      }
+
+      if (data.transactionHash) {
+        alert(`Transaction erfolgreich! Hash: ${data.transactionHash}`);
+        // Optional: Reload Token Balance
+        window.location.reload();
+      } else {
+        throw new Error("Keine Transaction Hash erhalten");
+      }
       
     } catch (error: any) {
       console.error("Purchase error:", error);
