@@ -113,12 +113,45 @@ export async function POST(request: NextRequest) {
     }
 
     // Thirdweb API gibt verschiedene Response-Strukturen zurück
-    // Die API kann ein Array von Results zurückgeben oder ein einzelnes Result
+    // Die API kann transactionIds (UUIDs) zurückgeben, die wir dann abfragen müssen
     let transactionHash = null;
+    let transactionId = null;
     
-    // Prüfe ob data.result ein Array ist (mehrere Calls)
-    if (Array.isArray(data.result)) {
-      // Nimm das erste Result
+    // Prüfe ob data.result transactionIds enthält
+    if (data.result?.transactionIds && Array.isArray(data.result.transactionIds) && data.result.transactionIds.length > 0) {
+      transactionId = data.result.transactionIds[0];
+      console.log("Transaction ID erhalten:", transactionId);
+      
+      // Versuche den Transaction Status abzurufen, um den Hash zu bekommen
+      try {
+        const statusResponse = await fetch(`https://api.thirdweb.com/v1/transactions/${transactionId}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "x-secret-key": secretKey,
+          },
+        });
+        
+        if (statusResponse.ok) {
+          const statusData = await statusResponse.json();
+          console.log("Transaction Status:", JSON.stringify(statusData, null, 2));
+          
+          // Prüfe verschiedene mögliche Felder für den Hash
+          transactionHash = 
+            statusData.result?.transactionHash ||
+            statusData.result?.hash ||
+            statusData.result?.receipt?.transactionHash ||
+            statusData.transactionHash ||
+            statusData.hash ||
+            statusData.receipt?.transactionHash;
+        }
+      } catch (statusError) {
+        console.error("Fehler beim Abrufen des Transaction Status:", statusError);
+      }
+    }
+    
+    // Fallback: Prüfe ob data.result ein Array ist (mehrere Calls)
+    if (!transactionHash && Array.isArray(data.result)) {
       const firstResult = data.result[0];
       transactionHash = 
         firstResult?.transactionHash || 
@@ -128,7 +161,7 @@ export async function POST(request: NextRequest) {
         firstResult?.receipt?.transactionHash;
     }
     // Prüfe ob data.result ein Objekt ist
-    else if (data.result && typeof data.result === 'object') {
+    else if (!transactionHash && data.result && typeof data.result === 'object') {
       transactionHash = 
         data.result.transactionHash || 
         data.result.hash ||
@@ -152,6 +185,17 @@ export async function POST(request: NextRequest) {
         data.data?.transaction?.hash ||
         data.results?.[0]?.transactionHash ||
         data.results?.[0]?.hash;
+    }
+
+    // Wenn wir eine Transaction ID haben, aber noch keinen Hash, geben wir die ID zurück
+    if (!transactionHash && transactionId) {
+      return NextResponse.json({
+        success: true,
+        pending: true,
+        transactionId: transactionId,
+        message: "Transaction wurde erstellt. Warte auf Bestätigung...",
+        data: data,
+      });
     }
 
     // Wenn immer noch kein Hash, könnte es ein async Response sein
@@ -183,6 +227,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       transactionHash: transactionHash,
+      transactionId: transactionId,
       data: data,
     });
   } catch (error) {

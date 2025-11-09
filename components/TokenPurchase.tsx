@@ -99,7 +99,15 @@ export default function TokenPurchase() {
         throw new Error(errorMsg);
       }
 
-      // Prüfe auf pending Transaction
+      // Prüfe auf pending Transaction mit Transaction ID
+      if (data.pending && data.transactionId) {
+        alert(`Transaction wurde erstellt. Transaction ID: ${data.transactionId}\n\nDie Transaction wird jetzt verarbeitet. Bitte warte auf Bestätigung.`);
+        // Optional: Poll für Status
+        // TODO: Implementiere Polling für Transaction Status
+        return;
+      }
+
+      // Prüfe auf pending Transaction mit Task ID
       if (data.pending && data.taskId) {
         alert(`Transaction wird verarbeitet. Task ID: ${data.taskId}`);
         // Optional: Poll für Status
