@@ -60,16 +60,16 @@ export default function TokenPurchase() {
 
   const handlePurchase = async (pkg: typeof PACKAGES[0]) => {
     if (!account) {
-      alert("Bitte verbinde zuerst deine Wallet");
+      alert("Please connect your wallet first");
       return;
     }
 
-    // Prüfe ob auf Base Chain
+    // Check if on Base Chain
     if (activeChain?.id !== BASE_CHAIN_ID) {
       try {
         await switchChain(baseChain);
       } catch (error) {
-        alert("Bitte wechsle zu Base Chain in deiner Wallet");
+        alert("Please switch to Base Chain in your wallet");
         return;
       }
     }
@@ -103,9 +103,9 @@ export default function TokenPurchase() {
         console.log("Total price for", pkg.tokens, "tokens (ETH):", (pricePerToken * pkg.tokens).toFixed(6));
       }
       
-      // Berechne den korrekten ETH-Wert basierend auf Claim Conditions
+      // Calculate the correct ETH value based on Claim Conditions
       if (!claimConditionData.success || !claimConditionData.claimCondition) {
-        throw new Error("Konnte Claim Conditions nicht laden");
+        throw new Error("Could not load claim conditions");
       }
       
       const pricePerToken = parseFloat(claimConditionData.claimCondition.pricePerToken);
@@ -115,10 +115,10 @@ export default function TokenPurchase() {
       console.log("Total price (wei):", totalPriceWei.toString());
       console.log("Total price (ETH):", (Number(totalPriceWei) / 1e18).toFixed(6));
       
-      // Prüfe ob der Preis zu hoch ist
+      // Check if price is too high
       const totalPriceEth = Number(totalPriceWei) / 1e18;
       if (totalPriceEth > 1000) {
-        throw new Error(`Der berechnete Preis ist extrem hoch: ${totalPriceEth.toFixed(2)} ETH. Bitte prüfe die Claim Conditions im Contract.`);
+        throw new Error(`Calculated price is extremely high: ${totalPriceEth.toFixed(2)} ETH. Please check the claim conditions in the contract.`);
       }
       
       // Bereite die claim Transaction vor mit prepareContractCall
@@ -144,23 +144,23 @@ export default function TokenPurchase() {
       
       console.log("Transaction prepared:", transaction);
 
-      // Sende die Transaction - MetaMask wird jetzt eine Signing-Anfrage zeigen
+      // Send the transaction - MetaMask will now show a signing request
       sendTransaction(transaction, {
         onSuccess: (result) => {
-          console.log("Transaction erfolgreich:", result);
-          alert(`Transaction erfolgreich! Hash: ${result.transactionHash}`);
+          console.log("Transaction successful:", result);
+          alert(`Transaction successful! Hash: ${result.transactionHash}`);
           // Optional: Reload Token Balance
           window.location.reload();
         },
         onError: (error) => {
-          console.error("Transaction Fehler:", error);
-          alert(`Fehler beim Kauf: ${error.message || "Unbekannter Fehler"}`);
+          console.error("Transaction error:", error);
+          alert(`Purchase error: ${error.message || "Unknown error"}`);
         },
       });
       
     } catch (error: any) {
       console.error("Purchase error:", error);
-      alert(`Fehler beim Kauf: ${error.message || "Unbekannter Fehler"}`);
+      alert(`Purchase error: ${error.message || "Unknown error"}`);
     } finally {
       setIsPurchasing(false);
     }
@@ -170,8 +170,8 @@ export default function TokenPurchase() {
     return (
       <div className="glass rounded-3xl p-10 border border-white/10">
         <div className="text-center py-8">
-          <p className="text-base text-gray-300 mb-2 font-medium">Bitte verbinde deine Wallet</p>
-          <p className="text-sm text-gray-400">um Token-Pakete zu kaufen</p>
+          <p className="text-base text-gray-300 mb-2 font-medium">Please connect your wallet</p>
+          <p className="text-sm text-gray-400">to purchase token packages</p>
         </div>
       </div>
     );
@@ -180,8 +180,8 @@ export default function TokenPurchase() {
   return (
     <div className="glass rounded-3xl p-10 border border-white/10 hover:border-white/20 transition-all">
       <div className="mb-10">
-        <h3 className="text-2xl font-bold text-white mb-3 tracking-tight">Token kaufen</h3>
-        <p className="text-base text-gray-400 font-medium">Wähle ein Paket und zahle mit Thirdweb Pay</p>
+        <h3 className="text-2xl font-bold text-white mb-3 tracking-tight">Purchase Tokens</h3>
+        <p className="text-base text-gray-400 font-medium">Choose a package and pay with Thirdweb Pay</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -198,7 +198,7 @@ export default function TokenPurchase() {
             {pkg.popular && (
               <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
                 <span className="bg-gradient-to-r from-yellow-500/20 to-orange-500/20 text-yellow-300 text-xs font-bold px-4 py-1.5 rounded-full border border-yellow-500/30 shadow-lg backdrop-blur-sm">
-                  ⭐ Beliebt
+                  ⭐ Popular
                 </span>
               </div>
             )}
@@ -212,7 +212,7 @@ export default function TokenPurchase() {
               {isLoadingPrice ? (
                 <div className="flex items-center justify-center gap-2">
                   <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  <span className="text-sm text-gray-400">Lade Preis...</span>
+                  <span className="text-sm text-gray-400">Loading price...</span>
                 </div>
               ) : claimCondition ? (
                 <>
@@ -223,11 +223,11 @@ export default function TokenPurchase() {
                     {(parseFloat(claimCondition.pricePerToken) * pkg.tokens).toFixed(6)} ETH
                   </div>
                   <div className="text-xs text-gray-500 mt-1">
-                    {parseFloat(claimCondition.pricePerTokenUsd).toFixed(4)} $ pro Token
+                    {parseFloat(claimCondition.pricePerTokenUsd).toFixed(4)} $ per token
                   </div>
                 </>
               ) : (
-                <div className="text-sm text-gray-500">Preis nicht verfügbar</div>
+                <div className="text-sm text-gray-500">Price not available</div>
               )}
             </div>
             <button
@@ -245,10 +245,10 @@ export default function TokenPurchase() {
               {isPurchasing || isSendingTransaction ? (
                 <span className="flex items-center justify-center gap-2">
                   <span className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin" />
-                  Wird verarbeitet...
+                  Processing...
                 </span>
               ) : (
-                "Kaufen"
+                "Purchase"
               )}
             </button>
           </div>
@@ -257,7 +257,7 @@ export default function TokenPurchase() {
 
       <div className="mt-4 p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg">
         <p className="text-xs text-blue-400">
-          💡 Zahlungen über Base, BSC, Polygon, Arbitrum und mehr möglich via Universal Bridge
+          💡 Payments via Base, BSC, Polygon, Arbitrum and more possible via Universal Bridge
         </p>
       </div>
     </div>

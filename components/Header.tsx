@@ -23,8 +23,8 @@ export default function Header() {
               <a href="#dashboard" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">
                 Dashboard
               </a>
-              <a href="#analysen" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">
-                Analysen
+              <a href="#analysis" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">
+                Analysis
               </a>
               <a href="#token" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">
                 Token
@@ -33,7 +33,7 @@ export default function Header() {
             <ConnectButton
               client={client}
               connectButton={{
-                label: "Wallet verbinden",
+                label: "Connect Wallet",
                 className: "!bg-white/10 !text-white !font-semibold !px-6 !py-3 !rounded-xl hover:!bg-white/20 !border !border-white/20 transition-all shadow-lg hover:shadow-xl",
               }}
             />

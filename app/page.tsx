@@ -25,10 +25,10 @@ export default function Home() {
       
       <Header />
       
-      <main className="relative pt-32 pb-32 px-6 sm:px-8 lg:px-12 xl:px-16 2xl:px-24">
-        <div className="w-full max-w-[1800px] mx-auto">
-          {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20 mt-20">
+      <main className="relative pt-24 pb-24 px-6 sm:px-8 lg:px-12 xl:px-16 2xl:px-24">
+        <div className="w-full max-w-[1600px] mx-auto">
+          {/* Stats Cards - Top Section */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12 mt-8">
             <div className="fade-in-up" style={{ animationDelay: "0.1s" }}>
               <TokenBalance />
             </div>
@@ -37,8 +37,8 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Main Content Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-20">
+          {/* Main Content Grid - Chart and Analysis */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-12">
             {/* Chart Panel - Takes 8 columns */}
             <div className="lg:col-span-8 fade-in-up" style={{ animationDelay: "0.3s" }}>
               <ChartPanel />
@@ -51,19 +51,19 @@ export default function Home() {
           </div>
 
           {/* Token Purchase Section */}
-          <div className="mb-20 fade-in-up" style={{ animationDelay: "0.5s" }}>
+          <div className="mb-12 fade-in-up" style={{ animationDelay: "0.5s" }}>
             <TokenPurchase />
           </div>
 
           {/* Features Section */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
             <div className="premium-card rounded-3xl p-10 fade-in-up" style={{ animationDelay: "0.6s" }}>
               <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-white/15 to-white/5 flex items-center justify-center mb-6 glow border border-white/10">
                 <span className="text-3xl">🔗</span>
               </div>
-              <h3 className="text-xl font-bold text-white mb-4">Wallet-Login</h3>
+              <h3 className="text-xl font-bold text-white mb-4">Wallet Login</h3>
               <p className="text-sm text-gray-400 leading-relaxed">
-                Verbinde deine Wallet (Metamask, Rabby, Phantom) direkt über Thirdweb
+                Connect your wallet (Metamask, Rabby, Phantom) directly via Thirdweb
               </p>
             </div>
 
@@ -71,9 +71,9 @@ export default function Home() {
               <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-white/15 to-white/5 flex items-center justify-center mb-6 glow border border-white/10">
                 <span className="text-3xl">💰</span>
               </div>
-              <h3 className="text-xl font-bold text-white mb-4">Token-Bezahlung</h3>
+              <h3 className="text-xl font-bold text-white mb-4">Token Payment</h3>
               <p className="text-sm text-gray-400 leading-relaxed">
-                Credits werden mit dem Paragon-Token (PARA) auf Base bezahlt
+                Credits are paid with the Paragon Token (PARA) on Base
               </p>
             </div>
 
@@ -81,9 +81,9 @@ export default function Home() {
               <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-white/15 to-white/5 flex items-center justify-center mb-6 glow border border-white/10">
                 <span className="text-3xl">🧠</span>
               </div>
-              <h3 className="text-xl font-bold text-white mb-4">AI Chart-Analyzer</h3>
+              <h3 className="text-xl font-bold text-white mb-4">AI Chart Analyzer</h3>
               <p className="text-sm text-gray-400 leading-relaxed">
-                KI-gestützte Analysen mit RSI, MACD, EMA und mehr
+                AI-powered analyses with RSI, MACD, EMA and more
               </p>
             </div>
           </div>
@@ -95,8 +95,8 @@ export default function Home() {
               <div>
                 <h4 className="text-sm font-semibold text-yellow-400 mb-2">Disclaimer</h4>
                 <p className="text-xs text-gray-400 leading-relaxed">
-                  Paragon AI bietet keine Finanz- oder Anlageberatung. Alle Analysen sind 
-                  algorithmisch generierte technische Einschätzungen. Trading erfolgt auf eigenes Risiko.
+                  Paragon AI does not provide financial or investment advice. All analyses are 
+                  algorithmically generated technical assessments. Trading is at your own risk.
                 </p>
               </div>
             </div>

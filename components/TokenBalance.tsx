@@ -37,8 +37,8 @@ export default function TokenBalance() {
     return (
       <div className="glass rounded-3xl p-10 border border-white/10">
         <div className="text-center py-6">
-          <p className="text-sm text-gray-300 mb-2 font-medium">Bitte verbinde deine Wallet</p>
-          <p className="text-xs text-gray-400">um deine Token-Balance zu sehen</p>
+          <p className="text-sm text-gray-300 mb-2 font-medium">Please connect your wallet</p>
+          <p className="text-xs text-gray-400">to view your token balance</p>
         </div>
       </div>
     );

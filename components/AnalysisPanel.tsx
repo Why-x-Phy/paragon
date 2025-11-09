@@ -5,7 +5,7 @@ import { useActiveAccount } from "thirdweb/react";
 
 interface AnalysisResult {
   tendency: "Bullish" | "Neutral" | "Bearish";
-  risk: "niedrig" | "mittel" | "hoch";
+  risk: "low" | "medium" | "high";
   reasoning: string;
   indicators: {
     rsi: number;
@@ -21,12 +21,12 @@ export default function AnalysisPanel({ credits, onAnalyze }: { credits: number;
 
   const handleAnalyze = async () => {
     if (!account) {
-      alert("Bitte verbinde zuerst deine Wallet");
+      alert("Please connect your wallet first");
       return;
     }
 
     if (credits < 1) {
-      alert("Nicht genügend Credits. Bitte kaufe mehr Tokens.");
+      alert("Insufficient credits. Please purchase more tokens.");
       return;
     }
 
@@ -47,20 +47,20 @@ export default function AnalysisPanel({ credits, onAnalyze }: { credits: number;
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.error || "Fehler bei der Analyse");
+        throw new Error(error.error || "Analysis error");
       }
 
       const data = await response.json();
       
       if (data.success && data.analysis) {
         setAnalysis(data.analysis);
-        onAnalyze(); // Credit wird abgezogen
+        onAnalyze(); // Credit is deducted
       } else {
-        throw new Error("Ungültige Antwort vom Server");
+        throw new Error("Invalid server response");
       }
     } catch (error) {
-      console.error("Analyse-Fehler:", error);
-      alert(error instanceof Error ? error.message : "Fehler bei der Analyse. Bitte versuche es erneut.");
+      console.error("Analysis error:", error);
+      alert(error instanceof Error ? error.message : "Analysis error. Please try again.");
     } finally {
       setIsAnalyzing(false);
     }
@@ -79,9 +79,9 @@ export default function AnalysisPanel({ credits, onAnalyze }: { credits: number;
 
   const getRiskColor = (risk: string) => {
     switch (risk) {
-      case "niedrig":
+      case "low":
         return "text-green-400";
-      case "hoch":
+      case "high":
         return "text-red-400";
       default:
         return "text-yellow-400";
@@ -92,11 +92,11 @@ export default function AnalysisPanel({ credits, onAnalyze }: { credits: number;
     <div className="glass rounded-3xl p-10 border border-white/10 hover:border-white/20 transition-all">
       <div className="flex items-center justify-between mb-10">
         <div>
-          <h3 className="text-2xl font-bold text-white mb-3 tracking-tight">KI-Analyse</h3>
-          <p className="text-sm text-gray-400 font-medium">Erhalte eine smarte Markteinschätzung</p>
+          <h3 className="text-2xl font-bold text-white mb-3 tracking-tight">AI Analysis</h3>
+          <p className="text-sm text-gray-400 font-medium">Get a smart market assessment</p>
         </div>
         <div className="text-right">
-          <div className="text-xs text-gray-500 mb-1 font-medium">Kosten</div>
+          <div className="text-xs text-gray-500 mb-1 font-medium">Cost</div>
           <div className="text-xl font-extrabold text-white">1 Credit</div>
         </div>
       </div>
@@ -115,19 +115,19 @@ export default function AnalysisPanel({ credits, onAnalyze }: { credits: number;
             {isAnalyzing ? (
               <span className="flex items-center justify-center gap-2">
                 <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                Analysiere...
+                Analyzing...
               </span>
             ) : !account ? (
-              "Wallet verbinden"
+              "Connect Wallet"
             ) : credits < 1 ? (
-              "Nicht genügend Credits"
+              "Insufficient Credits"
             ) : (
-              "⚡ Analyse starten"
+              "⚡ Start Analysis"
             )}
           </button>
           {!account && (
             <p className="text-xs text-center text-gray-500">
-              Verbinde deine Wallet, um eine Analyse zu starten
+              Connect your wallet to start an analysis
             </p>
           )}
         </div>
@@ -135,11 +135,11 @@ export default function AnalysisPanel({ credits, onAnalyze }: { credits: number;
         <div className="space-y-4">
           <div className={`p-4 rounded-lg border ${getTendencyColor(analysis.tendency)}`}>
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium">Tendenz</span>
+              <span className="text-sm font-medium">Tendency</span>
               <span className="text-lg font-bold">{analysis.tendency}</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium">Risiko</span>
+              <span className="text-sm font-medium">Risk</span>
               <span className={`text-lg font-bold ${getRiskColor(analysis.risk)}`}>
                 {analysis.risk.charAt(0).toUpperCase() + analysis.risk.slice(1)}
               </span>
@@ -147,7 +147,7 @@ export default function AnalysisPanel({ credits, onAnalyze }: { credits: number;
           </div>
 
           <div className="bg-gray-900/50 rounded-lg p-4 space-y-3">
-            <h4 className="text-sm font-semibold text-white mb-3">Technische Indikatoren</h4>
+            <h4 className="text-sm font-semibold text-white mb-3">Technical Indicators</h4>
             <div className="grid grid-cols-3 gap-3">
               <div>
                 <div className="text-xs text-gray-400 mb-1">RSI</div>
@@ -165,7 +165,7 @@ export default function AnalysisPanel({ credits, onAnalyze }: { credits: number;
           </div>
 
           <div className="bg-gray-900/50 rounded-lg p-4">
-            <h4 className="text-sm font-semibold text-white mb-2">Begründung</h4>
+            <h4 className="text-sm font-semibold text-white mb-2">Reasoning</h4>
             <p className="text-sm text-gray-300 leading-relaxed">{analysis.reasoning}</p>
           </div>
 
@@ -177,7 +177,7 @@ export default function AnalysisPanel({ credits, onAnalyze }: { credits: number;
             disabled={!account || credits < 1 || isAnalyzing}
             className="w-full py-3 rounded-lg font-semibold text-white bg-white/10 hover:bg-white/20 border border-white/20 transition-all"
           >
-            Neue Analyse starten
+            Start New Analysis
           </button>
         </div>
       )}
