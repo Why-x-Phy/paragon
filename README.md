@@ -1,36 +1,164 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ⚡ Paragon AI
 
-## Getting Started
+### The On-Chain AI Chart Analyst
 
-First, run the development server:
+**Paragon AI** ist eine hochmoderne Web-App, die Live-Marktdaten mit künstlicher Intelligenz kombiniert, um Tradern klare, datenbasierte Chart-Analysen zu liefern.
 
+Jede Analyse kostet Punkte („Credits"), die mit einem eigenen ERC-20-Token auf der **Base-Chain** bezahlt werden können.
+
+Die Nutzer verbinden einfach ihre Wallet, wählen einen Markt aus – und Paragon AI liefert eine smarte, KI-gestützte Einschätzung zu Momentum, Volumen und Trendrichtung.
+
+---
+
+## 🚀 Features
+
+- 🔗 **Wallet-Login (Thirdweb Connect)** - Unterstützung für Metamask, Rabby, Phantom, Rainbow und mehr
+- 💰 **Token-Bezahlung** - Credits mit PARA Token auf Base bezahlen
+- 🧠 **AI Chart-Analyzer** - KI-gestützte Analysen mit RSI, MACD, EMA Indikatoren
+- 📊 **Live-Charts** - TradingView Widget Integration für Echtzeit-Charts
+- 💳 **Token-Pakete** - Flexible Kaufoptionen (1.000 / 5.000 / 10.000 Tokens)
+- 🌉 **Universal Bridge** - Zahlungen über verschiedene Chains möglich
+
+---
+
+## 🏗️ Tech-Stack
+
+- **Frontend**: Next.js 13 (App Router), React 19, TypeScript, Tailwind CSS 4
+- **Blockchain**: Thirdweb SDK v5, Base Chain (EVM)
+- **Wallets**: Thirdweb Connect (Metamask, Rabby, Phantom, Rainbow)
+- **Charts**: TradingView Widget
+- **Styling**: Tailwind CSS mit Glass Morphism & Gradient Effects
+
+---
+
+## 📦 Installation
+
+1. **Repository klonen**
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/dein-username/paragon.git
+cd paragon
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. **Dependencies installieren**
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. **Umgebungsvariablen konfigurieren**
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Erstelle eine `.env.local` Datei:
 
-## Learn More
+```env
+# Thirdweb Client ID (erforderlich)
+NEXT_PUBLIC_THIRDWEB_CLIENT_ID=your-thirdweb-client-id
 
-To learn more about Next.js, take a look at the following resources:
+# Para Token Address (Base Mainnet)
+NEXT_PUBLIC_PARA_TOKEN_ADDRESS=0x0000000000000000000000000000000000000000
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+4. **Development Server starten**
+```bash
+npm run dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Die App läuft dann auf [http://localhost:3000](http://localhost:3000)
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🔧 Konfiguration
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Thirdweb Client ID
+
+1. Erstelle einen Account auf [thirdweb.com](https://thirdweb.com)
+2. Gehe zu Dashboard → Settings → API Keys
+3. Kopiere deine Client ID in die `.env.local` Datei
+
+### Para Token Deployment
+
+Der PARA Token muss auf Base Mainnet deployed werden:
+
+1. Verwende Thirdweb Dashboard oder CLI
+2. Deploy einen ERC-20 Token auf Base
+3. Kopiere die Contract-Adresse in `.env.local`
+
+---
+
+## 📁 Projektstruktur
+
+```
+paragon/
+├── app/
+│   ├── api/
+│   │   └── analyze/
+│   │       └── route.ts          # Backend API für AI-Analysen
+│   ├── layout.tsx                 # Root Layout mit Providers
+│   ├── page.tsx                   # Hauptseite / Dashboard
+│   ├── providers.tsx              # Thirdweb Provider
+│   └── globals.css                # Globale Styles
+├── components/
+│   ├── Header.tsx                 # Navigation & Wallet-Connect
+│   ├── TokenBalance.tsx           # Token-Balance Anzeige
+│   ├── CreditStatus.tsx           # Credit-Status & Progress
+│   ├── ChartPanel.tsx             # TradingView Chart Widget
+│   ├── AnalysisPanel.tsx          # AI-Analyse Panel
+│   └── TokenPurchase.tsx          # Token-Kauf Komponente
+├── lib/
+│   └── thirdweb.ts                # Thirdweb Client Konfiguration
+└── README.md
+```
+
+---
+
+## 🎨 Design-Features
+
+- **Glass Morphism** - Moderne Glass-Effekte für UI-Komponenten
+- **Gradient Text** - Indigo-Purple Gradient für Headlines
+- **Glow Effects** - Subtile Glow-Effekte für interaktive Elemente
+- **Dark Theme** - Professionelles Dark Theme mit hohem Kontrast
+- **Responsive Design** - Mobile-first, vollständig responsive
+
+---
+
+## 🔄 Nächste Schritte
+
+### Backend Integration
+
+- [ ] Supabase Setup für User-Credits & Analyse-History
+- [ ] Binance API Integration für Live-Marktdaten
+- [ ] Indikator-Berechnung (RSI, MACD, EMA)
+- [ ] OpenAI/Claude API Integration für AI-Analysen
+
+### Smart Contracts
+
+- [ ] PARA Token Deployment auf Base
+- [ ] Thirdweb Pay Integration für Token-Käufe
+- [ ] Universal Bridge Setup für Cross-Chain Payments
+
+### Features
+
+- [ ] Analyse-History anzeigen
+- [ ] Leaderboard / Gamification
+- [ ] Mehr Markt-Paare
+- [ ] Erweiterte Indikatoren
+
+---
+
+## ⚠️ Disclaimer
+
+Paragon AI bietet **keine Finanz- oder Anlageberatung**. Alle Analysen sind algorithmisch generierte technische Einschätzungen. Trading erfolgt auf eigenes Risiko.
+
+---
+
+## 📄 Lizenz
+
+MIT License
+
+---
+
+## 🤝 Contributing
+
+Contributions sind willkommen! Bitte erstelle einen Pull Request oder öffne ein Issue.
+
+---
+
+**Powered by Thirdweb, Base, und Paragon AI Token (PARA)** ⚡
