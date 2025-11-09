@@ -45,7 +45,7 @@ export default function TokenBalance() {
   }
 
   return (
-    <div className="glass rounded-xl p-6 border border-white/10">
+    <div className="glass rounded-xl p-8 border border-white/10">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-sm font-medium text-gray-400">Token Balance</h3>
         <div className="w-8 h-8 rounded-full bg-white/10 border border-white/20 flex items-center justify-center">
