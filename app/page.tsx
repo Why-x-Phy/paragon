@@ -28,7 +28,7 @@ export default function Home() {
       <main className="relative pt-20 pb-16 px-4 sm:px-6 lg:px-8 xl:px-10">
         <div className="w-full max-w-[1600px] mx-auto space-y-6" style={{ paddingTop: '80px' }}>
           {/* Stats Cards - Top Section */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-8 mb-8">
             <div className="fade-in-up" style={{ animationDelay: "0.1s" }}>
               <TokenBalance />
             </div>
