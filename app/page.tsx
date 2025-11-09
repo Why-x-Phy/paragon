@@ -23,24 +23,24 @@ export default function Home() {
       <main className="pt-20 pb-12 px-6 sm:px-8 lg:px-12 xl:px-16 2xl:px-24">
         <div className="w-full">
           {/* Hero Section */}
-          <div className="text-center mb-16 mt-12">
-            <div className="inline-block mb-6">
+          <div className="text-center mb-20 mt-16">
+            <div className="inline-block mb-8">
               <span className="text-7xl font-bold gradient-text tracking-tight">⚡ Paragon AI</span>
             </div>
-            <p className="text-2xl text-gray-300 mb-3 font-light">The On-Chain AI Chart Analyst</p>
+            <p className="text-2xl text-gray-300 mb-4 font-light">The On-Chain AI Chart Analyst</p>
             <p className="text-base text-gray-400 max-w-3xl mx-auto leading-relaxed">
               KI-gestützte Marktanalysen powered by Thirdweb, Base, und Paragon AI Token (PARA)
             </p>
           </div>
 
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
             <TokenBalance />
             <CreditStatus credits={credits} />
           </div>
 
           {/* Main Content Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-20">
             {/* Chart Panel - Takes 8 columns */}
             <div className="lg:col-span-8">
               <ChartPanel />
@@ -53,12 +53,12 @@ export default function Home() {
           </div>
 
           {/* Token Purchase Section */}
-          <div className="mb-12">
+          <div className="mb-20">
             <TokenPurchase />
           </div>
 
           {/* Features Section */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
             <div className="glass rounded-xl p-8 border border-white/10 hover:border-white/20 transition-colors">
               <div className="w-14 h-14 rounded-xl bg-white/10 flex items-center justify-center mb-6">
                 <span className="text-3xl">🔗</span>

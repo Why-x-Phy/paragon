@@ -90,9 +90,9 @@ export default function AnalysisPanel({ credits, onAnalyze }: { credits: number;
 
   return (
     <div className="glass rounded-xl p-8 border border-white/10">
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-8">
         <div>
-          <h3 className="text-lg font-semibold text-white mb-1">KI-Analyse</h3>
+          <h3 className="text-xl font-semibold text-white mb-2">KI-Analyse</h3>
           <p className="text-sm text-gray-400">Erhalte eine smarte Markteinschätzung</p>
         </div>
         <div className="text-right">
@@ -102,7 +102,7 @@ export default function AnalysisPanel({ credits, onAnalyze }: { credits: number;
       </div>
 
       {!analysis ? (
-        <div className="space-y-4">
+        <div className="space-y-6">
           <button
             onClick={handleAnalyze}
             disabled={!account || credits < 1 || isAnalyzing}
