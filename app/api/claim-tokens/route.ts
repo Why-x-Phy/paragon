@@ -80,6 +80,10 @@ export async function POST(request: NextRequest) {
 
     const data = await response.json();
 
+    // Log die komplette Response für Debugging
+    console.log("Thirdweb API Response Status:", response.status);
+    console.log("Thirdweb API Response Data:", JSON.stringify(data, null, 2));
+
     if (!response.ok) {
       console.error("Thirdweb API Error:", JSON.stringify(data, null, 2));
       console.error("Request Body:", JSON.stringify({
@@ -109,21 +113,51 @@ export async function POST(request: NextRequest) {
     }
 
     // Thirdweb API gibt verschiedene Response-Strukturen zurück
-    // Prüfe alle möglichen Felder für transactionHash
-    const transactionHash = 
-      data.result?.transactionHash || 
-      data.transactionHash || 
-      data.txHash ||
-      data.hash ||
-      data.data?.transactionHash ||
-      data.data?.hash;
+    // Die API gibt oft ein "result" Objekt zurück mit transactionHash oder transaction
+    let transactionHash = null;
+    
+    // Prüfe verschiedene mögliche Strukturen
+    if (data.result) {
+      transactionHash = 
+        data.result.transactionHash || 
+        data.result.hash ||
+        data.result.transaction?.hash ||
+        data.result.txHash ||
+        data.result.receipt?.transactionHash;
+    }
+    
+    // Fallback: Prüfe direkt im data Objekt
+    if (!transactionHash) {
+      transactionHash = 
+        data.transactionHash || 
+        data.txHash ||
+        data.hash ||
+        data.transaction?.hash ||
+        data.receipt?.transactionHash ||
+        data.data?.transactionHash ||
+        data.data?.hash ||
+        data.data?.transaction?.hash;
+    }
+
+    // Wenn immer noch kein Hash, könnte es ein async Response sein
+    // Prüfe auf "id" oder "taskId" für async operations
+    if (!transactionHash && (data.id || data.taskId)) {
+      return NextResponse.json({
+        success: true,
+        pending: true,
+        taskId: data.id || data.taskId,
+        message: "Transaction wird verarbeitet. Bitte warte auf Bestätigung.",
+        data: data,
+      });
+    }
 
     if (!transactionHash) {
-      console.error("No transaction hash in response:", JSON.stringify(data, null, 2));
+      console.error("No transaction hash in response. Full response:", JSON.stringify(data, null, 2));
       return NextResponse.json(
         { 
           error: "Keine Transaction Hash in der API-Antwort erhalten",
           details: data,
+          hint: "Die API-Antwort könnte eine andere Struktur haben. Bitte prüfe die Console-Logs.",
         },
         { status: 500 }
       );

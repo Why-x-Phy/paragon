@@ -112,10 +112,10 @@ export default function TokenPurchase() {
 
   if (!account) {
     return (
-      <div className="glass rounded-xl p-8 border border-white/10">
-        <div className="text-center py-4">
-          <p className="text-sm text-gray-400 mb-2">Bitte verbinde deine Wallet</p>
-          <p className="text-xs text-gray-500">um Token-Pakete zu kaufen</p>
+      <div className="glass rounded-3xl p-10 border border-white/10">
+        <div className="text-center py-8">
+          <p className="text-base text-gray-300 mb-2 font-medium">Bitte verbinde deine Wallet</p>
+          <p className="text-sm text-gray-400">um Token-Pakete zu kaufen</p>
         </div>
       </div>
     );
