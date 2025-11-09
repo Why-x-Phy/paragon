@@ -74,7 +74,12 @@ export default function TokenPurchase() {
     try {
       // Berechne die Anzahl der Tokens (in wei)
       // 1 Token = 1e18 wei
-      const tokenAmount = BigInt(pkg.tokens) * BigInt(10 ** 18);
+      // Wichtig: pkg.tokens ist bereits die Anzahl der Tokens (z.B. 1000)
+      // Wir müssen das in wei umwandeln: 1000 * 10^18 = 1000000000000000000000
+      const tokenAmountWei = BigInt(pkg.tokens) * BigInt(10 ** 18);
+      
+      console.log("Token Package:", pkg.tokens, "tokens");
+      console.log("Token Amount (wei):", tokenAmountWei.toString());
 
       // Erstelle Contract Instance
       const contract = getContract({
@@ -84,12 +89,14 @@ export default function TokenPurchase() {
       });
 
       // Bereite die claim Transaction vor
-      // claimTo erwartet die Parameter direkt im Options-Objekt
+      // claimTo erwartet quantity als String (in wei)
       const transaction = await claimTo({
         contract,
         to: account.address,
-        quantity: tokenAmount.toString(),
+        quantity: tokenAmountWei.toString(),
       });
+      
+      console.log("Transaction prepared:", transaction);
 
       // Sende die Transaction - MetaMask wird jetzt eine Signing-Anfrage zeigen
       sendTransaction(transaction, {
