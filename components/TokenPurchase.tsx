@@ -88,8 +88,19 @@ export default function TokenPurchase() {
         address: PARA_TOKEN_ADDRESS,
       });
 
+      // Lade Claim Conditions, um den Preis zu prüfen
+      const claimConditionResponse = await fetch("/api/claim-conditions");
+      const claimConditionData = await claimConditionResponse.json();
+      
+      if (claimConditionData.success && claimConditionData.claimCondition) {
+        const pricePerToken = parseFloat(claimConditionData.claimCondition.pricePerToken);
+        console.log("Price per token (ETH):", pricePerToken);
+        console.log("Total price for", pkg.tokens, "tokens (ETH):", (pricePerToken * pkg.tokens).toFixed(6));
+      }
+      
       // Bereite die claim Transaction vor
-      // claimTo erwartet quantity als String (in wei)
+      // claimTo berechnet den Preis automatisch basierend auf Claim Conditions
+      // Die quantity sollte die Anzahl der Tokens in wei sein
       const transaction = await claimTo({
         contract,
         to: account.address,
@@ -97,6 +108,17 @@ export default function TokenPurchase() {
       });
       
       console.log("Transaction prepared:", transaction);
+      
+      // Prüfe den value der Transaction
+      if (transaction.value) {
+        const transactionValueEth = Number(transaction.value) / 1e18;
+        console.log("Transaction value (ETH):", transactionValueEth.toFixed(6));
+        
+        if (transactionValueEth > 1000) {
+          console.error("WARNUNG: Transaction value ist extrem hoch!", transactionValueEth);
+          alert(`WARNUNG: Der berechnete Preis ist extrem hoch: ${transactionValueEth.toFixed(2)} ETH\n\nBitte prüfe die Claim Conditions im Contract.`);
+        }
+      }
 
       // Sende die Transaction - MetaMask wird jetzt eine Signing-Anfrage zeigen
       sendTransaction(transaction, {

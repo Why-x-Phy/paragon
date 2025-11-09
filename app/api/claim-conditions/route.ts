@@ -19,10 +19,19 @@ export async function GET(request: NextRequest) {
       contract,
     });
 
+    // Log die rohen Claim Conditions für Debugging
+    console.log("Raw Claim Condition:", JSON.stringify(claimCondition, null, 2));
+    
     // Berechne den Preis in ETH (wei zu ETH)
-    const pricePerToken = claimCondition?.pricePerToken 
-      ? Number(claimCondition.pricePerToken) / 1e18 
-      : 0;
+    // pricePerToken ist bereits in wei (BigInt), müssen es zu ETH konvertieren
+    const pricePerTokenWei = claimCondition?.pricePerToken 
+      ? BigInt(claimCondition.pricePerToken.toString())
+      : BigInt(0);
+    
+    const pricePerToken = Number(pricePerTokenWei) / 1e18;
+    
+    console.log("Price per token (wei):", pricePerTokenWei.toString());
+    console.log("Price per token (ETH):", pricePerToken);
 
     // Berechne den Preis in USD (angenommen 1 ETH = 3000 USD)
     const ethPriceUsd = 3000; // TODO: Dynamisch aus API holen
@@ -33,6 +42,7 @@ export async function GET(request: NextRequest) {
       claimCondition: {
         pricePerToken: pricePerToken.toString(),
         pricePerTokenUsd: pricePerTokenUsd.toFixed(2),
+        pricePerTokenWei: pricePerTokenWei.toString(), // Für Debugging
         currency: claimCondition?.currency || "0x0000000000000000000000000000000000000000",
         maxClaimableSupply: claimCondition?.maxClaimableSupply?.toString() || "0",
         supplyClaimed: claimCondition?.supplyClaimed?.toString() || "0",
