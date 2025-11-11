@@ -11,7 +11,7 @@ import { claimTo } from "thirdweb/extensions/erc20";
 const baseChain = defineChain(BASE_CHAIN_ID);
 
 const PACKAGES = [
-  { tokens: 1000, label: "Starter" },
+  { tokens: 100, label: "Starter" },
   { tokens: 5000, label: "Pro", popular: true },
   { tokens: 10000, label: "Enterprise" },
 ];
@@ -79,8 +79,6 @@ export default function TokenPurchase() {
     try {
       // Berechne die Anzahl der Tokens (in wei)
       // 1 Token = 1e18 wei
-      // Wichtig: pkg.tokens ist bereits die Anzahl der Tokens (z.B. 1000)
-      // Wir müssen das in wei umwandeln: 1000 * 10^18 = 1000000000000000000000
       const tokenAmountWei = BigInt(pkg.tokens) * BigInt(10 ** 18);
       
       console.log("Token Package:", pkg.tokens, "tokens");
@@ -109,9 +107,15 @@ export default function TokenPurchase() {
       }
       
       const pricePerToken = parseFloat(claimConditionData.claimCondition.pricePerToken);
-      const totalPriceWei = BigInt(Math.floor(pricePerToken * pkg.tokens * 1e18));
+      
+      // Berechne totalPriceWei mit höherer Genauigkeit
+      // Verwende BigInt für die Berechnung, um Rundungsfehler zu vermeiden
+      const pricePerTokenWei = BigInt(Math.floor(pricePerToken * 1e18));
+      const totalPriceWei = pricePerTokenWei * BigInt(pkg.tokens);
       
       console.log("Price per token (ETH):", pricePerToken);
+      console.log("Price per token (wei):", pricePerTokenWei.toString());
+      console.log("Token amount:", pkg.tokens);
       console.log("Total price (wei):", totalPriceWei.toString());
       console.log("Total price (ETH):", (Number(totalPriceWei) / 1e18).toFixed(6));
       
@@ -121,6 +125,12 @@ export default function TokenPurchase() {
         throw new Error(`Calculated price is extremely high: ${totalPriceEth.toFixed(2)} ETH. Please check the claim conditions in the contract.`);
       }
       
+      // Check if price is too low (0 oder negativ)
+      if (totalPriceWei === BigInt(0)) {
+        throw new Error(`Calculated price is 0. Please check the claim conditions. Price per token: ${pricePerToken} ETH`);
+      }
+      
+      // WICHTIG: Der Contract erwartet den tatsächlichen pricePerToken Wert, nicht 0!
       // Bereite die claim Transaction vor mit prepareContractCall
       // Verwende die claim Funktion direkt mit den korrekten Parametern
       const transaction = prepareContractCall({
@@ -129,13 +139,13 @@ export default function TokenPurchase() {
         params: [
           account.address, // _receiver
           tokenAmountWei, // _quantity (in wei, als BigInt)
-          "0x0000000000000000000000000000000000000000", // _currency (ETH/Base native)
-          BigInt(0), // _pricePerToken (Claim Conditions bestimmen den Preis)
+          "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE", // _currency (ETH/Base native - muss dieser spezielle Wert sein!)
+          pricePerTokenWei, // _pricePerToken (MUSS der tatsächliche Preis sein, nicht 0!)
           {
             proof: [], // proof: bytes32[] (empty array)
             quantityLimitPerWallet: BigInt(0), // quantityLimitPerWallet: uint256
-            pricePerToken: BigInt(0), // pricePerToken: uint256
-            currency: "0x0000000000000000000000000000000000000000", // currency: address
+            pricePerToken: pricePerTokenWei, // pricePerToken: uint256 (MUSS der tatsächliche Preis sein!)
+            currency: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE", // currency: address (ETH native)
           }, // _allowlistProof as object
           "0x", // _data (empty bytes)
         ],
@@ -168,10 +178,10 @@ export default function TokenPurchase() {
 
   if (!account) {
     return (
-      <div className="glass rounded-3xl p-10 border border-white/10">
-        <div className="text-center py-8">
-          <p className="text-base text-gray-300 mb-2 font-medium">Please connect your wallet</p>
-          <p className="text-sm text-gray-400">to purchase token packages</p>
+      <div className="glass rounded-2xl p-6 border border-white/10">
+        <div className="text-center py-6">
+          <p className="text-sm text-gray-300 mb-1 font-medium">Please connect your wallet</p>
+          <p className="text-xs text-gray-400">to purchase token packages</p>
         </div>
       </div>
     );
@@ -179,21 +189,25 @@ export default function TokenPurchase() {
 
   return (
     <div className="glass rounded-2xl p-6 border border-white/10 hover:border-white/20 transition-all">
-      <div className="mb-6">
+      <div className="mb-5">
         <h3 className="text-xl font-bold text-white mb-2 tracking-tight">Purchase Tokens</h3>
-        <p className="text-sm text-gray-400 font-medium">Choose a package and pay with Thirdweb Pay</p>
+        <p className="text-xs text-gray-400 font-medium">Choose a package and pay with Thirdweb Pay</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {PACKAGES.map((pkg, index) => (
           <div
             key={index}
+            onClick={() => {
+              if (!isPurchasing && !isLoadingPrice && !isSendingTransaction) {
+                handlePurchase(pkg);
+              }
+            }}
             className={`relative premium-card rounded-2xl p-6 border transition-all cursor-pointer ${
-              selectedPackage === index
-                ? "border-white/40 bg-white/15 shadow-2xl scale-[1.02]"
-                : "border-white/10 bg-gray-900/30 hover:border-white/25 hover:bg-white/5"
-            } ${pkg.popular ? "ring-2 ring-white/30 ring-offset-2 ring-offset-black" : ""}`}
-            onClick={() => setSelectedPackage(index)}
+              isPurchasing || isLoadingPrice || isSendingTransaction
+                ? "opacity-50 cursor-not-allowed"
+                : "hover:border-white/30 hover:bg-white/10 hover:scale-[1.02]"
+            } ${pkg.popular ? "ring-2 ring-white/30 ring-offset-2 ring-offset-black" : ""} border-white/10 bg-gray-900/30`}
           >
             {pkg.popular && (
               <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
@@ -203,7 +217,7 @@ export default function TokenPurchase() {
               </div>
             )}
             <div className="text-center mb-5">
-              <div className="text-3xl font-extrabold text-white mb-1.5 tracking-tight">
+              <div className="text-3xl font-extrabold text-white mb-2 tracking-tight">
                 {pkg.tokens.toLocaleString()}
               </div>
               <div className="text-xs text-gray-400 font-medium">PARA Tokens</div>
@@ -216,47 +230,40 @@ export default function TokenPurchase() {
                 </div>
               ) : claimCondition ? (
                 <>
-                  <div className="text-2xl font-extrabold text-white mb-1.5">
+                  <div className="text-xl font-extrabold text-white mb-1">
                     ${(parseFloat(claimCondition.pricePerTokenUsd) * pkg.tokens).toFixed(2)}
                   </div>
-                  <div className="text-xs text-gray-400 font-medium">
+                  <div className="text-[10px] text-gray-400 font-medium">
                     {(parseFloat(claimCondition.pricePerToken) * pkg.tokens).toFixed(6)} ETH
                   </div>
-                  <div className="text-xs text-gray-500 mt-1">
+                  <div className="text-[10px] text-gray-500 mt-1">
                     {parseFloat(claimCondition.pricePerTokenUsd).toFixed(4)} $ per token
                   </div>
                 </>
               ) : (
-                <div className="text-xs text-gray-500">Price not available</div>
+                <div className="text-[10px] text-gray-500">Price not available</div>
               )}
             </div>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                handlePurchase(pkg);
-              }}
-              disabled={isPurchasing || isLoadingPrice || isSendingTransaction}
-              className={`w-full py-3 rounded-lg font-bold text-sm transition-all ${
-                selectedPackage === index
-                  ? "bg-gradient-to-r from-white/20 to-white/10 text-white border-2 border-white/30 hover:from-white/30 hover:to-white/20 shadow-xl hover:shadow-2xl hover:scale-[1.02]"
-                  : "bg-gradient-to-r from-gray-800 to-gray-900 text-gray-200 border border-gray-700 hover:from-gray-700 hover:to-gray-800"
-              } ${isPurchasing || isLoadingPrice ? "opacity-50 cursor-not-allowed" : ""}`}
-            >
+            <div className={`w-full py-2.5 rounded-lg font-bold text-xs text-center transition-all ${
+              isPurchasing || isSendingTransaction
+                ? "bg-gray-700 text-gray-400"
+                : "bg-gradient-to-r from-white/20 to-white/10 text-white border-2 border-white/30"
+            }`}>
               {isPurchasing || isSendingTransaction ? (
                 <span className="flex items-center justify-center gap-2">
-                  <span className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                  <span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
                   Processing...
                 </span>
               ) : (
-                "Purchase"
+                "Click to Purchase"
               )}
-            </button>
+            </div>
           </div>
         ))}
       </div>
 
-      <div className="mt-4 p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg">
-        <p className="text-xs text-blue-400">
+      <div className="mt-3 p-2.5 bg-blue-500/10 border border-blue-500/20 rounded-lg">
+        <p className="text-[10px] text-blue-400">
           💡 Payments via Base, BSC, Polygon, Arbitrum and more possible via Universal Bridge
         </p>
       </div>

@@ -25,7 +25,7 @@ export async function generateAIAnalysis(
     try {
       return await generateOpenAIAnalysis(indicators, marketData, openaiKey);
     } catch (error) {
-      console.error("OpenAI Fehler, verwende regelbasierte Analyse:", error);
+      console.error("OpenAI error, using rule-based analysis:", error);
       return generateRuleBasedAnalysis(indicators, marketData);
     }
   }
@@ -35,7 +35,7 @@ export async function generateAIAnalysis(
     try {
       return await generateClaudeAnalysis(indicators, marketData, anthropicKey);
     } catch (error) {
-      console.error("Claude Fehler, verwende regelbasierte Analyse:", error);
+      console.error("Claude error, using rule-based analysis:", error);
       return generateRuleBasedAnalysis(indicators, marketData);
     }
   }
@@ -51,30 +51,31 @@ async function generateOpenAIAnalysis(
   marketData: { symbol: string; price: number; change24h: number; volume24h: number },
   apiKey: string
 ): Promise<AnalysisResult> {
-  const prompt = `Du bist ein professioneller Krypto-Chart-Analyst. Analysiere folgende Marktdaten:
+  const prompt = `You are a professional crypto chart analyst. Analyze the following market data:
 
 Symbol: ${marketData.symbol}
-Preis: $${marketData.price}
-24h Änderung: ${marketData.change24h.toFixed(2)}%
-Volumen: ${marketData.volume24h.toLocaleString()}
+Price: $${marketData.price}
+24h Change: ${marketData.change24h.toFixed(2)}%
+Volume: ${marketData.volume24h.toLocaleString()}
 
-Technische Indikatoren:
+Technical Indicators:
 - RSI: ${indicators.rsi}
-- MACD: ${indicators.macd.value} (Signal: ${indicators.macd.signal})
+- MACD: ${indicators.macd.value} (Signal: ${indicators.macd.signal}, Histogram: ${indicators.macd.histogram})
 - EMA 50: ${indicators.ema.ema50}
 - EMA 200: ${indicators.ema.ema200}
-- Volumen-Spike: ${indicators.volume.spike ? "Ja" : "Nein"}
+- Volume Spike: ${indicators.volume.spike ? "Yes" : "No"}
+${indicators.liquidationZones && indicators.liquidationZones.length > 0 ? `- Liquidation Zones: ${indicators.liquidationZones.length} zones identified (${indicators.liquidationZones.slice(0, 3).map(z => `${z.type === "long" ? "Long" : "Short"} @ $${z.price.toFixed(2)} (${(z.intensity * 100).toFixed(0)}% intensity)`).join(", ")})` : ""}
 
-Gib eine kurze, präzise Analyse mit:
-1. Tendenz: Bullish, Neutral oder Bearish
-2. Risiko: niedrig, mittel oder hoch
-3. Begründung: 2-3 Sätze auf Deutsch
+Provide a short, precise analysis with:
+1. Tendency: Bullish, Neutral or Bearish
+2. Risk: low, medium or high
+3. Reasoning: 2-3 sentences in English
 
-Antworte im JSON-Format:
+Respond in JSON format:
 {
   "tendency": "Bullish|Neutral|Bearish",
-  "risk": "niedrig|mittel|hoch",
-  "reasoning": "Begründung hier"
+  "risk": "low|medium|high",
+  "reasoning": "Reasoning here"
 }`;
 
   const response = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -88,7 +89,7 @@ Antworte im JSON-Format:
       messages: [
         {
           role: "system",
-          content: "Du bist ein professioneller Krypto-Chart-Analyst. Antworte immer im JSON-Format.",
+          content: "You are a professional crypto chart analyst. Always respond in JSON format.",
         },
         { role: "user", content: prompt },
       ],
@@ -109,8 +110,8 @@ Antworte im JSON-Format:
     reasoning: content.reasoning,
     indicators: {
       rsi: indicators.rsi,
-      macd: indicators.macd.value > indicators.macd.signal ? "Positiv" : "Negativ",
-      ema: indicators.ema.ema50 > indicators.ema.ema200 ? "Über EMA 50 & 200" : "Unter EMA 50 & 200",
+      macd: indicators.macd.value > indicators.macd.signal ? "Positive" : "Negative",
+      ema: indicators.ema.ema50 > indicators.ema.ema200 ? "Above EMA 50 & 200" : "Below EMA 50 & 200",
     },
     timestamp: new Date().toISOString(),
   };
@@ -137,7 +138,7 @@ function generateRuleBasedAnalysis(
   marketData: { symbol: string; price: number; change24h: number; volume24h: number }
 ): AnalysisResult {
   let tendency: "Bullish" | "Neutral" | "Bearish" = "Neutral";
-  let risk: "niedrig" | "mittel" | "hoch" = "mittel";
+  let risk: "low" | "medium" | "high" = "medium";
   let reasoning = "";
 
   // RSI Analyse
@@ -157,22 +158,44 @@ function generateRuleBasedAnalysis(
   // Volumen Analyse
   const volumeBullish = indicators.volume.spike && marketData.change24h > 0;
 
+  // Liquidation Zones Analyse
+  const liquidationZones = indicators.liquidationZones || [];
+  const longLiquidationZones = liquidationZones.filter(z => z.type === "long" && z.price < marketData.price);
+  const shortLiquidationZones = liquidationZones.filter(z => z.type === "short" && z.price > marketData.price);
+  const highIntensityZones = liquidationZones.filter(z => z.intensity > 0.7);
+  const nearbyLongLiquidation = longLiquidationZones.some(z => Math.abs(z.price - marketData.price) / marketData.price < 0.02);
+  const nearbyShortLiquidation = shortLiquidationZones.some(z => Math.abs(z.price - marketData.price) / marketData.price < 0.02);
+
   // Tendenz bestimmen
   const bullishSignals = [rsiBullish, macdBullish, emaBullish, volumeBullish].filter(Boolean).length;
   const bearishSignals = [rsiBearish, macdBearish, emaBearish].filter(Boolean).length;
 
+  // Berücksichtige Liquidationszonen in der Analyse
+  let liquidationContext = "";
+  if (liquidationZones.length > 0) {
+    if (nearbyLongLiquidation && longLiquidationZones.length > 0) {
+      liquidationContext = ` Strong long liquidation zone detected below current price at $${longLiquidationZones[0].price.toFixed(2)} (${(longLiquidationZones[0].intensity * 100).toFixed(0)}% intensity). This could trigger a bounce or further downside pressure.`;
+      if (bearishSignals > 0) risk = "high";
+    } else if (nearbyShortLiquidation && shortLiquidationZones.length > 0) {
+      liquidationContext = ` Strong short liquidation zone detected above current price at $${shortLiquidationZones[0].price.toFixed(2)} (${(shortLiquidationZones[0].intensity * 100).toFixed(0)}% intensity). This could trigger a pullback or further upside momentum.`;
+      if (bullishSignals > 0) risk = "high";
+    } else if (highIntensityZones.length > 0) {
+      liquidationContext = ` ${highIntensityZones.length} high-intensity liquidation zone${highIntensityZones.length > 1 ? "s" : ""} identified. Monitor these levels for potential price reactions.`;
+    }
+  }
+
   if (bullishSignals >= 3) {
     tendency = "Bullish";
-    risk = rsiOverbought ? "hoch" : "mittel";
-    reasoning = `Starke Aufwärtstendenz erkennbar. RSI bei ${indicators.rsi.toFixed(1)}, MACD positiv, EMA-Trend bullish. ${indicators.volume.spike ? "Volumen-Spike bestätigt die Bewegung." : ""}`;
+    risk = rsiOverbought ? "high" : "medium";
+    reasoning = `Strong upward trend detected. RSI at ${indicators.rsi.toFixed(1)}, MACD positive, EMA trend bullish. ${indicators.volume.spike ? "Volume spike confirms the movement." : ""}${liquidationContext}`;
   } else if (bearishSignals >= 2) {
     tendency = "Bearish";
-    risk = rsiOversold ? "niedrig" : "mittel";
-    reasoning = `Abwärtstendenz sichtbar. RSI bei ${indicators.rsi.toFixed(1)}, MACD negativ, EMA-Trend bearish.`;
+    risk = rsiOversold ? "low" : "medium";
+    reasoning = `Downward trend visible. RSI at ${indicators.rsi.toFixed(1)}, MACD negative, EMA trend bearish.${liquidationContext}`;
   } else {
     tendency = "Neutral";
-    risk = "mittel";
-    reasoning = `Markt zeigt gemischte Signale. RSI bei ${indicators.rsi.toFixed(1)}, Indikatoren uneinheitlich. Abwarten auf klare Richtung.`;
+    risk = "medium";
+    reasoning = `Market shows mixed signals. RSI at ${indicators.rsi.toFixed(1)}, indicators are inconsistent. Waiting for clear direction.${liquidationContext}`;
   }
 
   return {
@@ -181,8 +204,8 @@ function generateRuleBasedAnalysis(
     reasoning,
     indicators: {
       rsi: indicators.rsi,
-      macd: macdBullish ? "Positiv" : "Negativ",
-      ema: emaBullish ? "Über EMA 50 & 200" : "Unter EMA 50 & 200",
+      macd: macdBullish ? "Positive" : "Negative",
+      ema: emaBullish ? "Above EMA 50 & 200" : "Below EMA 50 & 200",
     },
     timestamp: new Date().toISOString(),
   };

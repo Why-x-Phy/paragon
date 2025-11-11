@@ -35,9 +35,9 @@ export default function TokenBalance() {
 
   if (!account) {
     return (
-      <div className="glass rounded-3xl p-10 border border-white/10">
-        <div className="text-center py-6">
-          <p className="text-sm text-gray-300 mb-2 font-medium">Please connect your wallet</p>
+      <div className="glass rounded-2xl p-6 border border-white/10 h-full flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-sm text-gray-300 mb-1 font-medium">Please connect your wallet</p>
           <p className="text-xs text-gray-400">to view your token balance</p>
         </div>
       </div>
@@ -45,8 +45,8 @@ export default function TokenBalance() {
   }
 
   return (
-    <div className="glass rounded-2xl p-6 border border-white/10 hover:border-white/20 transition-all">
-      <div className="flex items-center justify-between mb-8">
+    <div className="glass rounded-2xl p-6 border border-white/10 hover:border-white/20 transition-all h-full">
+      <div className="flex items-center justify-between mb-5">
         <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Token Balance</h3>
         <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-white/15 to-white/5 border border-white/20 flex items-center justify-center shadow-lg">
           <span className="text-sm font-bold text-white">PARA</span>
@@ -54,10 +54,10 @@ export default function TokenBalance() {
       </div>
       <div className="space-y-3">
         <div className="flex items-baseline gap-3">
-          <span className="text-5xl font-extrabold text-white tracking-tight">
+          <span className="text-4xl font-extrabold text-white tracking-tight">
             {isLoading ? "..." : formattedBalance}
           </span>
-          <span className="text-lg text-gray-400 font-medium">PARA</span>
+          <span className="text-base text-gray-400 font-medium">PARA</span>
         </div>
         <div className="text-sm text-gray-500 font-medium">
           ≈ ${usdValue} USD

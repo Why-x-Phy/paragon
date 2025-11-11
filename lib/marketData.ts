@@ -38,23 +38,19 @@ export async function fetchDexscreenerData(symbol: string): Promise<MarketData |
  */
 export async function fetchBinanceData(symbol: string): Promise<MarketData | null> {
   try {
-    const apiKey = process.env.BINANCE_API_KEY;
-    
-    if (!apiKey) {
-      console.warn("Binance API Key nicht konfiguriert, verwende Mock-Daten");
-      return fetchDexscreenerData(symbol);
-    }
-
-    // Binance API Endpoint
+    // Binance Public API - kein API-Key erforderlich für ticker/24hr
     const response = await fetch(
       `https://api.binance.com/api/v3/ticker/24hr?symbol=${symbol}`,
       {
-        headers: apiKey ? { "X-MBX-APIKEY": apiKey } : {},
+        next: { revalidate: 10 }, // Cache für 10 Sekunden
       }
     );
 
     if (!response.ok) {
-      throw new Error(`Binance API Error: ${response.statusText}`);
+      console.error(`Binance API Error: ${response.status} ${response.statusText}`);
+      // Fallback zu Mock-Daten nur wenn API komplett fehlschlägt
+      console.warn("Binance API fehlgeschlagen, verwende Fallback-Daten");
+      return fetchDexscreenerData(symbol);
     }
 
     const data = await response.json();
@@ -69,7 +65,9 @@ export async function fetchBinanceData(symbol: string): Promise<MarketData | nul
     };
   } catch (error) {
     console.error("Fehler beim Abrufen von Binance-Daten:", error);
-    return null;
+    // Fallback zu Mock-Daten nur bei Netzwerkfehler
+    console.warn("Verwende Fallback-Daten aufgrund eines Fehlers");
+    return fetchDexscreenerData(symbol);
   }
 }
 

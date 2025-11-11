@@ -2,7 +2,7 @@
 
 export interface AnalysisResult {
   tendency: "Bullish" | "Neutral" | "Bearish";
-  risk: "niedrig" | "mittel" | "hoch";
+  risk: "low" | "medium" | "high";
   reasoning: string;
   indicators: {
     rsi: number;
@@ -39,6 +39,12 @@ export interface TechnicalIndicators {
     average: number;
     spike: boolean;
   };
+  liquidationZones?: {
+    price: number;
+    intensity: number;
+    type: "long" | "short";
+    liquidationAmount: number; // Liquidationssumme in USD
+  }[];
 }
 
 export interface UserCredits {

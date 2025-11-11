@@ -7,3 +7,7 @@ export const client = createThirdwebClient({
 export const PARA_TOKEN_ADDRESS = process.env.NEXT_PUBLIC_PARA_TOKEN_ADDRESS || "0xB9FB73448d478312c1d3a747EbE795A97276Eb51";
 export const BASE_CHAIN_ID = 8453; // Base Mainnet
 
+// Tokens werden nach der Analyse an den Contract zurückgeschickt
+// Dadurch bleibt der Supply gleich (Token bleibt im Contract)
+export const TREASURY_ADDRESS = PARA_TOKEN_ADDRESS;
+
