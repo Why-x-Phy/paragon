@@ -32,6 +32,7 @@ interface ChartPanelProps {
   analysis?: AnalysisResult | null;
   onViewChange?: (view: "chart" | "jupiter") => void;
   initialView?: "chart" | "jupiter";
+  onAnalyze?: () => void;
 }
 
 type ViewType = "chart" | "jupiter";
@@ -44,7 +45,8 @@ export default function ChartPanel({
   showLiquidationHeatmap = false,
   analysis = null,
   onViewChange,
-  initialView = "chart"
+  initialView = "chart",
+  onAnalyze
 }: ChartPanelProps) {
   const [activeView, setActiveView] = useState<ViewType>(initialView);
 
@@ -72,14 +74,14 @@ export default function ChartPanel({
   const jupiterPerpsUrl = "https://jup.ag/perps";
 
   return (
-    <div className="glass rounded-2xl p-6 border border-white/10 hover:border-white/20 transition-all h-full flex flex-col min-h-0">
+    <div className="glass rounded-3xl p-8 h-full flex flex-col min-h-0">
       {/* Header with Tabs */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-5 flex-shrink-0">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 mb-8 flex-shrink-0">
         <div className="flex-1">
-          <h3 className="text-xl font-bold text-white tracking-tight mb-1">
+          <h3 className="text-h2 font-bold text-white tracking-tight mb-2">
             {activeView === "chart" ? "Live Chart" : "Jupiter Perps"}
           </h3>
-          <p className="text-xs text-gray-400 font-medium">
+          <p className="text-body-sm text-gray-400 font-medium">
             {activeView === "chart" 
               ? `${selectedMarket.name} • ${selectedInterval === "1" ? "1m" : selectedInterval === "5" ? "5m" : selectedInterval === "15" ? "15m" : selectedInterval === "60" ? "1h" : selectedInterval === "240" ? "4h" : "1d"} • ${showEMAs ? "EMAs, Volume Profile & Heatmap Active" : "Real-time Chart"}`
               : "Trade perpetual futures on Jupiter"
@@ -87,70 +89,86 @@ export default function ChartPanel({
           </p>
         </div>
         
-        {/* Tab Switcher */}
-        <div className="flex gap-2 bg-gray-900/50 rounded-lg p-1 border border-white/10">
-          <button
-            onClick={() => handleViewChange("chart")}
-            className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
-              activeView === "chart"
-                ? "bg-white/10 text-white border border-white/20 shadow-lg"
-                : "bg-transparent text-gray-400 hover:text-white hover:bg-white/5"
-            }`}
-          >
-            📊 Chart
-          </button>
-          <button
-            onClick={() => handleViewChange("jupiter")}
-            className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
-              activeView === "jupiter"
-                ? "bg-white/10 text-white border border-white/20 shadow-lg"
-                : "bg-transparent text-gray-400 hover:text-white hover:bg-white/5"
-            }`}
-          >
-            ⚡ Jupiter Perps
-          </button>
+        {/* Tab Switcher & Quick Actions */}
+        <div className="flex items-center gap-3">
+          {activeView === "chart" && (
+            <div className="flex gap-2">
+              <button
+                onClick={onAnalyze}
+                className="px-4 py-2 rounded-xl text-body-sm font-semibold text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 border-2 border-cyan-400/40 transition-all shadow-lg shadow-cyan-500/30 hover:shadow-xl hover:shadow-cyan-500/40 hover:scale-[1.02] flex items-center gap-2"
+                title="Quick Analyze"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                Analyze
+              </button>
+            </div>
+          )}
+          <div className="flex gap-3 bg-gray-900/80 rounded-xl p-1.5 border-2 border-white/10 shadow-lg">
+            <button
+              onClick={() => handleViewChange("chart")}
+              className={`px-6 py-3 rounded-xl text-body font-semibold transition-all min-w-[120px] ${
+                activeView === "chart"
+                  ? "bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-white border-2 border-cyan-500/40 shadow-lg shadow-cyan-500/20"
+                  : "bg-transparent text-gray-400 hover:text-white hover:bg-white/5 border-2 border-transparent"
+              }`}
+            >
+              📊 Chart
+            </button>
+            <button
+              onClick={() => handleViewChange("jupiter")}
+              className={`px-6 py-3 rounded-xl text-body font-semibold transition-all min-w-[120px] ${
+                activeView === "jupiter"
+                  ? "bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-white border-2 border-cyan-500/40 shadow-lg shadow-cyan-500/20"
+                  : "bg-transparent text-gray-400 hover:text-white hover:bg-white/5 border-2 border-transparent"
+              }`}
+            >
+              ⚡ Jupiter Perps
+            </button>
+          </div>
         </div>
       </div>
 
       {/* AI Analysis Context - nur bei Jupiter View */}
       {activeView === "jupiter" && analysis && (
-        <div className="mb-4 px-4 py-3 border border-white/10 bg-gradient-to-r from-white/5 to-transparent rounded-lg flex-shrink-0">
-          <div className="flex items-center gap-6 flex-wrap">
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-gray-400">Tendency:</span>
-              <span className={`text-xs font-semibold ${
-                analysis.tendency === "Bullish" ? "text-green-400" : 
+        <div className="mb-6 px-6 py-4 border-2 border-white/10 bg-gradient-to-r from-cyan-500/10 via-blue-500/5 to-transparent rounded-2xl flex-shrink-0 shadow-lg">
+          <div className="flex items-center gap-8 flex-wrap">
+            <div className="flex items-center gap-3">
+              <span className="text-label text-gray-400">Tendency:</span>
+              <span className={`text-body font-bold ${
+                analysis.tendency === "Bullish" ? "text-emerald-400" : 
                 analysis.tendency === "Bearish" ? "text-red-400" : 
-                "text-yellow-400"
+                "text-amber-400"
               }`}>
                 {analysis.tendency === "Bullish" ? "🟢 Bullish" : 
                  analysis.tendency === "Bearish" ? "🔴 Bearish" : 
                  "🟡 Neutral"}
               </span>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-gray-400">Risk:</span>
-              <span className={`text-xs font-semibold ${
-                analysis.risk === "low" ? "text-green-400" : 
+            <div className="flex items-center gap-3">
+              <span className="text-label text-gray-400">Risk:</span>
+              <span className={`text-body font-bold ${
+                analysis.risk === "low" ? "text-emerald-400" : 
                 analysis.risk === "high" ? "text-red-400" : 
-                "text-yellow-400"
+                "text-amber-400"
               }`}>
                 {analysis.risk?.charAt(0).toUpperCase() + analysis.risk?.slice(1)}
               </span>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-gray-400">Price:</span>
-              <span className="text-xs font-bold text-white">
+            <div className="flex items-center gap-3">
+              <span className="text-label text-gray-400">Price:</span>
+              <span className="text-body font-bold text-white text-number">
                 ${currentPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </span>
-              <span className={`text-xs font-semibold ${change24h >= 0 ? "text-green-400" : "text-red-400"}`}>
+              <span className={`text-body font-bold ${change24h >= 0 ? "text-emerald-400" : "text-red-400"}`}>
                 ({change24h >= 0 ? "+" : ""}{change24h.toFixed(2)}%)
               </span>
             </div>
             {relevantLiquidationZone && (
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-gray-400">Key Liq Zone:</span>
-                <span className="text-xs font-semibold text-white">
+              <div className="flex items-center gap-3">
+                <span className="text-label text-gray-400">Key Liq Zone:</span>
+                <span className="text-body font-bold text-white text-number">
                   ${relevantLiquidationZone.price.toFixed(0)} (${formatAmount(relevantLiquidationZone.liquidationAmount)})
                 </span>
               </div>
@@ -160,7 +178,7 @@ export default function ChartPanel({
       )}
       
       {/* Content Area */}
-      <div className="w-full flex-1 rounded-xl overflow-hidden bg-gray-900 border border-white/10 shadow-2xl min-h-0">
+      <div className="w-full flex-1 rounded-2xl overflow-hidden bg-gray-950 border-2 border-white/10 shadow-2xl min-h-0">
         {activeView === "chart" ? (
           <iframe
             src={(() => {

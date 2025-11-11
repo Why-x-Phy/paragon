@@ -11,9 +11,9 @@ import { claimTo } from "thirdweb/extensions/erc20";
 const baseChain = defineChain(BASE_CHAIN_ID);
 
 const PACKAGES = [
-  { tokens: 100, label: "Starter" },
-  { tokens: 5000, label: "Pro", popular: true },
-  { tokens: 10000, label: "Enterprise" },
+  { tokens: 100, label: "Starter", pricePerToken: 0.0001 },
+  { tokens: 5000, label: "Pro", popular: true, bestValue: true, pricePerToken: 0.00009 },
+  { tokens: 10000, label: "Enterprise", pricePerToken: 0.00008 },
 ];
 
 interface ClaimCondition {
@@ -188,13 +188,13 @@ export default function TokenPurchase() {
   }
 
   return (
-    <div className="glass rounded-2xl p-6 border border-white/10 hover:border-white/20 transition-all">
-      <div className="mb-5">
-        <h3 className="text-xl font-bold text-white mb-2 tracking-tight">Purchase Tokens</h3>
-        <p className="text-xs text-gray-400 font-medium">Choose a package and pay with Thirdweb Pay</p>
+    <div className="glass rounded-3xl p-8 border-2 border-white/10 hover:border-white/20 transition-all">
+      <div className="mb-8">
+        <h3 className="text-h2 font-bold text-white mb-3 tracking-tight">Purchase Tokens</h3>
+        <p className="text-body-sm text-gray-400 font-medium">Choose a package and pay with Thirdweb Pay</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {PACKAGES.map((pkg, index) => (
           <div
             key={index}
@@ -209,49 +209,51 @@ export default function TokenPurchase() {
                 : "hover:border-white/30 hover:bg-white/10 hover:scale-[1.02]"
             } ${pkg.popular ? "ring-2 ring-white/30 ring-offset-2 ring-offset-black" : ""} border-white/10 bg-gray-900/30`}
           >
-            {pkg.popular && (
-              <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
-                <span className="bg-gradient-to-r from-yellow-500/20 to-orange-500/20 text-yellow-300 text-xs font-bold px-4 py-1.5 rounded-full border border-yellow-500/30 shadow-lg backdrop-blur-sm">
-                  ⭐ Popular
-                </span>
+            {(pkg.popular || pkg.bestValue) && (
+              <div className="absolute -top-5 left-1/2 -translate-x-1/2 z-10 flex gap-2">
+                {pkg.bestValue && (
+                  <span className="bg-gradient-to-r from-emerald-500/30 to-green-500/30 text-emerald-300 text-label font-bold px-6 py-2 rounded-full border-2 border-emerald-500/50 shadow-lg shadow-emerald-500/30 backdrop-blur-sm">
+                    💎 Best Value
+                  </span>
+                )}
+                {pkg.popular && (
+                  <span className="bg-gradient-to-r from-amber-500/30 to-orange-500/30 text-amber-300 text-label font-bold px-6 py-2 rounded-full border-2 border-amber-500/50 shadow-lg shadow-amber-500/30 backdrop-blur-sm">
+                    ⭐ Popular
+                  </span>
+                )}
               </div>
             )}
-            <div className="text-center mb-5">
-              <div className="text-3xl font-extrabold text-white mb-2 tracking-tight">
+            <div className="text-center mb-8">
+              <div className="text-number text-5xl font-extrabold text-white mb-3 tracking-tight">
                 {pkg.tokens.toLocaleString()}
               </div>
-              <div className="text-xs text-gray-400 font-medium">PARA Tokens</div>
+              <div className="text-body-sm text-gray-400 font-semibold mb-2">PARA Tokens</div>
+              <div className="text-label text-cyan-400 font-bold">
+                ≈ {pkg.tokens.toLocaleString()} Analyses
+              </div>
             </div>
-            <div className="text-center mb-5">
+            <div className="text-center mb-8">
               {isLoadingPrice ? (
-                <div className="flex items-center justify-center gap-2">
-                  <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  <span className="text-xs text-gray-400">Loading price...</span>
+                <div className="flex items-center justify-center gap-3">
+                  <span className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  <span className="text-body-sm text-gray-400">Loading price...</span>
                 </div>
               ) : claimCondition ? (
-                <>
-                  <div className="text-xl font-extrabold text-white mb-1">
-                    ${(parseFloat(claimCondition.pricePerTokenUsd) * pkg.tokens).toFixed(2)}
-                  </div>
-                  <div className="text-[10px] text-gray-400 font-medium">
-                    {(parseFloat(claimCondition.pricePerToken) * pkg.tokens).toFixed(6)} ETH
-                  </div>
-                  <div className="text-[10px] text-gray-500 mt-1">
-                    {parseFloat(claimCondition.pricePerTokenUsd).toFixed(4)} $ per token
-                  </div>
-                </>
+                <div className="text-h3 font-extrabold text-white mb-2 text-number">
+                  {(parseFloat(claimCondition.pricePerToken) * pkg.tokens).toFixed(6)} ETH
+                </div>
               ) : (
-                <div className="text-[10px] text-gray-500">Price not available</div>
+                <div className="text-body-sm text-gray-500">Price not available</div>
               )}
             </div>
-            <div className={`w-full py-2.5 rounded-lg font-bold text-xs text-center transition-all ${
+            <div className={`w-full min-h-[56px] rounded-xl font-bold text-body text-center transition-all flex items-center justify-center ${
               isPurchasing || isSendingTransaction
-                ? "bg-gray-700 text-gray-400"
-                : "bg-gradient-to-r from-white/20 to-white/10 text-white border-2 border-white/30"
+                ? "bg-gray-800 text-gray-400 border-2 border-gray-700"
+                : "bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white border-2 border-cyan-400/40 shadow-lg shadow-cyan-500/30 hover:shadow-xl hover:shadow-cyan-500/40 hover:scale-[1.02]"
             }`}>
               {isPurchasing || isSendingTransaction ? (
-                <span className="flex items-center justify-center gap-2">
-                  <span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                <span className="flex items-center justify-center gap-3">
+                  <span className="w-6 h-6 border-2 border-current border-t-transparent rounded-full animate-spin" />
                   Processing...
                 </span>
               ) : (
@@ -262,8 +264,8 @@ export default function TokenPurchase() {
         ))}
       </div>
 
-      <div className="mt-3 p-2.5 bg-blue-500/10 border border-blue-500/20 rounded-lg">
-        <p className="text-[10px] text-blue-400">
+      <div className="mt-6 p-5 bg-cyan-500/10 border-2 border-cyan-500/30 rounded-2xl">
+        <p className="text-body-sm text-cyan-300 font-medium">
           💡 Payments via Base, BSC, Polygon, Arbitrum and more possible via Universal Bridge
         </p>
       </div>

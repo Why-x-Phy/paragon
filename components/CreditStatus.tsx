@@ -29,12 +29,23 @@ export default function CreditStatus({ credits: creditsProp }: CreditStatusProps
   // Berechne Credits basierend auf Token-Balance: 1 Token = 1 Credit
   const credits = balance ? Math.floor(Number(balance) / 1e18) : 0;
 
+  const formattedBalance = balance 
+    ? (Number(balance) / 1e18).toLocaleString("de-DE", { 
+        minimumFractionDigits: 2, 
+        maximumFractionDigits: 2 
+      })
+    : "0.00";
+
+  const usdValue = balance 
+    ? (Number(balance) / 1e18 * 0.01).toFixed(2)
+    : "0.00";
+
   if (!account) {
     return (
-      <div className="glass rounded-2xl p-6 border border-white/10 h-full flex items-center justify-center">
+      <div className="glass rounded-3xl p-8 h-full flex items-center justify-center">
         <div className="text-center">
-          <p className="text-sm text-gray-300 mb-1 font-medium">Please connect your wallet</p>
-          <p className="text-xs text-gray-400">to view your credits</p>
+          <p className="text-body text-gray-300 mb-2 font-medium">Please connect your wallet</p>
+          <p className="text-body-sm text-gray-400">to view your credits</p>
         </div>
       </div>
     );
@@ -42,18 +53,24 @@ export default function CreditStatus({ credits: creditsProp }: CreditStatusProps
 
   if (isLoading) {
     return (
-      <div className="glass rounded-2xl p-6 border border-white/10 h-full flex items-center justify-center">
+      <div className="glass rounded-3xl p-8 h-full flex items-center justify-center">
         <div className="text-center">
-          <p className="text-sm text-gray-300">Loading credits...</p>
+          <p className="text-body text-gray-300">Loading credits...</p>
         </div>
       </div>
     );
   }
 
   const getStatusColor = () => {
-    if (credits >= 10) return "text-green-400";
-    if (credits >= 5) return "text-yellow-400";
+    if (credits >= 10) return "text-emerald-400";
+    if (credits >= 5) return "text-amber-400";
     return "text-red-400";
+  };
+
+  const getStatusBg = () => {
+    if (credits >= 10) return "bg-emerald-500/20 border-emerald-500/40";
+    if (credits >= 5) return "bg-amber-500/20 border-amber-500/40";
+    return "bg-red-500/20 border-red-500/40";
   };
 
   const getStatusText = () => {
@@ -63,34 +80,51 @@ export default function CreditStatus({ credits: creditsProp }: CreditStatusProps
   };
 
   return (
-    <div className="glass rounded-2xl p-6 border border-white/10 hover:border-white/20 transition-all h-full">
-      <div className="flex items-center justify-between mb-5">
-        <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Credits</h3>
-        <span className={`text-xs font-bold px-4 py-1.5 rounded-lg ${getStatusColor()} bg-opacity-10 border border-current border-opacity-20`}>
-          {getStatusText()}
-        </span>
+    <div className="glass rounded-3xl p-8 h-full flex flex-col">
+      <div className="flex items-center justify-between mb-8">
+        <h3 className="text-label text-gray-400">Credits & Balance</h3>
+        <div className="flex items-center gap-3">
+          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border-2 border-cyan-500/30 flex items-center justify-center shadow-lg shadow-cyan-500/20">
+            <span className="text-lg font-bold text-cyan-400">PARA</span>
+          </div>
+          <span className={`text-label font-bold px-5 py-2 rounded-xl ${getStatusColor()} ${getStatusBg()} border-2`}>
+            {getStatusText()}
+          </span>
+        </div>
       </div>
-      <div className="space-y-4">
-        <div className="flex items-baseline gap-3">
-          <span className="text-4xl font-extrabold text-white tracking-tight">{credits}</span>
-          <span className="text-base text-gray-400 font-medium">available</span>
+      <div className="flex-1 flex flex-col justify-center space-y-6">
+        {/* Credits Display */}
+        <div className="flex items-baseline gap-4">
+          <span className="text-number text-6xl font-extrabold text-white tracking-tight">{credits}</span>
+          <span className="text-h4 text-gray-400 font-semibold">Credits</span>
         </div>
-        <div className="text-xs text-gray-500 font-medium">
-          Based on {credits} PARA Token{credits !== 1 ? "s" : ""}
+        
+        {/* Token Balance Info */}
+        <div className="bg-gray-900/60 rounded-2xl p-5 border-2 border-white/10">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-label text-gray-400 font-semibold">Token Balance</span>
+            <span className="text-h4 font-bold text-white text-number">{formattedBalance} PARA</span>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-label text-gray-400 font-semibold">USD Value</span>
+            <span className="text-body-lg font-semibold text-gray-300">≈ ${usdValue}</span>
+          </div>
         </div>
-        <div className="w-full bg-gray-800/50 rounded-full h-2.5 overflow-hidden shadow-inner">
+        
+        {/* Progress Bar */}
+        <div className="w-full bg-gray-900/80 rounded-full h-3 overflow-hidden shadow-inner border border-white/5">
           <div
-            className={`h-full rounded-full transition-all duration-500 ${
+            className={`h-full rounded-full transition-all duration-700 ${
               credits >= 10
-                ? "bg-gradient-to-r from-green-500 to-emerald-500 shadow-lg shadow-green-500/30"
+                ? "bg-gradient-to-r from-emerald-500 to-green-500 shadow-lg shadow-emerald-500/50"
                 : credits >= 5
-                ? "bg-gradient-to-r from-yellow-500 to-orange-500 shadow-lg shadow-yellow-500/30"
-                : "bg-gradient-to-r from-red-500 to-pink-500 shadow-lg shadow-red-500/30"
+                ? "bg-gradient-to-r from-amber-500 to-orange-500 shadow-lg shadow-amber-500/50"
+                : "bg-gradient-to-r from-red-500 to-pink-500 shadow-lg shadow-red-500/50"
             }`}
             style={{ width: `${Math.min((credits / 20) * 100, 100)}%` }}
           />
         </div>
-        <p className="text-sm text-gray-500 font-medium">
+        <p className="text-body-sm text-gray-400 font-medium text-center">
           1 Analysis = 1 Credit = 1 PARA Token
         </p>
       </div>

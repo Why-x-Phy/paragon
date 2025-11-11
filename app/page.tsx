@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Header from "@/components/Header";
-import TokenBalance from "@/components/TokenBalance";
 import CreditStatus from "@/components/CreditStatus";
 import ChartPanel from "@/components/ChartPanel";
 import AnalysisPanel from "@/components/AnalysisPanel";
@@ -52,21 +51,19 @@ export default function Home() {
         
         {/* Content Area - Takes remaining space */}
         <div className="relative overflow-hidden min-h-0">
-          <div className="h-full w-full px-6 sm:px-8 lg:px-10 xl:px-14 2xl:px-20 py-6 overflow-y-auto">
-            <div className="h-full w-full grid grid-rows-[auto_1fr_auto] gap-6">
+          <div className="h-full w-full px-8 sm:px-10 lg:px-12 xl:px-20 2xl:px-32 pb-8 overflow-y-auto">
+            <div className="h-full w-full grid grid-rows-[auto_1fr_auto] gap-8 pt-16">
               
-              {/* Top Row: Stats Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="fade-in-up" style={{ animationDelay: "0.1s" }}>
-                  <TokenBalance />
-                </div>
-                <div className="fade-in-up" style={{ animationDelay: "0.2s" }}>
+              {/* Top Row: Credits Card - nur so breit wie Chart (8 columns) */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div className="lg:col-span-8 fade-in-up" style={{ animationDelay: "0.1s" }}>
                   <CreditStatus />
                 </div>
+                <div className="lg:col-span-4"></div>
               </div>
 
               {/* Middle Row: Chart and Analysis - Takes remaining space */}
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 min-h-0">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 min-h-0">
                 {/* Chart Panel - 8 columns */}
                 <div className="lg:col-span-8 fade-in-up h-full min-h-0" style={{ animationDelay: "0.3s" }}>
                   <ChartPanel 
@@ -76,6 +73,7 @@ export default function Home() {
                     analysis={analysis}
                     onViewChange={setChartView}
                     initialView={chartView}
+                    onAnalyze={handleAnalyze}
                   />
                 </div>
 
@@ -96,7 +94,7 @@ export default function Home() {
               </div>
 
               {/* Bottom Row: Token Purchase */}
-              <div className="fade-in-up" style={{ animationDelay: "0.5s" }}>
+              <div id="token-purchase" className="fade-in-up" style={{ animationDelay: "0.5s" }}>
                 <TokenPurchase />
               </div>
             </div>

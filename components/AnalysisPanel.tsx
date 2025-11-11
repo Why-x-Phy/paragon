@@ -109,6 +109,14 @@ export default function AnalysisPanel({
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysis, setAnalysis] = useState<AnalysisResult | null>(null);
   const [showWantToTrade, setShowWantToTrade] = useState(false);
+  const [lastAnalysisTime, setLastAnalysisTime] = useState<Date | null>(null);
+  const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
+    rsi: true,
+    macd: true,
+    ema: true,
+    volume: true,
+    liquidation: true,
+  });
 
   // Lese Token-Balance für Credits
   const contract = getContract({
@@ -215,7 +223,10 @@ export default function AnalysisPanel({
         sendTransaction(transferTransaction, {
           onSuccess: () => {
             console.log("Token transfer successful");
-            resolve();
+            // Warte kurz, damit die Blockchain die Balance aktualisiert
+            setTimeout(() => {
+              resolve();
+            }, 1000); // 1 Sekunde warten für Balance-Update
           },
           onError: (error: any) => {
             console.error("Token transfer error:", error);
@@ -270,6 +281,7 @@ export default function AnalysisPanel({
       
       if (data.success && data.analysis) {
         setAnalysis(data.analysis);
+        setLastAnalysisTime(new Date());
         onAnalysisResult?.(data.analysis); // Übergib Analyse an Parent
         onAnalyze(); // Credit is deducted (Token wurde bereits transferiert)
         onAnalysisComplete(); // Signalisiere dass Analyse abgeschlossen ist
@@ -380,34 +392,34 @@ export default function AnalysisPanel({
   };
 
   return (
-    <div className="glass rounded-2xl p-6 border border-white/10 hover:border-white/20 transition-all h-full flex flex-col min-h-0">
-      <div className="mb-5 flex-shrink-0">
-        <div className="flex items-start justify-between mb-4">
+    <div className="glass rounded-3xl p-8 h-full flex flex-col min-h-0">
+      <div className="mb-8 flex-shrink-0">
+        <div className="flex items-start justify-between mb-6">
           <div>
-            <h3 className="text-xl font-bold text-white mb-1 tracking-tight">AI Analysis</h3>
-            <p className="text-xs text-gray-400 font-medium">Get a smart market assessment</p>
+            <h3 className="text-h2 font-bold text-white mb-2 tracking-tight">AI Analysis</h3>
+            <p className="text-body-sm text-gray-400 font-medium">Get a smart market assessment</p>
           </div>
           <div className="text-right">
-            <div className="text-xs text-gray-500 mb-1 font-medium">Cost</div>
-            <div className="text-lg font-extrabold text-white">1 Credit</div>
+            <div className="text-label text-gray-500 mb-2 font-medium">Cost</div>
+            <div className="text-h3 font-extrabold text-white">1 Credit</div>
           </div>
         </div>
         
         {/* Step 1: Market Selection */}
-        <div className="mb-4">
-          <label className="text-xs text-gray-400 font-medium mb-2 block">
+        <div className="mb-6">
+          <label className="text-label text-gray-400 font-semibold mb-3 block">
             Step 1: Select Crypto Asset
           </label>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-3">
             {MARKETS.map((market) => (
               <button
                 key={market.symbol}
                 onClick={() => onMarketChange(market)}
                 disabled={isAnalyzing}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                className={`px-5 py-3 rounded-xl text-body-sm font-semibold transition-all border-2 ${
                   selectedMarket.symbol === market.symbol
-                    ? "bg-white/10 text-white border border-white/20 shadow-lg"
-                    : "bg-gray-800/50 text-gray-300 hover:bg-gray-800/70 border border-white/5 hover:border-white/10"
+                    ? "bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-white border-cyan-500/40 shadow-lg shadow-cyan-500/20"
+                    : "bg-gray-900/50 text-gray-300 hover:bg-gray-900/70 border-white/10 hover:border-white/20"
                 } ${isAnalyzing ? "opacity-50 cursor-not-allowed" : ""}`}
               >
                 {market.name}
@@ -417,20 +429,20 @@ export default function AnalysisPanel({
         </div>
         
         {/* Step 2: Interval Selection */}
-        <div className="mb-4">
-          <label className="text-xs text-gray-400 font-medium mb-2 block">
+        <div className="mb-6">
+          <label className="text-label text-gray-400 font-semibold mb-3 block">
             Step 2: Select Timeframe (Default: 15m)
           </label>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-3">
             {INTERVALS.map((interval) => (
               <button
                 key={interval.value}
                 onClick={() => onIntervalChange(interval.value)}
                 disabled={isAnalyzing}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                className={`px-5 py-3 rounded-xl text-body-sm font-semibold transition-all border-2 ${
                   selectedInterval === interval.value
-                    ? "bg-white/10 text-white border border-white/20 shadow-lg"
-                    : "bg-gray-800/50 text-gray-300 hover:bg-gray-800/70 border border-white/5 hover:border-white/10"
+                    ? "bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-white border-cyan-500/40 shadow-lg shadow-cyan-500/20"
+                    : "bg-gray-900/50 text-gray-300 hover:bg-gray-900/70 border-white/10 hover:border-white/20"
                 } ${isAnalyzing ? "opacity-50 cursor-not-allowed" : ""}`}
               >
                 {interval.label}
@@ -442,29 +454,46 @@ export default function AnalysisPanel({
 
       <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
       {!analysis ? (
-        <div className="space-y-5 flex-1 flex flex-col justify-center">
-          <div className="bg-gray-900/30 rounded-lg p-5 border border-white/5">
-            <div className="text-center mb-3">
-              <div className="w-14 h-14 mx-auto mb-3 rounded-full bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center border border-white/10">
-                <span className="text-2xl">🧠</span>
+        <div className="space-y-6 flex-1 flex flex-col justify-center">
+          <div className="bg-gray-900/50 rounded-2xl p-8 border-2 border-white/10">
+            <div className="text-center mb-6">
+              <div className="w-20 h-20 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 flex items-center justify-center border-2 border-cyan-500/30 shadow-lg shadow-cyan-500/20">
+                <span className="text-4xl">🧠</span>
               </div>
-              <h4 className="text-sm font-semibold text-white mb-1.5">Ready to Analyze</h4>
-              <p className="text-xs text-gray-400 mb-2">
+              <h4 className="text-h4 font-bold text-white mb-2">Ready to Analyze</h4>
+              <p className="text-body-sm text-gray-400 mb-4">
                 Get AI-powered market insights with technical indicators
               </p>
-              <p className="text-xs text-gray-500 mb-3">
-                Selected: <span className="text-white font-semibold">{selectedMarket.name}</span> • 
-                <span className="text-white font-semibold"> {selectedInterval === "1" ? "1m" : selectedInterval === "5" ? "5m" : selectedInterval === "15" ? "15m" : selectedInterval === "60" ? "1h" : selectedInterval === "240" ? "4h" : "1d"}</span>
+              <p className="text-body-sm text-gray-500 mb-4">
+                Selected: <span className="text-white font-bold">{selectedMarket.name}</span> • 
+                <span className="text-white font-bold"> {selectedInterval === "1" ? "1m" : selectedInterval === "5" ? "5m" : selectedInterval === "15" ? "15m" : selectedInterval === "60" ? "1h" : selectedInterval === "240" ? "4h" : "1d"}</span>
               </p>
+              {lastAnalysisTime && (
+                <p className="text-body-sm text-cyan-400 mb-6 font-medium">
+                  Last Analysis: {lastAnalysisTime.toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" })} ({Math.floor((Date.now() - lastAnalysisTime.getTime()) / 60000)}m ago)
+                </p>
+              )}
               
               {/* Analysis Features Info */}
-              <div className="bg-gray-800/30 rounded-lg p-3 border border-white/5 text-left">
-                <p className="text-[10px] text-gray-400 mb-2 font-semibold">Analysis includes:</p>
-                <ul className="text-[10px] text-gray-500 space-y-1">
-                  <li>• RSI, MACD, EMA (50/200)</li>
-                  <li>• Volume analysis & spikes</li>
-                  <li>• Price action & trends</li>
-                  <li>• Support/Resistance levels</li>
+              <div className="bg-gray-800/50 rounded-xl p-5 border-2 border-white/10 text-left">
+                <p className="text-label text-gray-400 mb-3 font-bold">Analysis includes:</p>
+                <ul className="text-body-sm text-gray-400 space-y-2">
+                  <li className="flex items-center gap-2">
+                    <span className="text-cyan-400">•</span>
+                    <span>RSI, MACD, EMA (50/200)</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-cyan-400">•</span>
+                    <span>Volume analysis & spikes</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-cyan-400">•</span>
+                    <span>Price action & trends</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-cyan-400">•</span>
+                    <span>Support/Resistance levels</span>
+                  </li>
                 </ul>
               </div>
             </div>
@@ -472,16 +501,16 @@ export default function AnalysisPanel({
               <button
                 onClick={handleAnalyze}
                 disabled={!account || credits < 1 || isAnalyzing || isTransferring}
-                className={`w-full py-3 rounded-lg font-bold text-sm text-white transition-all ${
+                className={`w-full min-h-[56px] rounded-xl font-bold text-body text-white transition-all ${
                   !account || credits < 1 || isAnalyzing || isTransferring
-                    ? "bg-gray-700 cursor-not-allowed opacity-50"
-                    : "bg-gradient-to-r from-white/15 to-white/5 hover:from-white/25 hover:to-white/10 border border-white/20 shadow-lg hover:shadow-xl hover:scale-[1.02]"
+                    ? "bg-gray-800 cursor-not-allowed opacity-50 border-2 border-gray-700"
+                    : "bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 border-2 border-cyan-400/40 shadow-lg shadow-cyan-500/30 hover:shadow-xl hover:shadow-cyan-500/40 hover:scale-[1.02]"
                 }`}
           >
                 {isAnalyzing || isTransferring ? (
-                  <span className="flex items-center justify-center gap-2">
-                    <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    {isTransferring ? "Transferring Token..." : "Analyzing..."}
+                  <span className="flex items-center justify-center gap-3">
+                    <span className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    <span>{isTransferring ? "Transferring Token..." : "Analyzing..."}</span>
                   </span>
                 ) : !account ? (
                   "Connect Wallet"
@@ -492,58 +521,58 @@ export default function AnalysisPanel({
                 )}
           </button>
           {!account && (
-            <p className="text-xs text-center text-gray-500">
+            <p className="text-body-sm text-center text-gray-500">
               Connect your wallet to start an analysis
             </p>
           )}
         </div>
       ) : (
-        <div className="space-y-3 flex-1 overflow-y-auto min-h-0">
+        <div className="space-y-6 flex-1 overflow-y-auto min-h-0">
           {/* Market Info */}
-          <div className="bg-gray-900/50 rounded-lg p-3 border border-white/10">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs text-gray-400 font-medium">Asset</span>
-              <span className="text-sm font-bold text-white">{selectedMarket.name}</span>
+          <div className="bg-gray-900/60 rounded-2xl p-6 border-2 border-white/10">
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-label text-gray-400 font-semibold">Asset</span>
+              <span className="text-h4 font-bold text-white">{selectedMarket.name}</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-xs text-gray-400 font-medium">Timeframe</span>
-              <span className="text-sm font-bold text-white">
+              <span className="text-label text-gray-400 font-semibold">Timeframe</span>
+              <span className="text-h4 font-bold text-white">
                 {selectedInterval === "1" ? "1m" : selectedInterval === "5" ? "5m" : selectedInterval === "15" ? "15m" : selectedInterval === "60" ? "1h" : selectedInterval === "240" ? "4h" : "1d"}
               </span>
             </div>
             {analysis.marketData && (
               <>
-                <div className="flex items-center justify-between mt-2 pt-2 border-t border-white/5">
-                  <span className="text-xs text-gray-400 font-medium">Price</span>
-                  <span className="text-sm font-bold text-white">${analysis.marketData.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                <div className="flex items-center justify-between mt-4 pt-4 border-t-2 border-white/10">
+                  <span className="text-label text-gray-400 font-semibold">Price</span>
+                  <span className="text-h4 font-bold text-white text-number">${analysis.marketData.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-gray-400 font-medium">24h Change</span>
-                  <span className={`text-sm font-bold ${analysis.marketData.change24h >= 0 ? "text-green-400" : "text-red-400"}`}>
+                  <span className="text-label text-gray-400 font-semibold">24h Change</span>
+                  <span className={`text-h4 font-bold ${analysis.marketData.change24h >= 0 ? "text-emerald-400" : "text-red-400"}`}>
                     {analysis.marketData.change24h >= 0 ? "+" : ""}{analysis.marketData.change24h.toFixed(2)}%
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-gray-400 font-medium">24h High</span>
-                  <span className="text-sm font-semibold text-white">${analysis.marketData.high24h.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                  <span className="text-label text-gray-400 font-semibold">24h High</span>
+                  <span className="text-body font-semibold text-white text-number">${analysis.marketData.high24h.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-gray-400 font-medium">24h Low</span>
-                  <span className="text-sm font-semibold text-white">${analysis.marketData.low24h.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                  <span className="text-label text-gray-400 font-semibold">24h Low</span>
+                  <span className="text-body font-semibold text-white text-number">${analysis.marketData.low24h.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                 </div>
               </>
             )}
           </div>
 
           {/* Tendency & Risk */}
-          <div className={`p-3 rounded-lg border ${getTendencyColor(analysis.tendency)}`}>
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-medium">Tendency</span>
-              <span className="text-sm font-bold">{analysis.tendency}</span>
+          <div className={`p-6 rounded-2xl border-2 ${getTendencyColor(analysis.tendency)}`}>
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-label font-semibold">Tendency</span>
+              <span className="text-h4 font-bold">{analysis.tendency}</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-xs font-medium">Risk</span>
-              <span className={`text-sm font-bold ${getRiskColor(analysis.risk)}`}>
+              <span className="text-label font-semibold">Risk</span>
+              <span className={`text-h4 font-bold ${getRiskColor(analysis.risk)}`}>
                 {analysis.risk.charAt(0).toUpperCase() + analysis.risk.slice(1)}
               </span>
             </div>
@@ -551,181 +580,246 @@ export default function AnalysisPanel({
 
           {/* RSI Details */}
           {analysis.detailedIndicators && (
-            <div className="bg-gray-900/50 rounded-lg p-3 border border-white/10">
-              <h4 className="text-xs font-semibold text-white mb-3">RSI (Relative Strength Index)</h4>
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-gray-400">Value</span>
-                  <span className="text-sm font-bold text-white">{analysis.detailedIndicators.rsi.value.toFixed(2)}</span>
+            <div className="bg-gray-900/60 rounded-2xl border-2 border-white/10 overflow-hidden">
+              <button
+                onClick={() => setExpandedSections({...expandedSections, rsi: !expandedSections.rsi})}
+                className="w-full p-6 flex items-center justify-between hover:bg-white/5 transition-colors"
+              >
+                <h4 className="text-h4 font-bold text-white">RSI (Relative Strength Index)</h4>
+                <span className="text-cyan-400 text-2xl transition-transform duration-300" style={{ transform: expandedSections.rsi ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+                  ▼
+                </span>
+              </button>
+              {expandedSections.rsi && (
+                <div className="px-6 pb-6 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-label text-gray-400 font-semibold">Value</span>
+                    <span className="text-h3 font-bold text-white text-number">{analysis.detailedIndicators.rsi.value.toFixed(2)}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-label text-gray-400 font-semibold">Status</span>
+                    <span className={`text-body font-bold ${
+                      analysis.detailedIndicators.rsi.status === "Overbought" ? "text-red-400" :
+                      analysis.detailedIndicators.rsi.status === "Oversold" ? "text-emerald-400" : "text-amber-400"
+                    }`}>
+                      {analysis.detailedIndicators.rsi.status}
+                    </span>
+                  </div>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-gray-400">Status</span>
-                  <span className={`text-xs font-semibold ${
-                    analysis.detailedIndicators.rsi.status === "Overbought" ? "text-red-400" :
-                    analysis.detailedIndicators.rsi.status === "Oversold" ? "text-green-400" : "text-yellow-400"
-                  }`}>
-                    {analysis.detailedIndicators.rsi.status}
-                  </span>
-                </div>
-              </div>
+              )}
             </div>
           )}
 
           {/* MACD Details */}
           {analysis.detailedIndicators && (
-            <div className="bg-gray-900/50 rounded-lg p-3 border border-white/10">
-              <h4 className="text-xs font-semibold text-white mb-3">MACD (Moving Average Convergence Divergence)</h4>
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-gray-400">MACD Line</span>
-                  <span className="text-sm font-bold text-white">{analysis.detailedIndicators.macd.value.toFixed(4)}</span>
+            <div className="bg-gray-900/60 rounded-2xl border-2 border-white/10 overflow-hidden">
+              <button
+                onClick={() => setExpandedSections({...expandedSections, macd: !expandedSections.macd})}
+                className="w-full p-6 flex items-center justify-between hover:bg-white/5 transition-colors"
+              >
+                <h4 className="text-h4 font-bold text-white">MACD (Moving Average Convergence Divergence)</h4>
+                <span className="text-cyan-400 text-2xl transition-transform duration-300" style={{ transform: expandedSections.macd ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+                  ▼
+                </span>
+              </button>
+              {expandedSections.macd && (
+                <div className="px-6 pb-6 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-label text-gray-400 font-semibold">MACD Line</span>
+                    <span className="text-body font-bold text-white text-number">{analysis.detailedIndicators.macd.value.toFixed(4)}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-label text-gray-400 font-semibold">Signal Line</span>
+                    <span className="text-body font-semibold text-white text-number">{analysis.detailedIndicators.macd.signal.toFixed(4)}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-label text-gray-400 font-semibold">Histogram</span>
+                    <span className={`text-body font-bold ${analysis.detailedIndicators.macd.histogram >= 0 ? "text-emerald-400" : "text-red-400"} text-number`}>
+                      {analysis.detailedIndicators.macd.histogram >= 0 ? "+" : ""}{analysis.detailedIndicators.macd.histogram.toFixed(4)}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between pt-4 border-t-2 border-white/10">
+                    <span className="text-label text-gray-400 font-semibold">Trend</span>
+                    <span className={`text-body font-bold ${
+                      analysis.detailedIndicators.macd.trend === "Bullish" 
+                        ? "text-emerald-400" 
+                        : analysis.detailedIndicators.macd.trend === "Bearish" 
+                        ? "text-red-400" 
+                        : "text-amber-400"
+                    }`}>
+                      {analysis.detailedIndicators.macd.trend}
+                    </span>
+                  </div>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-gray-400">Signal Line</span>
-                  <span className="text-sm font-semibold text-white">{analysis.detailedIndicators.macd.signal.toFixed(4)}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-gray-400">Histogram</span>
-                  <span className={`text-sm font-semibold ${analysis.detailedIndicators.macd.histogram >= 0 ? "text-green-400" : "text-red-400"}`}>
-                    {analysis.detailedIndicators.macd.histogram >= 0 ? "+" : ""}{analysis.detailedIndicators.macd.histogram.toFixed(4)}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between pt-2 border-t border-white/5">
-                  <span className="text-xs text-gray-400">Trend</span>
-                  <span className={`text-xs font-semibold ${
-                    analysis.detailedIndicators.macd.trend === "Bullish" 
-                      ? "text-green-400" 
-                      : analysis.detailedIndicators.macd.trend === "Bearish" 
-                      ? "text-red-400" 
-                      : "text-yellow-400"
-                  }`}>
-                    {analysis.detailedIndicators.macd.trend}
-                  </span>
-                </div>
-              </div>
+              )}
             </div>
           )}
 
           {/* EMA Details */}
           {analysis.detailedIndicators && (
-            <div className="bg-gray-900/50 rounded-lg p-3 border border-white/10">
-              <h4 className="text-xs font-semibold text-white mb-3">EMA (Exponential Moving Average)</h4>
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-gray-400">EMA 13</span>
-                  <span className="text-sm font-semibold text-white">${analysis.detailedIndicators.ema.ema13.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+            <div className="bg-gray-900/60 rounded-2xl border-2 border-white/10 overflow-hidden">
+              <button
+                onClick={() => setExpandedSections({...expandedSections, ema: !expandedSections.ema})}
+                className="w-full p-6 flex items-center justify-between hover:bg-white/5 transition-colors"
+              >
+                <h4 className="text-h4 font-bold text-white">EMA (Exponential Moving Average)</h4>
+                <span className="text-cyan-400 text-2xl transition-transform duration-300" style={{ transform: expandedSections.ema ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+                  ▼
+                </span>
+              </button>
+              {expandedSections.ema && (
+                <div className="px-6 pb-6 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-label text-gray-400 font-semibold">EMA 13</span>
+                    <span className="text-body font-bold text-white text-number">${analysis.detailedIndicators.ema.ema13.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-label text-gray-400 font-semibold">EMA 50</span>
+                    <span className="text-body font-bold text-white text-number">${analysis.detailedIndicators.ema.ema50.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-label text-gray-400 font-semibold">EMA 200</span>
+                    <span className="text-body font-bold text-white text-number">${analysis.detailedIndicators.ema.ema200.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-label text-gray-400 font-semibold">EMA 800</span>
+                    <span className="text-body font-bold text-white text-number">${analysis.detailedIndicators.ema.ema800.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                  </div>
+                  <div className="flex items-center justify-between pt-4 border-t-2 border-white/10">
+                    <span className="text-label text-gray-400 font-semibold">Trend</span>
+                    <span className={`text-body font-bold ${analysis.detailedIndicators.ema.trend === "Bullish" ? "text-emerald-400" : "text-red-400"}`}>
+                      {analysis.detailedIndicators.ema.trend}
+                    </span>
+                  </div>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-gray-400">EMA 50</span>
-                  <span className="text-sm font-semibold text-white">${analysis.detailedIndicators.ema.ema50.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-gray-400">EMA 200</span>
-                  <span className="text-sm font-semibold text-white">${analysis.detailedIndicators.ema.ema200.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-gray-400">EMA 800</span>
-                  <span className="text-sm font-semibold text-white">${analysis.detailedIndicators.ema.ema800.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
-                </div>
-                <div className="flex items-center justify-between pt-2 border-t border-white/5">
-                  <span className="text-xs text-gray-400">Trend</span>
-                  <span className={`text-xs font-semibold ${analysis.detailedIndicators.ema.trend === "Bullish" ? "text-green-400" : "text-red-400"}`}>
-                    {analysis.detailedIndicators.ema.trend}
-                  </span>
-                </div>
-              </div>
+              )}
             </div>
           )}
 
           {/* Volume Details */}
           {analysis.detailedIndicators && (
-            <div className="bg-gray-900/50 rounded-lg p-3 border border-white/10">
-              <h4 className="text-xs font-semibold text-white mb-3">Volume Analysis</h4>
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-gray-400">Current Volume</span>
-                  <span className="text-sm font-semibold text-white">
-                    {analysis.detailedIndicators.volume.current.toLocaleString(undefined, { maximumFractionDigits: 0 })}
-                  </span>
+            <div className="bg-gray-900/60 rounded-2xl border-2 border-white/10 overflow-hidden">
+              <button
+                onClick={() => setExpandedSections({...expandedSections, volume: !expandedSections.volume})}
+                className="w-full p-6 flex items-center justify-between hover:bg-white/5 transition-colors"
+              >
+                <h4 className="text-h4 font-bold text-white">Volume Analysis</h4>
+                <span className="text-cyan-400 text-2xl transition-transform duration-300" style={{ transform: expandedSections.volume ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+                  ▼
+                </span>
+              </button>
+              {expandedSections.volume && (
+                <div className="px-6 pb-6 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-label text-gray-400 font-semibold">Current Volume</span>
+                    <span className="text-body font-bold text-white text-number">
+                      {analysis.detailedIndicators.volume.current.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-label text-gray-400 font-semibold">Average Volume</span>
+                    <span className="text-body font-bold text-white text-number">
+                      {analysis.detailedIndicators.volume.average.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-label text-gray-400 font-semibold">Volume Ratio</span>
+                    <span className={`text-body font-bold ${analysis.detailedIndicators.volume.ratio >= 1.5 ? "text-emerald-400" : "text-gray-400"} text-number`}>
+                      {analysis.detailedIndicators.volume.ratio.toFixed(2)}x
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between pt-4 border-t-2 border-white/10">
+                    <span className="text-label text-gray-400 font-semibold">Volume Spike</span>
+                    <span className={`text-body font-bold ${analysis.detailedIndicators.volume.spike ? "text-emerald-400" : "text-gray-400"}`}>
+                      {analysis.detailedIndicators.volume.spike ? "Yes" : "No"}
+                    </span>
+                  </div>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-gray-400">Average Volume</span>
-                  <span className="text-sm font-semibold text-white">
-                    {analysis.detailedIndicators.volume.average.toLocaleString(undefined, { maximumFractionDigits: 0 })}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-gray-400">Volume Ratio</span>
-                  <span className={`text-sm font-semibold ${analysis.detailedIndicators.volume.ratio >= 1.5 ? "text-green-400" : "text-gray-400"}`}>
-                    {analysis.detailedIndicators.volume.ratio.toFixed(2)}x
-                  </span>
-                </div>
-                <div className="flex items-center justify-between pt-2 border-t border-white/5">
-                  <span className="text-xs text-gray-400">Volume Spike</span>
-                  <span className={`text-xs font-semibold ${analysis.detailedIndicators.volume.spike ? "text-green-400" : "text-gray-400"}`}>
-                    {analysis.detailedIndicators.volume.spike ? "Yes" : "No"}
-                  </span>
-                </div>
-              </div>
+              )}
             </div>
           )}
 
           {/* Liquidation Zones */}
           {analysis.detailedIndicators && analysis.detailedIndicators.liquidationZones && analysis.detailedIndicators.liquidationZones.length > 0 && (
-            <div className="bg-gray-900/50 rounded-lg p-3 border border-white/10">
-              <h4 className="text-xs font-semibold text-white mb-3">Liquidation Zones</h4>
-              <div className="space-y-2">
-                {analysis.detailedIndicators.liquidationZones.map((zone, index) => (
-                  <div
-                    key={index}
-                    className={`p-2 rounded-lg border ${
-                      zone.type === "long"
-                        ? "bg-red-500/10 border-red-500/20"
-                        : "bg-green-500/10 border-green-500/20"
-                    }`}
-                  >
-                    <div className="flex items-center justify-between mb-1">
-                      <span className={`text-xs font-semibold ${
-                        zone.type === "long" ? "text-red-400" : "text-green-400"
-                      }`}>
-                        {zone.type === "long" ? "Long" : "Short"} Liquidation
-                      </span>
-                      <span className="text-xs font-bold text-white">
-                        ${zone.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                      </span>
+            <div className="bg-gray-900/60 rounded-2xl border-2 border-white/10 overflow-hidden">
+              <button
+                onClick={() => setExpandedSections({...expandedSections, liquidation: !expandedSections.liquidation})}
+                className="w-full p-6 flex items-center justify-between hover:bg-white/5 transition-colors"
+              >
+                <h4 className="text-h4 font-bold text-white">Liquidation Zones</h4>
+                <span className="text-cyan-400 text-2xl transition-transform duration-300" style={{ transform: expandedSections.liquidation ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+                  ▼
+                </span>
+              </button>
+              {expandedSections.liquidation && (
+                <div className="px-6 pb-6 space-y-4">
+                  {analysis.detailedIndicators.liquidationZones.map((zone, index) => (
+                    <div
+                      key={index}
+                      className={`p-5 rounded-xl border-2 ${
+                        zone.type === "long"
+                          ? "bg-red-500/10 border-red-500/30"
+                          : "bg-emerald-500/10 border-emerald-500/30"
+                      }`}
+                    >
+                      <div className="flex items-center justify-between mb-3">
+                        <span className={`text-body font-bold ${
+                          zone.type === "long" ? "text-red-400" : "text-emerald-400"
+                        }`}>
+                          {zone.type === "long" ? "Long" : "Short"} Liquidation
+                        </span>
+                        <span className="text-h4 font-bold text-white text-number">
+                          ${zone.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-label text-gray-400 font-semibold">Liquidation Amount</span>
+                        <span className="text-body font-bold text-white text-number">
+                          ${zone.liquidationAmount >= 1000000 
+                            ? `${(zone.liquidationAmount / 1000000).toFixed(2)}M`
+                            : zone.liquidationAmount >= 1000
+                            ? `${(zone.liquidationAmount / 1000).toFixed(2)}K`
+                            : zone.liquidationAmount.toFixed(0)}
+                        </span>
+                      </div>
                     </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-[10px] text-gray-400">Liquidation Amount</span>
-                      <span className="text-xs font-bold text-white">
-                        ${zone.liquidationAmount >= 1000000 
-                          ? `${(zone.liquidationAmount / 1000000).toFixed(2)}M`
-                          : zone.liquidationAmount >= 1000
-                          ? `${(zone.liquidationAmount / 1000).toFixed(2)}K`
-                          : zone.liquidationAmount.toFixed(0)}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
           {/* Reasoning */}
-          <div className="bg-gray-900/50 rounded-lg p-3 border border-white/10">
-            <h4 className="text-xs font-semibold text-white mb-2">AI Analysis Reasoning</h4>
-            <p className="text-xs text-gray-300 leading-relaxed">{analysis.reasoning}</p>
+          <div className="bg-gray-900/60 rounded-2xl p-6 border-2 border-white/10">
+            <h4 className="text-h4 font-bold text-white mb-4">AI Analysis Reasoning</h4>
+            <p className="text-body text-gray-300 leading-relaxed">{analysis.reasoning}</p>
           </div>
 
-          {/* X Post Button */}
-          <button
-            onClick={handlePostToX}
-            className="w-full py-2.5 rounded-lg text-sm font-semibold text-white bg-[#1DA1F2] hover:bg-[#1a8cd8] border border-[#1DA1F2]/30 transition-all flex items-center justify-center gap-2"
-          >
-            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-            </svg>
-            Post to X
-          </button>
+          {/* Quick Actions */}
+          <div className="grid grid-cols-2 gap-4">
+            <button
+              onClick={() => {
+                const analysisText = `Paragon AI Analysis: ${selectedMarket.name} - ${analysis.tendency} | Risk: ${analysis.risk}\n${analysis.reasoning}`;
+                navigator.clipboard.writeText(analysisText);
+                // Optional: Toast notification
+              }}
+              className="min-h-[56px] rounded-xl text-body-sm font-bold text-white bg-white/10 hover:bg-white/20 border-2 border-white/20 transition-all flex items-center justify-center gap-2 hover:scale-[1.02]"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+              </svg>
+              Copy
+            </button>
+            <button
+              onClick={handlePostToX}
+              className="min-h-[56px] rounded-xl text-body-sm font-bold text-white bg-[#1DA1F2] hover:bg-[#1a8cd8] border-2 border-[#1DA1F2]/40 transition-all flex items-center justify-center gap-2 shadow-lg shadow-[#1DA1F2]/30 hover:shadow-xl hover:shadow-[#1DA1F2]/40 hover:scale-[1.02]"
+            >
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+              </svg>
+              Share
+            </button>
+          </div>
 
           {/* Action Button */}
           <button
@@ -734,7 +828,7 @@ export default function AnalysisPanel({
               handleAnalyze();
             }}
             disabled={!account || credits < 1 || isAnalyzing}
-            className="w-full py-2.5 rounded-lg text-sm font-semibold text-white bg-white/10 hover:bg-white/20 border border-white/20 transition-all mt-2"
+            className="w-full min-h-[56px] rounded-xl text-body font-bold text-white bg-white/10 hover:bg-white/20 border-2 border-white/20 transition-all mt-4 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-[1.02]"
           >
             Start New Analysis
           </button>
@@ -743,30 +837,30 @@ export default function AnalysisPanel({
 
       {/* "Want to Trade?" Popup */}
       {showWantToTrade && (
-        <div className="fixed inset-0 z-40 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-          <div className="glass rounded-2xl p-6 border border-white/10 shadow-2xl max-w-sm w-full">
-            <div className="text-center mb-4">
-              <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-br from-green-500/20 to-emerald-500/20 flex items-center justify-center border border-green-500/30">
-                <span className="text-3xl">🚀</span>
+        <div className="fixed inset-0 z-40 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+          <div className="glass rounded-3xl p-8 border-2 border-white/10 shadow-2xl max-w-md w-full">
+            <div className="text-center mb-8">
+              <div className="w-24 h-24 mx-auto mb-6 rounded-3xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 flex items-center justify-center border-2 border-cyan-500/40 shadow-lg shadow-cyan-500/30">
+                <span className="text-5xl">🚀</span>
               </div>
-              <h3 className="text-lg font-bold text-white mb-2">Want to Trade?</h3>
-              <p className="text-xs text-gray-400">
+              <h3 className="text-h2 font-bold text-white mb-3">Want to Trade?</h3>
+              <p className="text-body-sm text-gray-400">
                 Open a position on Jupiter Perps based on your analysis
               </p>
             </div>
-            <div className="flex gap-3">
+            <div className="flex gap-4">
               <button
                 onClick={() => {
                   setShowWantToTrade(false);
                   onOpenJupiter?.(); // Wechsle zum Jupiter Tab im ChartPanel
                 }}
-                className="flex-1 py-2.5 rounded-lg text-sm font-semibold text-white bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 border border-green-500/30 transition-all shadow-lg shadow-green-500/20"
+                className="flex-1 min-h-[56px] rounded-xl text-body font-bold text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 border-2 border-cyan-400/40 transition-all shadow-lg shadow-cyan-500/30 hover:shadow-xl hover:shadow-cyan-500/40 hover:scale-[1.02]"
               >
                 Yes, Trade Now
               </button>
               <button
                 onClick={() => setShowWantToTrade(false)}
-                className="flex-1 py-2.5 rounded-lg text-sm font-semibold text-white bg-white/10 hover:bg-white/20 border border-white/20 transition-all"
+                className="flex-1 min-h-[56px] rounded-xl text-body font-bold text-white bg-white/10 hover:bg-white/20 border-2 border-white/20 transition-all hover:scale-[1.02]"
               >
                 Maybe Later
               </button>
