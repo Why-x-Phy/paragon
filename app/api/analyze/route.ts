@@ -7,6 +7,7 @@ import { client, PARA_TOKEN_ADDRESS, BASE_CHAIN_ID } from "@/lib/thirdweb";
 import { getContract } from "thirdweb/contract";
 import { balanceOf } from "thirdweb/extensions/erc20";
 import { defineChain } from "thirdweb/chains";
+import { checkRateLimit } from "@/lib/rateLimit";
 
 const baseChain = defineChain(BASE_CHAIN_ID);
 
@@ -24,6 +25,26 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { error: "Market and wallet address required" },
         { status: 400 }
+      );
+    }
+
+    // Rate-Limiting: 10 Requests pro Minute pro Wallet-Adresse
+    const rateLimit = checkRateLimit(walletAddress, 10, 60000);
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        { 
+          error: "Rate limit exceeded. Please wait before requesting another analysis.",
+          retryAfter: Math.ceil((rateLimit.resetAt - Date.now()) / 1000)
+        },
+        { 
+          status: 429,
+          headers: {
+            "X-RateLimit-Limit": "10",
+            "X-RateLimit-Remaining": "0",
+            "X-RateLimit-Reset": rateLimit.resetAt.toString(),
+            "Retry-After": Math.ceil((rateLimit.resetAt - Date.now()) / 1000).toString(),
+          }
+        }
       );
     }
 

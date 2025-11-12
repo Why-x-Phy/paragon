@@ -1,26 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import type { AnalysisResult } from "@/lib/types";
 
 interface Market {
   symbol: string;
   name: string;
-}
-
-interface AnalysisResult {
-  tendency?: "Bullish" | "Neutral" | "Bearish";
-  risk?: "low" | "medium" | "high";
-  marketData?: {
-    price: number;
-    change24h: number;
-  };
-  detailedIndicators?: {
-    liquidationZones?: {
-      price: number;
-      type: "long" | "short";
-      liquidationAmount: number;
-    }[];
-  };
 }
 
 interface ChartPanelProps {
@@ -95,10 +80,11 @@ export default function ChartPanel({
             <div className="flex gap-2">
               <button
                 onClick={onAnalyze}
-                className="px-4 py-2 rounded-xl text-body-sm font-semibold text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 border-2 border-cyan-400/40 transition-all shadow-lg shadow-cyan-500/30 hover:shadow-xl hover:shadow-cyan-500/40 hover:scale-[1.02] flex items-center gap-2"
+                className="px-4 py-2 rounded-xl text-body-sm font-semibold text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 border-2 border-cyan-400/40 transition-all shadow-lg shadow-cyan-500/30 hover:shadow-xl hover:shadow-cyan-500/40 hover:scale-[1.02] flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-gray-900"
                 title="Quick Analyze"
+                aria-label="Start quick market analysis"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
                 Analyze
@@ -108,21 +94,25 @@ export default function ChartPanel({
           <div className="flex gap-3 bg-gray-900/80 rounded-xl p-1.5 border-2 border-white/10 shadow-lg">
             <button
               onClick={() => handleViewChange("chart")}
-              className={`px-6 py-3 rounded-xl text-body font-semibold transition-all min-w-[120px] ${
+              className={`px-6 py-3 rounded-xl text-body font-semibold transition-all min-w-[120px] focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-gray-900 ${
                 activeView === "chart"
                   ? "bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-white border-2 border-cyan-500/40 shadow-lg shadow-cyan-500/20"
                   : "bg-transparent text-gray-400 hover:text-white hover:bg-white/5 border-2 border-transparent"
               }`}
+              aria-label="Switch to chart view"
+              aria-pressed={activeView === "chart"}
             >
               📊 Chart
             </button>
             <button
               onClick={() => handleViewChange("jupiter")}
-              className={`px-6 py-3 rounded-xl text-body font-semibold transition-all min-w-[120px] ${
+              className={`px-6 py-3 rounded-xl text-body font-semibold transition-all min-w-[120px] focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-gray-900 ${
                 activeView === "jupiter"
                   ? "bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-white border-2 border-cyan-500/40 shadow-lg shadow-cyan-500/20"
                   : "bg-transparent text-gray-400 hover:text-white hover:bg-white/5 border-2 border-transparent"
               }`}
+              aria-label="Switch to Jupiter Perps trading view"
+              aria-pressed={activeView === "jupiter"}
             >
               ⚡ Jupiter Perps
             </button>

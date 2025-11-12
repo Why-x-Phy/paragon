@@ -18,7 +18,7 @@ export default function Home() {
   const [selectedMarket, setSelectedMarket] = useState(MARKETS[0]);
   const [selectedInterval, setSelectedInterval] = useState("15");
   const [showEMAs, setShowEMAs] = useState(false);
-  const [analysis, setAnalysis] = useState<any>(null);
+  const [analysis, setAnalysis] = useState<import("@/lib/types").AnalysisResult | null>(null);
   const [chartView, setChartView] = useState<"chart" | "jupiter">("chart");
 
   const handleAnalyze = () => {
@@ -55,7 +55,7 @@ export default function Home() {
             <div className="h-full w-full grid grid-rows-[auto_1fr_auto] gap-8 pt-16">
               
               {/* Top Row: Credits Card - nur so breit wie Chart (8 columns) */}
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+              <div id="dashboard" className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 <div className="lg:col-span-8 fade-in-up" style={{ animationDelay: "0.1s" }}>
                   <CreditStatus />
                 </div>
@@ -63,7 +63,7 @@ export default function Home() {
               </div>
 
               {/* Middle Row: Chart and Analysis - Takes remaining space */}
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 min-h-0">
+              <div id="analysis" className="grid grid-cols-1 lg:grid-cols-12 gap-8 min-h-0">
                 {/* Chart Panel - 8 columns */}
                 <div className="lg:col-span-8 fade-in-up h-full min-h-0" style={{ animationDelay: "0.3s" }}>
                   <ChartPanel 

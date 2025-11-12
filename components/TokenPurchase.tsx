@@ -2,6 +2,7 @@
 
 import { useActiveAccount, useActiveWalletChain, useSwitchActiveWalletChain, useSendTransaction } from "thirdweb/react";
 import { useState, useEffect } from "react";
+import { showToast } from "@/components/Toast";
 import { client, PARA_TOKEN_ADDRESS, BASE_CHAIN_ID } from "@/lib/thirdweb";
 import { defineChain } from "thirdweb/chains";
 import { getContract } from "thirdweb/contract";
@@ -60,7 +61,7 @@ export default function TokenPurchase() {
 
   const handlePurchase = async (pkg: typeof PACKAGES[0]) => {
     if (!account) {
-      alert("Please connect your wallet first");
+      showToast("Please connect your wallet first", "warning");
       return;
     }
 
@@ -69,7 +70,7 @@ export default function TokenPurchase() {
       try {
         await switchChain(baseChain);
       } catch (error) {
-        alert("Please switch to Base Chain in your wallet");
+        showToast("Please switch to Base Chain in your wallet", "warning");
         return;
       }
     }
@@ -158,19 +159,23 @@ export default function TokenPurchase() {
       sendTransaction(transaction, {
         onSuccess: (result) => {
           console.log("Transaction successful:", result);
-          alert(`Transaction successful! Hash: ${result.transactionHash}`);
+          showToast(`Transaction successful! Hash: ${result.transactionHash.substring(0, 10)}...`, "success");
           // Optional: Reload Token Balance
-          window.location.reload();
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
         },
         onError: (error) => {
           console.error("Transaction error:", error);
-          alert(`Purchase error: ${error.message || "Unknown error"}`);
+          const errorMessage = error instanceof Error ? error.message : "Unknown error";
+          showToast(`Purchase error: ${errorMessage}`, "error");
         },
       });
       
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Purchase error:", error);
-      alert(`Purchase error: ${error.message || "Unknown error"}`);
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      showToast(`Purchase error: ${errorMessage}`, "error");
     } finally {
       setIsPurchasing(false);
     }

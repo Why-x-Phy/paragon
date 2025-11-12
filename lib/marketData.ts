@@ -194,7 +194,7 @@ export async function fetchHistoricalData(
       return null;
     }
 
-    const mappedData = data.map((candle: any[]) => ({
+    const mappedData = data.map((candle: import("./types").BinanceCandle) => ({
       timestamp: candle[0],
       open: parseFloat(candle[1]),
       high: parseFloat(candle[2]),

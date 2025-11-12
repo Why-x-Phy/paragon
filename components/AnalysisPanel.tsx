@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { showToast } from "@/components/Toast";
 import { useActiveAccount, useReadContract, useSendTransaction } from "thirdweb/react";
 import { client, PARA_TOKEN_ADDRESS, BASE_CHAIN_ID } from "@/lib/thirdweb";
 import { getContract } from "thirdweb/contract";
@@ -137,12 +138,12 @@ export default function AnalysisPanel({
 
   const handleAnalyze = async () => {
     if (!account) {
-      alert("Please connect your wallet first");
+      showToast("Please connect your wallet first", "warning");
       return;
     }
 
     if (credits < 1) {
-      alert("Insufficient credits. Please purchase more PARA tokens.");
+      showToast("Insufficient credits. Please purchase more PARA tokens.", "error");
       return;
     }
 
@@ -228,7 +229,7 @@ export default function AnalysisPanel({
               resolve();
             }, 1000); // 1 Sekunde warten für Balance-Update
           },
-          onError: (error: any) => {
+          onError: (error: Error | unknown) => {
             console.error("Token transfer error:", error);
             console.error("Error type:", typeof error);
             console.error("Error constructor:", error?.constructor?.name);
@@ -241,8 +242,9 @@ export default function AnalysisPanel({
             console.error("Error cause:", error?.cause);
             
             // Prüfe ob es ein Balance-Problem ist
-            const errorMessage = error?.message || error?.data?.message || error?.reason || error?.shortMessage || String(error);
-            const errorCode = error?.code || error?.data?.code;
+            const errorObj = error as { message?: string; data?: { message?: string }; reason?: string; shortMessage?: string; code?: string | number; data?: { code?: string | number } };
+            const errorMessage = errorObj?.message || errorObj?.data?.message || errorObj?.reason || errorObj?.shortMessage || String(error);
+            const errorCode = errorObj?.code || errorObj?.data?.code;
             
             console.error("Parsed error message:", errorMessage);
             console.error("Parsed error code:", errorCode);
@@ -274,6 +276,11 @@ export default function AnalysisPanel({
 
       if (!response.ok) {
         const error = await response.json();
+        if (response.status === 429) {
+          // Rate Limit Error
+          const retryAfter = error.retryAfter || 60;
+          throw new Error(`Rate limit exceeded. Please wait ${retryAfter} seconds before trying again.`);
+        }
         throw new Error(error.error || "Analysis error");
       }
 
@@ -292,7 +299,8 @@ export default function AnalysisPanel({
       }
     } catch (error) {
       console.error("Analysis error:", error);
-      alert(error instanceof Error ? error.message : "Analysis error. Please try again.");
+      const errorMessage = error instanceof Error ? error.message : "Analysis error. Please try again.";
+      showToast(errorMessage, "error");
       onAnalysisComplete(); // Auch bei Fehler EMAs anzeigen
     } finally {
       setIsAnalyzing(false);
@@ -501,11 +509,13 @@ export default function AnalysisPanel({
               <button
                 onClick={handleAnalyze}
                 disabled={!account || credits < 1 || isAnalyzing || isTransferring}
-                className={`w-full min-h-[56px] rounded-xl font-bold text-body text-white transition-all ${
+                className={`w-full min-h-[56px] rounded-xl font-bold text-body text-white transition-all focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-gray-900 ${
                   !account || credits < 1 || isAnalyzing || isTransferring
                     ? "bg-gray-800 cursor-not-allowed opacity-50 border-2 border-gray-700"
                     : "bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 border-2 border-cyan-400/40 shadow-lg shadow-cyan-500/30 hover:shadow-xl hover:shadow-cyan-500/40 hover:scale-[1.02]"
                 }`}
+                aria-label={!account ? "Connect wallet to start analysis" : credits < 1 ? "Insufficient credits to start analysis" : "Start AI market analysis"}
+                aria-disabled={!account || credits < 1 || isAnalyzing || isTransferring}
           >
                 {isAnalyzing || isTransferring ? (
                   <span className="flex items-center justify-center gap-3">
