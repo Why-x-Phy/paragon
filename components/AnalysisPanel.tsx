@@ -266,22 +266,22 @@ export default function AnalysisPanel({
   const getTendencyColor = (tendency: string) => {
     switch (tendency) {
       case "Bullish":
-        return "text-green-400 bg-green-400/10 border-green-400/20";
+        return "text-emerald-400 bg-emerald-500/15 border-emerald-500/30";
       case "Bearish":
-        return "text-red-400 bg-red-400/10 border-red-400/20";
+        return "text-rose-400 bg-rose-500/15 border-rose-500/30";
       default:
-        return "text-yellow-400 bg-yellow-400/10 border-yellow-400/20";
+        return "text-amber-400 bg-amber-500/15 border-amber-500/30";
     }
   };
 
   const getRiskColor = (risk: string) => {
     switch (risk) {
       case "low":
-        return "text-green-400";
+        return "text-emerald-400";
       case "high":
-        return "text-red-400";
+        return "text-rose-400";
       default:
-        return "text-yellow-400";
+        return "text-amber-400";
     }
   };
 
@@ -356,34 +356,61 @@ export default function AnalysisPanel({
   };
 
   return (
-    <div className="glass rounded-3xl p-6 sm:p-8 md:p-10 h-full flex flex-col min-h-0">
-      <div className="mb-4 sm:mb-6 flex-shrink-0">
-        <div className="flex items-start mb-4 gap-6">
-          <div className="flex-1 min-w-0 pl-[5px]">
-            <h3 className="text-h3 sm:text-h2 font-bold text-white mb-1 tracking-tight">AI Analysis</h3>
-            <p className="text-body-xs sm:text-body-sm text-gray-400 font-medium">Get a smart market assessment</p>
+    <div className="glass rounded-3xl p-8 sm:p-10 md:p-12 h-full flex flex-col min-h-0 !mt-[5px]">
+      <div className="mb-6 flex-shrink-0 !mt-[10px]">
+        {/* Header Section */}
+        <div className="flex items-center justify-between !px-[10px] mb-4">
+          <div className="flex-1 min-w-0 !pl-[10px]">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500/30 to-blue-500/20 flex items-center justify-center border-2 border-cyan-500/40 shadow-lg shadow-cyan-500/20">
+                <svg className="w-6 h-6 text-cyan-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                </svg>
+              </div>
+              <h3 className="text-h3 sm:text-h2 font-bold bg-gradient-to-r from-cyan-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent tracking-tight">AI Analysis</h3>
+            </div>
           </div>
-          <div className="text-right flex-shrink-0 ml-auto pr-[5px]">
-            <div className="text-label text-gray-500 mb-1 font-medium text-xs">Cost</div>
-            <div className="text-h4 sm:text-h3 font-extrabold text-white">1 Credit</div>
+          {/* Kosten-Badge - Modern Card Design */}
+          <div className="flex-shrink-0 !pr-[10px]">
+            <div className="bg-gradient-to-br from-cyan-500/30 via-blue-500/20 to-purple-500/20 rounded-2xl !px-[calc(1.5rem+20px)] py-4 border-2 border-cyan-500/50 shadow-xl shadow-cyan-500/30 backdrop-blur-md">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center border border-white/20">
+                  <svg className="w-5 h-5 text-cyan-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div className="flex flex-col">
+                  <div className="text-label text-cyan-200 font-semibold text-xs leading-tight opacity-90">Cost per Analysis</div>
+                  <div className="text-h3 font-extrabold text-white leading-tight">1 Credit</div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         
-        {/* Step 1: Market Selection */}
-        <div className="mb-4 pl-[5px] pr-[5px]">
-          <label className="text-label text-gray-400 font-semibold mb-2 block text-xs sm:text-sm">
-            Step 1: Select Crypto Asset
-          </label>
-          <div className="flex flex-wrap gap-2">
+        {/* Step 1: Market Selection - Modern Card */}
+        <div className="bg-gray-900/40 rounded-2xl p-5 border border-white/10 backdrop-blur-sm !mx-[10px] !mt-[10px]">
+          <div className="flex items-center gap-3 mb-4 !px-[5px]">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-cyan-500/30 to-cyan-600/20 flex items-center justify-center border-2 border-cyan-500/40 shadow-lg shadow-cyan-500/20">
+              <span className="text-sm font-bold text-cyan-300">1</span>
+            </div>
+            <div className="flex-1">
+              <label className="text-body-sm text-gray-200 font-bold">
+                Select Crypto Asset
+              </label>
+              <p className="text-label text-gray-500 text-xs mt-0.5">Choose your trading pair</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 !px-[5px]">
             {MARKETS.map((market) => (
               <button
                 key={market.symbol}
                 onClick={() => onMarketChange(market)}
                 disabled={isAnalyzing}
-                className={`px-3 sm:px-4 py-2 rounded-xl text-body-xs sm:text-body-sm font-semibold transition-all border-2 ${
+                className={`px-4 py-3 rounded-xl text-body-sm font-semibold transition-all border-2 ${
                   selectedMarket.symbol === market.symbol
-                    ? "bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-white border-cyan-500/40 shadow-lg shadow-cyan-500/20"
-                    : "bg-gray-900/50 text-gray-300 hover:bg-gray-900/70 border-white/10 hover:border-white/20"
+                    ? "bg-gradient-to-br from-cyan-500/30 to-blue-500/20 text-white border-cyan-500/50 shadow-lg shadow-cyan-500/30 scale-[1.02]"
+                    : "bg-gray-800/50 text-gray-300 hover:bg-gray-800/70 border-white/10 hover:border-white/20 hover:scale-[1.02]"
                 } ${isAnalyzing ? "opacity-50 cursor-not-allowed" : ""}`}
               >
                 {market.name}
@@ -392,21 +419,29 @@ export default function AnalysisPanel({
           </div>
         </div>
         
-        {/* Step 2: Interval Selection */}
-        <div className="mb-4 pl-[5px] pr-[5px]">
-          <label className="text-label text-gray-400 font-semibold mb-2 block text-xs sm:text-sm">
-            Step 2: Select Timeframe
-          </label>
-          <div className="flex flex-wrap gap-2">
+        {/* Step 2: Interval Selection - Modern Card */}
+        <div className="bg-gray-900/40 rounded-2xl p-5 border border-white/10 backdrop-blur-sm !mx-[10px] !mt-[5px]">
+          <div className="flex items-center gap-3 mb-4 !px-[5px]">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-blue-500/30 to-blue-600/20 flex items-center justify-center border-2 border-blue-500/40 shadow-lg shadow-blue-500/20">
+              <span className="text-sm font-bold text-blue-300">2</span>
+            </div>
+            <div className="flex-1">
+              <label className="text-body-sm text-gray-200 font-bold">
+                Select Timeframe
+              </label>
+              <p className="text-label text-gray-500 text-xs mt-0.5">Choose your analysis period</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-3 sm:grid-cols-6 gap-3 !px-[5px]">
             {INTERVALS.map((interval) => (
               <button
                 key={interval.value}
                 onClick={() => onIntervalChange(interval.value)}
                 disabled={isAnalyzing}
-                className={`px-3 sm:px-4 py-2 rounded-xl text-body-xs sm:text-body-sm font-semibold transition-all border-2 ${
+                className={`px-4 py-3 rounded-xl text-body-sm font-semibold transition-all border-2 ${
                   selectedInterval === interval.value
-                    ? "bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-white border-cyan-500/40 shadow-lg shadow-cyan-500/20"
-                    : "bg-gray-900/50 text-gray-300 hover:bg-gray-900/70 border-white/10 hover:border-white/20"
+                    ? "bg-gradient-to-br from-cyan-500/30 to-blue-500/20 text-white border-cyan-500/50 shadow-lg shadow-cyan-500/30 scale-[1.02]"
+                    : "bg-gray-800/50 text-gray-300 hover:bg-gray-800/70 border-white/10 hover:border-white/20 hover:scale-[1.02]"
                 } ${isAnalyzing ? "opacity-50 cursor-not-allowed" : ""}`}
               >
                 {interval.label}
@@ -419,27 +454,27 @@ export default function AnalysisPanel({
       <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
       {!analysis ? (
         <div className="space-y-4 sm:space-y-6 flex-1 flex flex-col justify-center overflow-y-auto">
-          <div className="bg-gray-900/50 rounded-3xl p-[calc(1.5rem+5px)] sm:p-[calc(2rem+5px)] border-2 border-white/10">
-            <div className="text-center mb-6 px-[5px]">
-              <div className="w-20 h-20 mx-auto mb-4 rounded-3xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 flex items-center justify-center border-2 border-cyan-500/30 shadow-lg shadow-cyan-500/20">
+          <div className="bg-gray-900/50 rounded-3xl p-8 sm:p-10 border-2 border-white/10 !mx-[10px] !my-[5px]">
+            <div className="text-center !mb-[5px] !px-[5px] !py-[5px]">
+              <div className="w-20 h-20 mx-auto !mb-[5px] rounded-3xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 flex items-center justify-center border-2 border-cyan-500/30 shadow-lg shadow-cyan-500/20">
                 <svg className="w-10 h-10 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                 </svg>
               </div>
-              <h4 className="text-h4 font-bold text-white mb-2">Ready to Analyze</h4>
-              <p className="text-body-sm text-gray-400 mb-6 px-[5px]">
+              <h4 className="text-h4 font-bold text-white !mb-[5px] !px-[10px]">Ready to Analyze</h4>
+              <p className="text-body-sm text-gray-400 !mb-[5px] !px-[10px]">
                 Get AI-powered market insights with technical indicators
               </p>
               
               {/* Selected Asset & Timeframe as Badges */}
-              <div className="flex gap-3 justify-center mb-6">
-                <div className="px-4 py-2 bg-gradient-to-r from-cyan-500/20 to-cyan-500/10 rounded-full border-2 border-cyan-500/40 flex items-center gap-2">
+              <div className="flex gap-[5px] justify-center !mb-[5px] !px-[5px]">
+                <div className="px-4 py-2 bg-gradient-to-r from-cyan-500/20 to-cyan-500/10 rounded-full border-2 border-cyan-500/40 flex items-center gap-2 !m-[5px]">
                   <svg className="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   <span className="text-cyan-400 font-bold text-body-sm">{selectedMarket.name}</span>
                 </div>
-                <div className="px-4 py-2 bg-gradient-to-r from-blue-500/20 to-blue-500/10 rounded-full border-2 border-blue-500/40 flex items-center gap-2">
+                <div className="px-4 py-2 bg-gradient-to-r from-blue-500/20 to-blue-500/10 rounded-full border-2 border-blue-500/40 flex items-center gap-2 !m-[5px]">
                   <svg className="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
@@ -448,16 +483,16 @@ export default function AnalysisPanel({
               </div>
               
               {lastAnalysisTime && (
-                <p className="text-body-sm text-cyan-400 mb-6 font-medium">
+                <p className="text-body-sm text-cyan-400 !mb-[5px] font-medium">
                   Last Analysis: {lastAnalysisTime.toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" })} ({Math.floor((Date.now() - lastAnalysisTime.getTime()) / 60000)}m ago)
                 </p>
               )}
               
               {/* Analysis Features Info as Grid */}
-              <div className="bg-gray-800/50 rounded-3xl p-[calc(1.5rem+5px)] border-2 border-white/10">
-                <p className="text-label text-gray-400 mb-4 font-bold text-center px-[5px]">Analysis includes:</p>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="flex items-center gap-3 p-3 bg-gray-900/50 rounded-xl border border-white/10">
+              <div className="bg-gray-800/50 rounded-3xl p-8 border-2 border-white/10 !mb-[5px] !px-[5px]">
+                <p className="text-label text-gray-400 !mb-[5px] font-bold text-center !px-[5px]">Analysis includes:</p>
+                <div className="grid grid-cols-2 gap-[5px] !px-[5px]">
+                  <div className="flex items-center gap-3 p-5 bg-gray-900/50 rounded-xl border border-white/10 !m-[5px]">
                     <div className="w-8 h-8 rounded-lg bg-cyan-500/20 flex items-center justify-center border border-cyan-500/40">
                       <svg className="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
@@ -465,7 +500,7 @@ export default function AnalysisPanel({
                     </div>
                     <span className="text-body-sm text-gray-300 font-medium">RSI, MACD, EMA</span>
                   </div>
-                  <div className="flex items-center gap-3 p-3 bg-gray-900/50 rounded-xl border border-white/10">
+                  <div className="flex items-center gap-3 p-5 bg-gray-900/50 rounded-xl border border-white/10 !m-[5px]">
                     <div className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center border border-blue-500/40">
                       <svg className="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
@@ -473,7 +508,7 @@ export default function AnalysisPanel({
                     </div>
                     <span className="text-body-sm text-gray-300 font-medium">Volume Analysis</span>
                   </div>
-                  <div className="flex items-center gap-3 p-3 bg-gray-900/50 rounded-xl border border-white/10">
+                  <div className="flex items-center gap-3 p-5 bg-gray-900/50 rounded-xl border border-white/10 !m-[5px]">
                     <div className="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center border border-emerald-500/40">
                       <svg className="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
@@ -481,7 +516,7 @@ export default function AnalysisPanel({
                     </div>
                     <span className="text-body-sm text-gray-300 font-medium">Price Trends</span>
                   </div>
-                  <div className="flex items-center gap-3 p-3 bg-gray-900/50 rounded-xl border border-white/10">
+                  <div className="flex items-center gap-3 p-5 bg-gray-900/50 rounded-xl border border-white/10 !m-[5px]">
                     <div className="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center border border-purple-500/40">
                       <svg className="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
@@ -496,7 +531,7 @@ export default function AnalysisPanel({
               <button
                 onClick={handleAnalyze}
                 disabled={!account || credits < 1 || isAnalyzing || isTransferring}
-                className={`w-full min-h-[48px] rounded-xl font-bold text-body text-white transition-all focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-gray-900 mx-auto ${
+                className={`w-1/2 min-h-[48px] rounded-xl font-bold text-body text-white transition-all focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-gray-900 !mx-auto !mt-[5px] ${
                   !account || credits < 1 || isAnalyzing || isTransferring
                     ? "bg-gray-800 cursor-not-allowed opacity-50 border-2 border-gray-700"
                     : "bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 border-2 border-cyan-400/40 shadow-lg shadow-cyan-500/30 hover:shadow-xl hover:shadow-cyan-500/40 hover:scale-[1.02]"
@@ -523,31 +558,16 @@ export default function AnalysisPanel({
             </p>
           )}
         </div>
-      ) : (
-        <div className="flex-1 overflow-y-auto min-h-0 pb-4">
-          {/* Market Overview Section - Sticky Header */}
-          <div className="sticky top-0 z-10 bg-gray-950/95 backdrop-blur-sm pb-2 mb-4">
-            <div className="bg-gray-900/60 rounded-3xl p-[calc(1rem+5px)] sm:p-[calc(1.5rem+5px)] border-2 border-white/10">
-            {/* Asset & Timeframe Badges */}
-            <div className="flex gap-2 sm:gap-3 mb-4 px-[5px]">
-              <div className="px-3 sm:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-cyan-500/20 to-cyan-500/10 rounded-full border-2 border-cyan-500/40 flex items-center gap-1.5 sm:gap-2">
-                <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span className="text-cyan-400 font-bold text-body-xs sm:text-body-sm">{selectedMarket.name}</span>
-              </div>
-              <div className="px-3 sm:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-blue-500/20 to-blue-500/10 rounded-full border-2 border-blue-500/40 flex items-center gap-1.5 sm:gap-2">
-                <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span className="text-blue-400 font-bold text-body-xs sm:text-body-sm">{selectedInterval === "1" ? "1m" : selectedInterval === "5" ? "5m" : selectedInterval === "15" ? "15m" : selectedInterval === "60" ? "1h" : selectedInterval === "240" ? "4h" : "1d"}</span>
-              </div>
-            </div>
+        ) : (
+          <div className="flex-1 overflow-y-auto min-h-0 !mt-[30px] pb-0">
+            {/* Market Overview Section - Sticky Header */}
+            <div className="sticky top-0 z-10 bg-gray-950/95 backdrop-blur-sm pb-2 !mb-[5px]">
+            <div className="bg-gray-900/60 rounded-3xl p-8 sm:p-10 border-2 border-white/10">
             
             {analysis.marketData && (
               <>
                 {/* Price - Prominent */}
-                <div className="text-center py-4 sm:py-6 border-y-2 border-white/10 mb-4 sm:mb-6 px-[calc(0.5rem+5px)]">
+                <div className="text-center py-4 sm:py-6 border-y-2 border-white/10 mb-4 sm:mb-6 !px-[10px]">
                   <div className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white mb-1 sm:mb-2 text-number">
                     ${analysis.marketData.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </div>
@@ -557,14 +577,14 @@ export default function AnalysisPanel({
                 </div>
                 
                 {/* 24h Stats as Grid */}
-                <div className="grid grid-cols-2 gap-3 sm:gap-4">
-                  <div className="p-3 sm:p-4 bg-gray-800/50 rounded-xl border border-white/10">
-                    <div className="text-label text-gray-400 font-semibold mb-1 sm:mb-2 text-xs sm:text-sm">24h High</div>
-                    <div className="text-h4 sm:text-h3 font-bold text-white text-number">${analysis.marketData.high24h.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+                <div className="grid grid-cols-2 gap-3 sm:gap-4 !px-[10px]">
+                  <div className="p-6 sm:p-8 bg-gray-800/50 rounded-xl border border-white/10">
+                    <div className="text-label text-gray-400 font-semibold mb-1 sm:mb-2 text-xs sm:text-sm !pl-[10px]">24h High</div>
+                    <div className="text-h4 sm:text-h3 font-bold text-white text-number !pl-[10px]">${analysis.marketData.high24h.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
                   </div>
-                  <div className="p-3 sm:p-4 bg-gray-800/50 rounded-xl border border-white/10">
-                    <div className="text-label text-gray-400 font-semibold mb-1 sm:mb-2 text-xs sm:text-sm">24h Low</div>
-                    <div className="text-h4 sm:text-h3 font-bold text-white text-number">${analysis.marketData.low24h.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+                  <div className="p-6 sm:p-8 bg-gray-800/50 rounded-xl border border-white/10">
+                    <div className="text-label text-gray-400 font-semibold mb-1 sm:mb-2 text-xs sm:text-sm !pl-[10px]">24h Low</div>
+                    <div className="text-h4 sm:text-h3 font-bold text-white text-number !pl-[10px]">${analysis.marketData.low24h.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
                   </div>
                 </div>
               </>
@@ -573,52 +593,52 @@ export default function AnalysisPanel({
           </div>
 
           {/* Key Metrics Section */}
-          <div className="space-y-3 sm:space-y-4 mb-4">
+          <div className="space-y-3 sm:space-y-4 !mb-[5px] !px-[10px]">
             <div className="grid grid-cols-2 gap-3 sm:gap-4">
             {/* Tendency Card */}
-            <div className={`p-[calc(1rem+5px)] sm:p-[calc(1.5rem+5px)] rounded-3xl border-2 ${getTendencyColor(analysis.tendency)}`}>
-              <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
+            <div className={`p-8 sm:p-10 rounded-3xl border-2 ${getTendencyColor(analysis.tendency)}`}>
+              <div className="flex items-center justify-center gap-2 sm:gap-3 mb-3 sm:mb-4">
                 <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-white/10 flex items-center justify-center border border-white/20">
                   {analysis.tendency === "Bullish" ? (
-                    <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                     </svg>
                   ) : analysis.tendency === "Bearish" ? (
-                    <svg className="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-6 h-6 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6" />
                     </svg>
                   ) : (
-                    <svg className="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14" />
                     </svg>
                   )}
                 </div>
                 <span className="text-label font-semibold text-xs sm:text-sm">Tendency</span>
               </div>
-              <div className="text-xl sm:text-2xl font-bold px-[5px]">{analysis.tendency}</div>
+              <div className="text-xl sm:text-2xl font-bold text-center">{analysis.tendency}</div>
             </div>
             
             {/* Risk Card */}
-            <div className={`p-[calc(1rem+5px)] sm:p-[calc(1.5rem+5px)] rounded-3xl border-2 ${getRiskColor(analysis.risk) === "text-green-400" ? "text-green-400 bg-green-400/10 border-green-400/20" : getRiskColor(analysis.risk) === "text-red-400" ? "text-red-400 bg-red-400/10 border-red-400/20" : "text-yellow-400 bg-yellow-400/10 border-yellow-400/20"}`}>
-              <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3 px-[5px]">
+            <div className={`p-8 sm:p-10 rounded-3xl border-2 ${getRiskColor(analysis.risk) === "text-emerald-400" ? "text-emerald-400 bg-emerald-500/15 border-emerald-500/30" : getRiskColor(analysis.risk) === "text-rose-400" ? "text-rose-400 bg-rose-500/15 border-rose-500/30" : "text-amber-400 bg-amber-500/15 border-amber-500/30"}`}>
+              <div className="flex items-center justify-center gap-2 sm:gap-3 mb-3 sm:mb-4">
                 <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-white/10 flex items-center justify-center border border-white/20">
                   {analysis.risk === "low" ? (
-                    <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                   ) : analysis.risk === "high" ? (
-                    <svg className="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-6 h-6 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                     </svg>
                   ) : (
-                    <svg className="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                     </svg>
                   )}
                 </div>
                 <span className="text-label font-semibold text-xs sm:text-sm">Risk</span>
               </div>
-              <div className={`text-xl sm:text-2xl font-bold ${getRiskColor(analysis.risk)} px-[5px]`}>
+              <div className={`text-xl sm:text-2xl font-bold text-center ${getRiskColor(analysis.risk)}`}>
                 {analysis.risk.charAt(0).toUpperCase() + analysis.risk.slice(1)}
               </div>
             </div>
@@ -626,13 +646,13 @@ export default function AnalysisPanel({
           </div>
 
           {/* Technical Indicators Section */}
-          <div className="space-y-3 sm:space-y-4">
+          <div className="space-y-[5px] !mb-[5px] !px-[10px]">
             {/* RSI Details */}
           {analysis.detailedIndicators && (
-            <div className="bg-gray-900/60 rounded-3xl border-2 border-white/10 overflow-hidden">
+            <div className="bg-gray-900/60 rounded-3xl p-8 sm:p-10 border-2 border-white/10 overflow-hidden !my-[5px]">
               <button
                 onClick={() => setExpandedSections({...expandedSections, rsi: !expandedSections.rsi})}
-                className="w-full p-[calc(1rem+5px)] sm:p-[calc(1.5rem+5px)] flex items-center justify-between hover:bg-white/5 transition-colors"
+                className="w-full p-8 sm:p-10 flex items-center gap-6 hover:bg-white/5 transition-colors"
               >
                 <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
                   <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-cyan-500/20 flex items-center justify-center border border-cyan-500/40 flex-shrink-0">
@@ -649,17 +669,17 @@ export default function AnalysisPanel({
                     {analysis.detailedIndicators.rsi.status}
                   </span>
                 </div>
-                <span className="text-cyan-400 text-2xl transition-transform duration-300" style={{ transform: expandedSections.rsi ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+                <span className="text-cyan-400 text-2xl transition-transform duration-300 flex-shrink-0 !mr-[20px]" style={{ transform: expandedSections.rsi ? 'rotate(180deg)' : 'rotate(0deg)' }}>
                   ▼
                 </span>
               </button>
               {expandedSections.rsi && (
-                <div className="px-[calc(1rem+5px)] sm:px-[calc(1.5rem+5px)] pb-[calc(1rem+5px)] sm:pb-[calc(1.5rem+5px)] space-y-3 sm:space-y-4">
-                  <div className="flex items-center gap-6 px-[5px]">
+                <div className="px-8 sm:px-10 pb-8 sm:pb-10 space-y-3 sm:space-y-4">
+                  <div className="flex items-center gap-6 !px-[10px]">
                     <span className="text-label text-gray-400 font-semibold flex-1">Value</span>
                     <span className="text-h3 font-bold text-white text-number flex-shrink-0">{analysis.detailedIndicators.rsi.value.toFixed(2)}</span>
                   </div>
-                  <div className="flex items-center gap-6 px-[5px]">
+                  <div className="flex items-center gap-6 !px-[10px]">
                     <span className="text-label text-gray-400 font-semibold flex-1">Status</span>
                     <span className={`text-body font-bold ${
                       analysis.detailedIndicators.rsi.status === "Overbought" ? "text-red-400" :
@@ -675,10 +695,10 @@ export default function AnalysisPanel({
 
           {/* MACD Details */}
           {analysis.detailedIndicators && (
-            <div className="bg-gray-900/60 rounded-3xl border-2 border-white/10 overflow-hidden">
+            <div className="bg-gray-900/60 rounded-3xl p-8 sm:p-10 border-2 border-white/10 overflow-hidden !my-[5px]">
               <button
                 onClick={() => setExpandedSections({...expandedSections, macd: !expandedSections.macd})}
-                className="w-full p-[calc(1rem+5px)] sm:p-[calc(1.5rem+5px)] flex items-center justify-between hover:bg-white/5 transition-colors"
+                className="w-full p-8 sm:p-10 flex items-center gap-6 hover:bg-white/5 transition-colors"
               >
                 <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
                   <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-blue-500/20 flex items-center justify-center border border-blue-500/40 flex-shrink-0">
@@ -695,27 +715,27 @@ export default function AnalysisPanel({
                     {analysis.detailedIndicators.macd.trend}
                   </span>
                 </div>
-                <span className="text-cyan-400 text-2xl transition-transform duration-300" style={{ transform: expandedSections.macd ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+                <span className="text-cyan-400 text-2xl transition-transform duration-300 flex-shrink-0 !mr-[20px]" style={{ transform: expandedSections.macd ? 'rotate(180deg)' : 'rotate(0deg)' }}>
                   ▼
                 </span>
               </button>
               {expandedSections.macd && (
-                <div className="px-[calc(1rem+5px)] sm:px-[calc(1.5rem+5px)] pb-[calc(1rem+5px)] sm:pb-[calc(1.5rem+5px)] space-y-3 sm:space-y-4">
-                  <div className="flex items-center gap-6 px-[5px]">
+                <div className="px-8 sm:px-10 pb-8 sm:pb-10 space-y-3 sm:space-y-4">
+                  <div className="flex items-center gap-6 !px-[10px]">
                     <span className="text-label text-gray-400 font-semibold flex-1">MACD Line</span>
                     <span className="text-body font-bold text-white text-number flex-shrink-0">{analysis.detailedIndicators.macd.value.toFixed(4)}</span>
                   </div>
-                  <div className="flex items-center gap-6 px-[5px]">
+                  <div className="flex items-center gap-6 !px-[10px]">
                     <span className="text-label text-gray-400 font-semibold flex-1">Signal Line</span>
                     <span className="text-body font-semibold text-white text-number flex-shrink-0">{analysis.detailedIndicators.macd.signal.toFixed(4)}</span>
                   </div>
-                  <div className="flex items-center gap-6 px-[5px]">
+                  <div className="flex items-center gap-6 !px-[10px]">
                     <span className="text-label text-gray-400 font-semibold flex-1">Histogram</span>
                     <span className={`text-body font-bold flex-shrink-0 ${analysis.detailedIndicators.macd.histogram >= 0 ? "text-emerald-400" : "text-red-400"} text-number`}>
                       {analysis.detailedIndicators.macd.histogram >= 0 ? "+" : ""}{analysis.detailedIndicators.macd.histogram.toFixed(4)}
                     </span>
                   </div>
-                  <div className="flex items-center gap-6 pt-4 border-t-2 border-white/10">
+                  <div className="flex items-center gap-6 pt-4 border-t-2 border-white/10 !px-[10px]">
                     <span className="text-label text-gray-400 font-semibold flex-1">Trend</span>
                     <span className={`text-body font-bold ${
                       analysis.detailedIndicators.macd.trend === "Bullish" 
@@ -734,10 +754,10 @@ export default function AnalysisPanel({
 
           {/* EMA Details */}
           {analysis.detailedIndicators && (
-            <div className="bg-gray-900/60 rounded-3xl border-2 border-white/10 overflow-hidden">
+            <div className="bg-gray-900/60 rounded-3xl p-8 sm:p-10 border-2 border-white/10 overflow-hidden !my-[5px]">
               <button
                 onClick={() => setExpandedSections({...expandedSections, ema: !expandedSections.ema})}
-                className="w-full p-[calc(1rem+5px)] sm:p-[calc(1.5rem+5px)] flex items-center justify-between hover:bg-white/5 transition-colors"
+                className="w-full p-8 sm:p-10 flex items-center gap-6 hover:bg-white/5 transition-colors"
               >
                 <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
                   <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-purple-500/20 flex items-center justify-center border border-purple-500/40 flex-shrink-0">
@@ -753,29 +773,29 @@ export default function AnalysisPanel({
                     {analysis.detailedIndicators.ema.trend}
                   </span>
                 </div>
-                <span className="text-cyan-400 text-2xl transition-transform duration-300" style={{ transform: expandedSections.ema ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+                <span className="text-cyan-400 text-2xl transition-transform duration-300 flex-shrink-0 !mr-[20px]" style={{ transform: expandedSections.ema ? 'rotate(180deg)' : 'rotate(0deg)' }}>
                   ▼
                 </span>
               </button>
               {expandedSections.ema && (
-                <div className="px-[calc(1rem+5px)] sm:px-[calc(1.5rem+5px)] pb-[calc(1rem+5px)] sm:pb-[calc(1.5rem+5px)] space-y-3 sm:space-y-4">
-                  <div className="flex items-center gap-6 px-[5px]">
+                <div className="px-8 sm:px-10 pb-8 sm:pb-10 space-y-3 sm:space-y-4">
+                  <div className="flex items-center gap-6 !px-[10px]">
                     <span className="text-label text-gray-400 font-semibold flex-1">EMA 13</span>
                     <span className="text-body font-bold text-white text-number flex-shrink-0">${analysis.detailedIndicators.ema.ema13.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                   </div>
-                  <div className="flex items-center gap-6 px-[5px]">
+                  <div className="flex items-center gap-6 !px-[10px]">
                     <span className="text-label text-gray-400 font-semibold flex-1">EMA 50</span>
                     <span className="text-body font-bold text-white text-number flex-shrink-0">${analysis.detailedIndicators.ema.ema50.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                   </div>
-                  <div className="flex items-center gap-6 px-[5px]">
+                  <div className="flex items-center gap-6 !px-[10px]">
                     <span className="text-label text-gray-400 font-semibold flex-1">EMA 200</span>
                     <span className="text-body font-bold text-white text-number flex-shrink-0">${analysis.detailedIndicators.ema.ema200.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                   </div>
-                  <div className="flex items-center gap-6 px-[5px]">
+                  <div className="flex items-center gap-6 !px-[10px]">
                     <span className="text-label text-gray-400 font-semibold flex-1">EMA 800</span>
                     <span className="text-body font-bold text-white text-number flex-shrink-0">${analysis.detailedIndicators.ema.ema800.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                   </div>
-                  <div className="flex items-center gap-6 pt-4 border-t-2 border-white/10 px-[5px]">
+                  <div className="flex items-center gap-6 pt-4 border-t-2 border-white/10 !px-[10px]">
                     <span className="text-label text-gray-400 font-semibold flex-1">Trend</span>
                     <span className={`text-body font-bold ${analysis.detailedIndicators.ema.trend === "Bullish" ? "text-emerald-400" : "text-red-400"}`}>
                       {analysis.detailedIndicators.ema.trend}
@@ -788,10 +808,10 @@ export default function AnalysisPanel({
 
           {/* Volume Details */}
           {analysis.detailedIndicators && (
-            <div className="bg-gray-900/60 rounded-3xl border-2 border-white/10 overflow-hidden">
+            <div className="bg-gray-900/60 rounded-3xl p-8 sm:p-10 border-2 border-white/10 overflow-hidden !my-[5px]">
               <button
                 onClick={() => setExpandedSections({...expandedSections, volume: !expandedSections.volume})}
-                className="w-full p-[calc(1rem+5px)] sm:p-[calc(1.5rem+5px)] flex items-center justify-between hover:bg-white/5 transition-colors"
+                className="w-full p-8 sm:p-10 flex items-center gap-6 hover:bg-white/5 transition-colors"
               >
                 <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
                   <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center border border-emerald-500/40 flex-shrink-0">
@@ -806,31 +826,31 @@ export default function AnalysisPanel({
                     </span>
                   )}
                 </div>
-                <span className="text-cyan-400 text-2xl transition-transform duration-300" style={{ transform: expandedSections.volume ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+                <span className="text-cyan-400 text-2xl transition-transform duration-300 flex-shrink-0 !mr-[20px]" style={{ transform: expandedSections.volume ? 'rotate(180deg)' : 'rotate(0deg)' }}>
                   ▼
                 </span>
               </button>
               {expandedSections.volume && (
-                <div className="px-[calc(1rem+5px)] sm:px-[calc(1.5rem+5px)] pb-[calc(1rem+5px)] sm:pb-[calc(1.5rem+5px)] space-y-3 sm:space-y-4">
-                  <div className="flex items-center gap-6 px-[5px]">
+                <div className="px-8 sm:px-10 pb-8 sm:pb-10 space-y-3 sm:space-y-4">
+                  <div className="flex items-center gap-6 !px-[10px]">
                     <span className="text-label text-gray-400 font-semibold flex-1">Current Volume</span>
                     <span className="text-body font-bold text-white text-number flex-shrink-0">
                       {analysis.detailedIndicators.volume.current.toLocaleString(undefined, { maximumFractionDigits: 0 })}
                     </span>
                   </div>
-                  <div className="flex items-center gap-6 px-[5px]">
+                  <div className="flex items-center gap-6 !px-[10px]">
                     <span className="text-label text-gray-400 font-semibold flex-1">Average Volume</span>
                     <span className="text-body font-bold text-white text-number flex-shrink-0">
                       {analysis.detailedIndicators.volume.average.toLocaleString(undefined, { maximumFractionDigits: 0 })}
                     </span>
                   </div>
-                  <div className="flex items-center gap-6 px-[5px]">
+                  <div className="flex items-center gap-6 !px-[10px]">
                     <span className="text-label text-gray-400 font-semibold flex-1">Volume Ratio</span>
                     <span className={`text-body font-bold flex-shrink-0 ${analysis.detailedIndicators.volume.ratio >= 1.5 ? "text-emerald-400" : "text-gray-400"} text-number`}>
                       {analysis.detailedIndicators.volume.ratio.toFixed(2)}x
                     </span>
                   </div>
-                  <div className="flex items-center gap-6 pt-4 border-t-2 border-white/10 px-[5px]">
+                  <div className="flex items-center gap-6 pt-4 border-t-2 border-white/10 !px-[10px]">
                     <span className="text-label text-gray-400 font-semibold flex-1">Volume Spike</span>
                     <span className={`text-body font-bold ${analysis.detailedIndicators.volume.spike ? "text-emerald-400" : "text-gray-400"}`}>
                       {analysis.detailedIndicators.volume.spike ? "Yes" : "No"}
@@ -843,10 +863,10 @@ export default function AnalysisPanel({
 
           {/* Liquidation Zones */}
           {analysis.detailedIndicators && analysis.detailedIndicators.liquidationZones && analysis.detailedIndicators.liquidationZones.length > 0 && (
-            <div className="bg-gray-900/60 rounded-3xl border-2 border-white/10 overflow-hidden">
+            <div className="bg-gray-900/60 rounded-3xl p-8 sm:p-10 border-2 border-white/10 overflow-hidden !my-[5px]">
               <button
                 onClick={() => setExpandedSections({...expandedSections, liquidation: !expandedSections.liquidation})}
-                className="w-full p-[calc(1rem+5px)] sm:p-[calc(1.5rem+5px)] flex items-center justify-between hover:bg-white/5 transition-colors"
+                className="w-full p-8 sm:p-10 flex items-center gap-6 hover:bg-white/5 transition-colors"
               >
                 <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
                   <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-orange-500/20 flex items-center justify-center border border-orange-500/40 flex-shrink-0">
@@ -859,22 +879,22 @@ export default function AnalysisPanel({
                     {analysis.detailedIndicators.liquidationZones.length}
                   </span>
                 </div>
-                <span className="text-cyan-400 text-2xl transition-transform duration-300" style={{ transform: expandedSections.liquidation ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+                <span className="text-cyan-400 text-2xl transition-transform duration-300 flex-shrink-0 !mr-[20px]" style={{ transform: expandedSections.liquidation ? 'rotate(180deg)' : 'rotate(0deg)' }}>
                   ▼
                 </span>
               </button>
               {expandedSections.liquidation && (
-                <div className="px-[calc(1rem+5px)] sm:px-[calc(1.5rem+5px)] pb-[calc(1rem+5px)] sm:pb-[calc(1.5rem+5px)] space-y-3 sm:space-y-4">
+                <div className="px-8 sm:px-10 pb-8 sm:pb-10 space-y-3 sm:space-y-4">
                   {analysis.detailedIndicators.liquidationZones.map((zone, index) => (
                     <div
                       key={index}
-                      className={`p-[calc(1.25rem+5px)] rounded-3xl border-2 ${
+                      className={`p-6 sm:p-8 rounded-3xl border-2 ${
                         zone.type === "long"
                           ? "bg-red-500/10 border-red-500/30"
                           : "bg-emerald-500/10 border-emerald-500/30"
                       }`}
                     >
-                      <div className="flex items-center gap-6 mb-3">
+                      <div className="flex items-center gap-6 mb-3 !px-[10px]">
                         <span className={`text-body font-bold flex-1 ${
                           zone.type === "long" ? "text-red-400" : "text-emerald-400"
                         }`}>
@@ -884,7 +904,7 @@ export default function AnalysisPanel({
                           ${zone.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                         </span>
                       </div>
-                      <div className="flex items-center gap-6">
+                      <div className="flex items-center gap-6 !px-[10px]">
                         <span className="text-label text-gray-400 font-semibold flex-1">Liquidation Amount</span>
                         <span className="text-body font-bold text-white text-number">
                           ${zone.liquidationAmount >= 1000000 
@@ -903,31 +923,31 @@ export default function AnalysisPanel({
           </div>
 
           {/* AI Analysis Reasoning */}
-          <div className="bg-gray-900/60 rounded-3xl p-[calc(1rem+5px)] sm:p-[calc(1.5rem+5px)] border-2 border-white/10">
-            <h4 className="text-h4 sm:text-h3 font-bold text-white mb-3 sm:mb-4 px-[5px]">AI Analysis Reasoning</h4>
-            <p className="text-body-sm sm:text-body text-gray-300 leading-relaxed px-[5px]">{analysis.reasoning}</p>
+          <div className="bg-gray-900/60 rounded-3xl p-8 sm:p-10 border-2 border-white/10 !px-[10px] !mb-[5px]">
+            <h4 className="text-h4 sm:text-h3 font-bold text-white mb-3 sm:mb-4 !px-[10px]">AI Analysis Reasoning</h4>
+            <p className="text-body-sm sm:text-body text-gray-300 leading-relaxed !px-[10px]">{analysis.reasoning}</p>
           </div>
 
           {/* Quick Actions */}
-          <div className="grid grid-cols-2 gap-3 sm:gap-4">
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 !mb-[5px] !px-[10px]">
             <button
               onClick={() => {
                 const analysisText = `Paragon AI Analysis: ${selectedMarket.name} - ${analysis.tendency} | Risk: ${analysis.risk}\n${analysis.reasoning}`;
                 navigator.clipboard.writeText(analysisText);
                 showToast("Analysis copied to clipboard", "success");
               }}
-              className="min-h-[44px] sm:min-h-[48px] rounded-xl text-body-xs sm:text-body-sm font-bold text-white bg-white/10 hover:bg-white/20 border-2 border-white/20 transition-all flex items-center justify-center gap-2 hover:scale-[1.02]"
+              className="min-h-[44px] sm:min-h-[48px] rounded-xl text-body-xs sm:text-body-sm font-semibold text-white bg-gray-900/60 hover:bg-gray-900/80 border-2 border-white/10 hover:border-white/20 transition-all flex items-center justify-center gap-2 hover:scale-[1.02] backdrop-blur-sm"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
               </svg>
               Copy
             </button>
             <button
               onClick={handlePostToX}
-              className="min-h-[44px] sm:min-h-[48px] rounded-xl text-body-xs sm:text-body-sm font-bold text-white bg-[#1DA1F2] hover:bg-[#1a8cd8] border-2 border-[#1DA1F2]/40 transition-all flex items-center justify-center gap-2 shadow-lg shadow-[#1DA1F2]/30 hover:shadow-xl hover:shadow-[#1DA1F2]/40 hover:scale-[1.02]"
+              className="min-h-[44px] sm:min-h-[48px] rounded-xl text-body-xs sm:text-body-sm font-semibold text-white bg-gradient-to-r from-cyan-500/30 to-blue-500/20 hover:from-cyan-500/40 hover:to-blue-500/30 border-2 border-cyan-500/40 hover:border-cyan-500/50 transition-all flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/20 hover:shadow-xl hover:shadow-cyan-500/30 hover:scale-[1.02] backdrop-blur-sm"
             >
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
               </svg>
               Share
@@ -935,16 +955,18 @@ export default function AnalysisPanel({
           </div>
 
           {/* Action Button */}
-          <button
-            onClick={() => {
-              setAnalysis(null);
-              handleAnalyze();
-            }}
-            disabled={!account || credits < 1 || isAnalyzing}
-            className="w-full min-h-[44px] sm:min-h-[48px] rounded-xl text-body-sm sm:text-body font-bold text-white bg-white/10 hover:bg-white/20 border-2 border-white/20 transition-all mt-3 sm:mt-4 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-[1.02]"
-          >
-            Start New Analysis
-          </button>
+          <div className="flex justify-center !px-[10px] !mt-[5px]">
+            <button
+              onClick={() => {
+                setAnalysis(null);
+                handleAnalyze();
+              }}
+              disabled={!account || credits < 1 || isAnalyzing}
+              className="w-1/2 min-h-[44px] sm:min-h-[48px] rounded-xl text-body-sm sm:text-body font-semibold text-white bg-gradient-to-r from-cyan-500/30 to-blue-500/20 hover:from-cyan-500/40 hover:to-blue-500/30 border-2 border-cyan-500/40 hover:border-cyan-500/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed hover:scale-[1.02] shadow-lg shadow-cyan-500/20 hover:shadow-xl hover:shadow-cyan-500/30 backdrop-blur-sm"
+            >
+              Start New Analysis
+            </button>
+          </div>
         </div>
       )}
 

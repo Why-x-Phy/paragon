@@ -59,14 +59,14 @@ export default function ChartPanel({
   const jupiterPerpsUrl = "https://jup.ag/perps";
 
   return (
-    <div className="glass rounded-3xl p-8 sm:p-10 h-full flex flex-col min-h-0">
+    <div className="glass rounded-3xl p-8 sm:p-10 md:p-12 h-full flex flex-col min-h-0 !mt-[5px]">
       {/* Header with Tabs */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 mb-6 sm:mb-8 flex-shrink-0">
-        <div className="flex-1 min-w-0 pl-[5px]">
-          <h3 className="text-h2 font-bold text-white tracking-tight mb-2">
+        <div className="flex-1 min-w-0 !px-[10px]">
+          <h3 className="text-h2 font-bold text-white tracking-tight mb-2 !pl-[10px]">
             {activeView === "chart" ? "Live Chart" : "Jupiter Perps"}
           </h3>
-          <p className="text-body-sm text-gray-400 font-medium">
+          <p className="text-body-sm text-gray-400 font-medium !pl-[10px]">
             {activeView === "chart" 
               ? `${selectedMarket.name} • ${selectedInterval === "1" ? "1m" : selectedInterval === "5" ? "5m" : selectedInterval === "15" ? "15m" : selectedInterval === "60" ? "1h" : selectedInterval === "240" ? "4h" : "1d"} • ${showEMAs ? "EMAs, Volume Profile & Heatmap Active" : "Real-time Chart"}`
               : "Trade perpetual futures on Jupiter"
@@ -74,49 +74,32 @@ export default function ChartPanel({
           </p>
         </div>
         
-        {/* Tab Switcher & Quick Actions */}
-        <div className="flex items-center gap-3 flex-shrink-0 ml-auto">
-          {activeView === "chart" && (
-            <div className="flex gap-2">
-              <button
-                onClick={onAnalyze}
-                className="px-4 py-2 rounded-xl text-body-sm font-semibold text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 border-2 border-cyan-400/40 transition-all shadow-lg shadow-cyan-500/30 hover:shadow-xl hover:shadow-cyan-500/40 hover:scale-[1.02] flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-gray-900"
-                title="Quick Analyze"
-                aria-label="Start quick market analysis"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-                Analyze
-              </button>
-            </div>
-          )}
-          <div className="flex gap-3 bg-gray-900/80 rounded-xl p-1.5 border-2 border-white/10 shadow-lg">
-            <button
-              onClick={() => handleViewChange("chart")}
-              className={`px-6 py-3 rounded-xl text-body font-semibold transition-all min-w-[120px] focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-gray-900 ${
-                activeView === "chart"
-                  ? "bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-white border-2 border-cyan-500/40 shadow-lg shadow-cyan-500/20"
-                  : "bg-transparent text-gray-400 hover:text-white hover:bg-white/5 border-2 border-transparent"
-              }`}
-              aria-label="Switch to chart view"
-              aria-pressed={activeView === "chart"}
-            >
-              📊 Chart
-            </button>
-            <button
-              onClick={() => handleViewChange("jupiter")}
-              className={`px-6 py-3 rounded-xl text-body font-semibold transition-all min-w-[120px] focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-gray-900 ${
-                activeView === "jupiter"
-                  ? "bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-white border-2 border-cyan-500/40 shadow-lg shadow-cyan-500/20"
-                  : "bg-transparent text-gray-400 hover:text-white hover:bg-white/5 border-2 border-transparent"
-              }`}
-              aria-label="Switch to Jupiter Perps trading view"
-              aria-pressed={activeView === "jupiter"}
-            >
-              ⚡ Jupiter Perps
-            </button>
-          </div>
+        {/* Tab Switcher */}
+        <div className="flex items-center gap-3 flex-shrink-0 ml-auto !mr-[20px]">
+          <button
+            onClick={() => handleViewChange("chart")}
+            className={`px-6 py-3 rounded-xl text-body font-semibold transition-all min-w-[120px] focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-gray-900 ${
+              activeView === "chart"
+                ? "bg-gradient-to-r from-cyan-500/30 to-blue-500/20 text-white border-2 border-cyan-500/50 shadow-xl shadow-cyan-500/40"
+                : "bg-gray-900/80 text-gray-400 hover:text-white hover:bg-gray-900/90 border-2 border-white/10"
+            }`}
+            aria-label="Switch to chart view"
+            aria-pressed={activeView === "chart"}
+          >
+            📊 Chart
+          </button>
+          <button
+            onClick={() => handleViewChange("jupiter")}
+            className={`!px-[calc(1.5rem+5px)] py-3 rounded-xl text-body font-semibold transition-all !min-w-[125px] focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-gray-900 !mr-[5px] ${
+              activeView === "jupiter"
+                ? "bg-gradient-to-r from-cyan-500/30 to-blue-500/20 text-white border-2 border-cyan-500/50 shadow-xl shadow-cyan-500/40"
+                : "bg-gray-900/80 text-gray-400 hover:text-white hover:bg-gray-900/90 border-2 border-white/10"
+            }`}
+            aria-label="Switch to Jupiter Perps trading view"
+            aria-pressed={activeView === "jupiter"}
+          >
+            ⚡ Jupiter Perps
+          </button>
         </div>
       </div>
 

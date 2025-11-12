@@ -1,13 +1,19 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { ConnectButton } from "thirdweb/react";
+import { ConnectButton, useActiveAccount, useReadContract } from "thirdweb/react";
 import { createWallet } from "thirdweb/wallets";
-import { client } from "@/lib/thirdweb";
+import { client, PARA_TOKEN_ADDRESS, BASE_CHAIN_ID } from "@/lib/thirdweb";
+import { getContract } from "thirdweb/contract";
+import { balanceOf } from "thirdweb/extensions/erc20";
+import { defineChain } from "thirdweb/chains";
 import Image from "next/image";
+
+const baseChain = defineChain(BASE_CHAIN_ID);
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const account = useActiveAccount();
 
   // Definiere spezifische Wallets für Connect Button
   const wallets = useMemo(
@@ -21,13 +27,28 @@ export default function Header() {
     []
   );
 
-  const handleNavClick = (targetId: string) => {
-    setMobileMenuOpen(false);
-    const element = document.getElementById(targetId);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth", block: "start" });
+  // Token Balance für Credits
+  const contract = useMemo(
+    () =>
+      getContract({
+        client,
+        chain: baseChain,
+        address: PARA_TOKEN_ADDRESS,
+      }),
+    []
+  );
+
+  const { data: balance, isLoading: isLoadingBalance } = useReadContract(
+    balanceOf,
+    {
+      contract,
+      address: account?.address || "0x0000000000000000000000000000000000000000",
+      queryOptions: { enabled: !!account },
     }
-  };
+  );
+
+  // Berechne Credits basierend auf Token-Balance: 1 Token = 1 Credit
+  const credits = balance ? Math.floor(Number(balance) / 1e18) : 0;
 
   return (
     <header className="w-full glass border-b-2 border-white/10 backdrop-blur-xl" role="banner">
@@ -48,43 +69,30 @@ export default function Header() {
             </div>
           </div>
           
-          <div className="flex items-center gap-6 flex-shrink-0">
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center gap-8" aria-label="Main navigation">
-              <a 
-                href="#dashboard" 
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleNavClick("dashboard");
-                }}
-                className="text-body-sm font-semibold text-gray-300 hover:text-cyan-400 transition-colors focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-gray-900 rounded px-2 py-1"
-                aria-label="Navigate to Dashboard"
-              >
-                Dashboard
-              </a>
-              <a 
-                href="#analysis" 
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleNavClick("analysis");
-                }}
-                className="text-body-sm font-semibold text-gray-300 hover:text-cyan-400 transition-colors focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-gray-900 rounded px-2 py-1"
-                aria-label="Navigate to Analysis"
-              >
-                Analysis
-              </a>
-              <a 
-                href="#token-purchase" 
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleNavClick("token-purchase");
-                }}
-                className="text-body-sm font-semibold text-gray-300 hover:text-cyan-400 transition-colors focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-gray-900 rounded px-2 py-1"
-                aria-label="Navigate to Token Purchase"
-              >
-                Token
-              </a>
-            </nav>
+          <div className="flex items-center gap-4 flex-shrink-0 !pr-[10px]">
+            {/* Balance Display - nur wenn Wallet verbunden */}
+            {account && (
+              <div className="hidden sm:flex items-center gap-4 px-8 py-3 bg-gray-900/60 rounded-xl border border-white/10 backdrop-blur-sm !ml-[20px] min-w-[200px] shadow-lg shadow-cyan-500/10">
+                {isLoadingBalance ? (
+                  <div className="flex items-center gap-2">
+                    <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    <span className="text-body-sm text-gray-400">Loading...</span>
+                  </div>
+                ) : (
+                  <>
+                    <div className="flex items-center gap-3 w-full">
+                      <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/30 flex items-center justify-center flex-shrink-0 shadow-md shadow-cyan-500/20">
+                        <span className="text-xs font-bold text-cyan-400">PARA</span>
+                      </div>
+                      <div className="flex items-baseline gap-2 flex-1 min-w-0">
+                        <span className="text-h4 font-bold text-white leading-tight">{credits}</span>
+                        <span className="text-body-sm text-gray-400 font-medium leading-tight">Credits</span>
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+            )}
 
             {/* Mobile Menu Button */}
             <button
@@ -109,7 +117,7 @@ export default function Header() {
             </button>
 
             {/* Connect Button */}
-            <div className="hidden sm:block">
+            <div className="hidden sm:block !pr-[10px]">
               <ConnectButton
                 client={client}
                 connectButton={{
@@ -135,40 +143,30 @@ export default function Header() {
             role="navigation"
           >
             <div className="flex flex-col gap-4">
-              <a
-                href="#dashboard"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleNavClick("dashboard");
-                }}
-                className="text-body-sm font-semibold text-gray-300 hover:text-cyan-400 transition-colors px-4 py-2 rounded-lg hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-gray-900"
-                aria-label="Navigate to Dashboard"
-              >
-                Dashboard
-              </a>
-              <a
-                href="#analysis"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleNavClick("analysis");
-                }}
-                className="text-body-sm font-semibold text-gray-300 hover:text-cyan-400 transition-colors px-4 py-2 rounded-lg hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-gray-900"
-                aria-label="Navigate to Analysis"
-              >
-                Analysis
-              </a>
-              <a
-                href="#token-purchase"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleNavClick("token-purchase");
-                }}
-                className="text-body-sm font-semibold text-gray-300 hover:text-cyan-400 transition-colors px-4 py-2 rounded-lg hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-gray-900"
-                aria-label="Navigate to Token Purchase"
-              >
-                Token
-              </a>
-              <div className="pt-2 border-t border-white/10">
+              {/* Mobile Balance Display */}
+              {account && (
+                <div className="flex items-center justify-between px-8 py-4 bg-gray-900/60 rounded-xl border border-white/10 min-w-[200px] shadow-lg shadow-cyan-500/10">
+                  {isLoadingBalance ? (
+                    <div className="flex items-center gap-2">
+                      <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      <span className="text-body-sm text-gray-400">Loading...</span>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="flex items-center gap-3 w-full">
+                        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/30 flex items-center justify-center flex-shrink-0 shadow-md shadow-cyan-500/20">
+                          <span className="text-xs font-bold text-cyan-400">PARA</span>
+                        </div>
+                        <div className="flex items-baseline gap-2 flex-1 min-w-0">
+                          <span className="text-h4 font-bold text-white leading-tight">{credits}</span>
+                          <span className="text-body-sm text-gray-400 font-medium leading-tight">Credits</span>
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
+              )}
+              <div className="pt-2 border-t border-white/10 !px-[10px]">
                 <ConnectButton
                   client={client}
                   connectButton={{

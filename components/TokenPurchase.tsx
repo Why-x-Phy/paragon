@@ -193,13 +193,13 @@ export default function TokenPurchase() {
   }
 
   return (
-    <div className="glass rounded-3xl p-8 sm:p-10 border-2 border-white/10 hover:border-white/20 transition-all">
-      <div className="mb-6 sm:mb-8 px-[5px]">
-        <h3 className="text-h2 font-bold text-white mb-3 tracking-tight">Purchase Tokens</h3>
-        <p className="text-body-sm text-gray-400 font-medium">Choose a package and pay with Thirdweb Pay</p>
+    <div className="glass rounded-3xl p-8 sm:p-10 md:p-12 border-2 border-white/10 hover:border-white/20 transition-all">
+      <div className="mb-6 sm:mb-8 !px-[10px]">
+        <h3 className="text-h2 font-bold text-white mb-3 tracking-tight !pl-[10px]">Purchase Credits</h3>
+        <p className="text-body-sm text-gray-400 font-medium !pl-[10px]">Choose a package and pay</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 !px-[10px]">
         {PACKAGES.map((pkg, index) => (
           <div
             key={index}
@@ -208,11 +208,11 @@ export default function TokenPurchase() {
                 handlePurchase(pkg);
               }
             }}
-            className={`relative premium-card rounded-3xl p-[calc(1.25rem+5px)] sm:p-[calc(1.5rem+5px)] border-2 transition-all cursor-pointer ${
+            className={`relative premium-card rounded-3xl p-6 sm:p-8 border-2 transition-all cursor-pointer ${
               isPurchasing || isLoadingPrice || isSendingTransaction
                 ? "opacity-50 cursor-not-allowed"
-                : "hover:border-white/30 hover:bg-white/10 hover:scale-[1.02]"
-            } ${pkg.popular ? "ring-2 ring-white/30 ring-offset-2 ring-offset-black" : ""} border-white/10 bg-gray-900/30`}
+                : "hover:border-cyan-500/50 hover:bg-gradient-to-br hover:from-cyan-500/10 hover:to-blue-500/5 hover:scale-[1.02] hover:shadow-xl hover:shadow-cyan-500/20"
+            } ${pkg.popular ? "ring-2 ring-cyan-500/50 ring-offset-2 ring-offset-gray-950 border-cyan-500/40 bg-gradient-to-br from-cyan-500/10 to-blue-500/5" : ""} border-white/10 bg-gray-900/40 backdrop-blur-sm`}
           >
             {(pkg.popular || pkg.bestValue) && (
               <div className="absolute -top-5 left-1/2 -translate-x-1/2 z-10 flex gap-2">
@@ -228,52 +228,49 @@ export default function TokenPurchase() {
                 )}
               </div>
             )}
-            <div className="text-center mb-8">
-              <div className="text-number text-5xl font-extrabold text-white mb-3 tracking-tight">
-                {pkg.tokens.toLocaleString()}
+            <div className="text-center mb-6 !px-[10px]">
+              <div className="flex items-center justify-center gap-2 mb-3">
+                <svg className="w-8 h-8 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <div className="text-number text-4xl font-extrabold text-white tracking-tight">
+                  {pkg.tokens.toLocaleString()}
+                </div>
               </div>
-              <div className="text-body-sm text-gray-400 font-semibold mb-2">PARA Tokens</div>
-              <div className="text-label text-cyan-400 font-bold">
+              <div className="text-body-sm text-gray-400 font-semibold mb-1">PARA Tokens</div>
+              <div className="text-label text-cyan-400 font-bold mb-4">
                 ≈ {pkg.tokens.toLocaleString()} Analyses
               </div>
-            </div>
-            <div className="text-center mb-8">
               {isLoadingPrice ? (
-                <div className="flex items-center justify-center gap-3">
+                <div className="flex items-center justify-center gap-3 py-4">
                   <span className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                   <span className="text-body-sm text-gray-400">Loading price...</span>
                 </div>
               ) : claimCondition ? (
-                <div className="text-h3 font-extrabold text-white mb-2 text-number">
-                  {(parseFloat(claimCondition.pricePerToken) * pkg.tokens).toFixed(6)} ETH
+                <div className="bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-xl p-4 border-2 border-cyan-500/30">
+                  <div className="text-label text-gray-400 mb-1">Price</div>
+                  <div className="text-h3 font-extrabold text-white text-number">
+                    {(parseFloat(claimCondition.pricePerToken) * pkg.tokens).toFixed(6)} ETH
+                  </div>
                 </div>
               ) : (
-                <div className="text-body-sm text-gray-500">Price not available</div>
+                <div className="text-body-sm text-gray-500 py-4">Price not available</div>
               )}
             </div>
-            <div className={`w-full min-h-[48px] rounded-xl font-bold text-body text-center transition-all flex items-center justify-center ${
-              isPurchasing || isSendingTransaction
-                ? "bg-gray-800 text-gray-400 border-2 border-gray-700"
-                : "bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white border-2 border-cyan-400/40 shadow-lg shadow-cyan-500/30 hover:shadow-xl hover:shadow-cyan-500/40 hover:scale-[1.02]"
-            }`}>
-              {isPurchasing || isSendingTransaction ? (
-                <span className="flex items-center justify-center gap-3">
-                  <span className="w-6 h-6 border-2 border-current border-t-transparent rounded-full animate-spin" />
+            {/* Unsichtbarer Platzhalter für konsistente Höhe */}
+            <div className="h-12"></div>
+            {isPurchasing || isSendingTransaction && (
+              <div className="flex items-center justify-center -mt-12">
+                <span className="flex items-center justify-center gap-2 text-body-sm text-gray-400">
+                  <span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
                   Processing...
                 </span>
-              ) : (
-                "Click to Purchase"
-              )}
-            </div>
+              </div>
+            )}
           </div>
         ))}
       </div>
 
-      <div className="mt-6 p-[calc(1rem+5px)] sm:p-[calc(1.25rem+5px)] bg-cyan-500/10 border-2 border-cyan-500/30 rounded-3xl">
-        <p className="text-body-sm text-cyan-300 font-medium">
-          💡 Payments via Base, BSC, Polygon, Arbitrum and more possible via Universal Bridge
-        </p>
-      </div>
     </div>
   );
 }

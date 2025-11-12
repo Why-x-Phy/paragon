@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Header from "@/components/Header";
-import CreditStatus from "@/components/CreditStatus";
 import ChartPanel from "@/components/ChartPanel";
 import AnalysisPanel from "@/components/AnalysisPanel";
 import TokenPurchase from "@/components/TokenPurchase";
@@ -52,17 +51,9 @@ export default function Home() {
         {/* Content Area - Takes remaining space */}
         <div className="relative overflow-hidden min-h-0">
           <div className="h-full w-full px-6 sm:px-8 md:px-10 lg:px-16 xl:px-24 2xl:px-40 pb-8 sm:pb-10 md:pb-12 overflow-y-auto">
-            <div className="h-full w-full grid grid-rows-[auto_1fr_auto] gap-6 sm:gap-8 md:gap-10 pt-8 sm:pt-12 md:pt-16">
+            <div className="h-full w-full grid grid-rows-[1fr_auto] gap-6 sm:gap-8 md:gap-10 pt-8 sm:pt-12 md:pt-16">
               
-              {/* Top Row: Credits Card - nur so breit wie Chart (8 columns) */}
-              <div id="dashboard" className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                <div className="lg:col-span-8 fade-in-up" style={{ animationDelay: "0.1s" }}>
-                  <CreditStatus />
-                </div>
-                <div className="lg:col-span-4"></div>
-              </div>
-
-              {/* Middle Row: Chart and Analysis - Takes remaining space */}
+              {/* Chart and Analysis - Takes remaining space */}
               <div id="analysis" className="grid grid-cols-1 lg:grid-cols-12 gap-8 min-h-0">
                 {/* Chart Panel - 8 columns */}
                 <div className="lg:col-span-8 fade-in-up h-full min-h-0" style={{ animationDelay: "0.3s" }}>
@@ -93,9 +84,12 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Bottom Row: Token Purchase */}
-              <div id="token-purchase" className="fade-in-up" style={{ animationDelay: "0.5s" }}>
-                <TokenPurchase />
+              {/* Bottom Row: Token Purchase - nur so breit wie Chart (8 columns) */}
+              <div id="token-purchase" className="grid grid-cols-1 lg:grid-cols-12 gap-8 fade-in-up" style={{ animationDelay: "0.5s" }}>
+                <div className="lg:col-span-8">
+                  <TokenPurchase />
+                </div>
+                <div className="lg:col-span-4"></div>
               </div>
             </div>
           </div>
