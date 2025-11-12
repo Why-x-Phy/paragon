@@ -87,7 +87,7 @@ export default function Home() {
                     onIntervalChange={setSelectedInterval}
                     onAnalysisStart={handleAnalysisStart}
                     onAnalysisComplete={handleAnalysisComplete}
-                    onAnalysisResult={setAnalysis}
+                    onAnalysisResult={(analysis) => setAnalysis(analysis)}
                     onOpenJupiter={() => setChartView("jupiter")}
                   />
                 </div>

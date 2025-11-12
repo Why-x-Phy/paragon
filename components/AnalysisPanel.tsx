@@ -8,61 +8,13 @@ import { getContract } from "thirdweb/contract";
 import { balanceOf, transfer } from "thirdweb/extensions/erc20";
 import { prepareContractCall } from "thirdweb";
 import { defineChain } from "thirdweb/chains";
+import type { AnalysisResult } from "@/lib/types";
 
 const baseChain = defineChain(BASE_CHAIN_ID);
 
 interface Market {
   symbol: string;
   name: string;
-}
-
-interface AnalysisResult {
-  tendency: "Bullish" | "Neutral" | "Bearish";
-  risk: "low" | "medium" | "high";
-  reasoning: string;
-  indicators: {
-    rsi: number;
-    macd: string;
-    ema: string;
-  };
-  detailedIndicators?: {
-    rsi: {
-      value: number;
-      status: string;
-    };
-    macd: {
-      value: number;
-      signal: number;
-      histogram: number;
-      trend: string;
-    };
-    ema: {
-      ema13: number;
-      ema50: number;
-      ema200: number;
-      ema800: number;
-      trend: string;
-    };
-    volume: {
-      current: number;
-      average: number;
-      spike: boolean;
-      ratio: number;
-    };
-    liquidationZones?: {
-      price: number;
-      intensity: number;
-      type: "long" | "short";
-      liquidationAmount: number;
-    }[];
-  };
-  marketData?: {
-    price: number;
-    change24h: number;
-    volume24h: number;
-    high24h: number;
-    low24h: number;
-  };
 }
 
 interface AnalysisPanelProps {
@@ -231,20 +183,24 @@ export default function AnalysisPanel({
           },
           onError: (error: Error | unknown) => {
             console.error("Token transfer error:", error);
-            console.error("Error type:", typeof error);
-            console.error("Error constructor:", error?.constructor?.name);
-            console.error("Error details:", JSON.stringify(error, null, 2));
-            console.error("Error message:", error?.message);
-            console.error("Error data:", error?.data);
-            console.error("Error code:", error?.code);
-            console.error("Error reason:", error?.reason);
-            console.error("Error shortMessage:", error?.shortMessage);
-            console.error("Error cause:", error?.cause);
             
             // Prüfe ob es ein Balance-Problem ist
-            const errorObj = error as { message?: string; data?: { message?: string }; reason?: string; shortMessage?: string; code?: string | number; data?: { code?: string | number } };
+            const errorObj = error as { 
+              message?: string; 
+              reason?: string; 
+              shortMessage?: string; 
+              code?: string | number; 
+              data?: { 
+                message?: string; 
+                code?: string | number;
+              };
+            };
             const errorMessage = errorObj?.message || errorObj?.data?.message || errorObj?.reason || errorObj?.shortMessage || String(error);
             const errorCode = errorObj?.code || errorObj?.data?.code;
+            
+            if (error instanceof Error) {
+              console.error("Error message:", error.message);
+            }
             
             console.error("Parsed error message:", errorMessage);
             console.error("Parsed error code:", errorCode);

@@ -311,8 +311,10 @@ export async function POST(request: NextRequest) {
     const analysis = await generateAIAnalysis(indicators, marketData);
 
     // Erweitere Analyse mit detaillierten Indikator-Werten
-    const detailedAnalysis = {
+    // Stelle sicher, dass timestamp vorhanden ist
+    const detailedAnalysis: import("@/lib/types").AnalysisResult = {
       ...analysis,
+      timestamp: analysis.timestamp || new Date().toISOString(),
       detailedIndicators: {
         rsi: {
           value: rsi,
