@@ -366,3 +366,16 @@ body {
   color: white !important;
   font-weight: 600 !important;
 }
+
+/* Hide Thirdweb "Powered by" branding in Connect Modal */
+[data-tw-powered-by],
+.tw-powered-by,
+[class*="powered-by"],
+[class*="PoweredBy"] {
+  display: none !important;
+}
+
+/* Alternative: Hide via data attribute if Thirdweb uses it */
+[data-powered-by="thirdweb"] {
+  display: none !important;
+}
