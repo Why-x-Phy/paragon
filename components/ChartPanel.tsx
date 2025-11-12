@@ -122,7 +122,7 @@ export default function ChartPanel({
 
       {/* AI Analysis Context - nur bei Jupiter View */}
       {activeView === "jupiter" && analysis && (
-        <div className="mb-6 px-6 py-4 border-2 border-white/10 bg-gradient-to-r from-cyan-500/10 via-blue-500/5 to-transparent rounded-2xl flex-shrink-0 shadow-lg">
+        <div className="mb-6 px-6 py-4 border-2 border-white/10 bg-gradient-to-r from-cyan-500/10 via-blue-500/5 to-transparent rounded-3xl flex-shrink-0 shadow-lg">
           <div className="flex items-center gap-8 flex-wrap">
             <div className="flex items-center gap-3">
               <span className="text-label text-gray-400">Tendency:</span>
@@ -168,7 +168,7 @@ export default function ChartPanel({
       )}
       
       {/* Content Area */}
-      <div className="w-full flex-1 rounded-2xl overflow-hidden bg-gray-950 border-2 border-white/10 shadow-2xl min-h-0">
+      <div className="w-full flex-1 rounded-3xl overflow-hidden bg-gray-950 border-2 border-white/10 shadow-2xl min-h-0">
         {activeView === "chart" ? (
           <iframe
             src={(() => {

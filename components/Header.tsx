@@ -1,12 +1,25 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { ConnectButton } from "thirdweb/react";
+import { createWallet } from "thirdweb/wallets";
 import { client } from "@/lib/thirdweb";
 import Image from "next/image";
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Definiere spezifische Wallets für Connect Button
+  const wallets = useMemo(
+    () => [
+      createWallet("io.metamask"),
+      createWallet("com.coinbase.wallet"),
+      createWallet("me.rainbow"),
+      createWallet("io.rabby"),
+      createWallet("io.zerion.wallet"),
+    ],
+    []
+  );
 
   const handleNavClick = (targetId: string) => {
     setMobileMenuOpen(false);
@@ -103,7 +116,12 @@ export default function Header() {
                   label: "Connect Wallet",
                   className: "!bg-white/10 !text-white !font-semibold !px-6 !py-3 !rounded-xl hover:!bg-white/20 !border-2 !border-white/20 transition-all shadow-lg hover:shadow-xl !text-body-sm !min-h-[48px] focus:!outline-none focus:!ring-2 focus:!ring-cyan-400 focus:!ring-offset-2 focus:!ring-offset-gray-900",
                 }}
-                connectModal={{ showThirdwebBranding: false }}
+                connectModal={{
+                  showThirdwebBranding: false,
+                  size: "compact",
+                  title: "Paragon AI",
+                }}
+                wallets={wallets}
               />
             </div>
           </div>
@@ -157,7 +175,12 @@ export default function Header() {
                     label: "Connect Wallet",
                     className: "!w-full !bg-white/10 !text-white !font-semibold !px-6 !py-3 !rounded-xl hover:!bg-white/20 !border-2 !border-white/20 transition-all shadow-lg hover:shadow-xl !text-body-sm !min-h-[48px] focus:!outline-none focus:!ring-2 focus:!ring-cyan-400 focus:!ring-offset-2 focus:!ring-offset-gray-900",
                   }}
-                  connectModal={{ showThirdwebBranding: false }}
+                  connectModal={{
+                    showThirdwebBranding: false,
+                    size: "compact",
+                    title: "Paragon AI",
+                  }}
+                  wallets={wallets}
                 />
               </div>
             </div>

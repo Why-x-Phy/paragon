@@ -183,7 +183,7 @@ export default function TokenPurchase() {
 
   if (!account) {
     return (
-      <div className="glass rounded-2xl p-6 border border-white/10">
+      <div className="glass rounded-3xl p-6 border-2 border-white/10">
         <div className="text-center py-6">
           <p className="text-sm text-gray-300 mb-1 font-medium">Please connect your wallet</p>
           <p className="text-xs text-gray-400">to purchase token packages</p>
@@ -208,7 +208,7 @@ export default function TokenPurchase() {
                 handlePurchase(pkg);
               }
             }}
-            className={`relative premium-card rounded-2xl p-6 border transition-all cursor-pointer ${
+            className={`relative premium-card rounded-3xl p-6 border-2 transition-all cursor-pointer ${
               isPurchasing || isLoadingPrice || isSendingTransaction
                 ? "opacity-50 cursor-not-allowed"
                 : "hover:border-white/30 hover:bg-white/10 hover:scale-[1.02]"
@@ -251,7 +251,7 @@ export default function TokenPurchase() {
                 <div className="text-body-sm text-gray-500">Price not available</div>
               )}
             </div>
-            <div className={`w-full min-h-[56px] rounded-xl font-bold text-body text-center transition-all flex items-center justify-center ${
+            <div className={`w-full min-h-[48px] rounded-xl font-bold text-body text-center transition-all flex items-center justify-center ${
               isPurchasing || isSendingTransaction
                 ? "bg-gray-800 text-gray-400 border-2 border-gray-700"
                 : "bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white border-2 border-cyan-400/40 shadow-lg shadow-cyan-500/30 hover:shadow-xl hover:shadow-cyan-500/40 hover:scale-[1.02]"
@@ -269,7 +269,7 @@ export default function TokenPurchase() {
         ))}
       </div>
 
-      <div className="mt-6 p-5 bg-cyan-500/10 border-2 border-cyan-500/30 rounded-2xl">
+      <div className="mt-6 p-5 bg-cyan-500/10 border-2 border-cyan-500/30 rounded-3xl">
         <p className="text-body-sm text-cyan-300 font-medium">
           💡 Payments via Base, BSC, Polygon, Arbitrum and more possible via Universal Bridge
         </p>

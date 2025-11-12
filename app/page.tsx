@@ -51,8 +51,8 @@ export default function Home() {
         
         {/* Content Area - Takes remaining space */}
         <div className="relative overflow-hidden min-h-0">
-          <div className="h-full w-full px-8 sm:px-10 lg:px-12 xl:px-20 2xl:px-32 pb-8 overflow-y-auto">
-            <div className="h-full w-full grid grid-rows-[auto_1fr_auto] gap-8 pt-16">
+          <div className="h-full w-full px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-32 pb-6 sm:pb-8 overflow-y-auto">
+            <div className="h-full w-full grid grid-rows-[auto_1fr_auto] gap-6 sm:gap-8 pt-8 sm:pt-12 md:pt-16">
               
               {/* Top Row: Credits Card - nur so breit wie Chart (8 columns) */}
               <div id="dashboard" className="grid grid-cols-1 lg:grid-cols-12 gap-8">

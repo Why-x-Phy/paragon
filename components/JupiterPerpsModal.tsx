@@ -57,7 +57,7 @@ export default function JupiterPerpsModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-      <div className="glass rounded-2xl border border-white/10 w-full max-w-6xl h-[90vh] shadow-2xl flex flex-col">
+      <div className="glass rounded-3xl border-2 border-white/10 w-full max-w-6xl h-[90vh] shadow-2xl flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-white/10 flex-shrink-0">
           <div>

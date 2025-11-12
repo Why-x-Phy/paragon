@@ -48,7 +48,7 @@ export default function TokenBalance() {
     <div className="glass rounded-3xl p-8 h-full flex flex-col">
       <div className="flex items-center justify-between mb-8">
         <h3 className="text-label text-gray-400">Token Balance</h3>
-        <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border-2 border-cyan-500/30 flex items-center justify-center shadow-lg shadow-cyan-500/20">
+        <div className="w-16 h-16 rounded-3xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border-2 border-cyan-500/30 flex items-center justify-center shadow-lg shadow-cyan-500/20">
           <span className="text-lg font-bold text-cyan-400">PARA</span>
         </div>
       </div>

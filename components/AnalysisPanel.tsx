@@ -419,9 +419,9 @@ export default function AnalysisPanel({
       <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
       {!analysis ? (
         <div className="space-y-6 flex-1 flex flex-col justify-center">
-          <div className="bg-gray-900/50 rounded-2xl p-8 border-2 border-white/10">
+          <div className="bg-gray-900/50 rounded-3xl p-8 border-2 border-white/10">
             <div className="text-center mb-6">
-              <div className="w-20 h-20 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 flex items-center justify-center border-2 border-cyan-500/30 shadow-lg shadow-cyan-500/20">
+              <div className="w-20 h-20 mx-auto mb-4 rounded-3xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 flex items-center justify-center border-2 border-cyan-500/30 shadow-lg shadow-cyan-500/20">
                 <span className="text-4xl">🧠</span>
               </div>
               <h4 className="text-h4 font-bold text-white mb-2">Ready to Analyze</h4>
@@ -439,7 +439,7 @@ export default function AnalysisPanel({
               )}
               
               {/* Analysis Features Info */}
-              <div className="bg-gray-800/50 rounded-xl p-5 border-2 border-white/10 text-left">
+              <div className="bg-gray-800/50 rounded-3xl p-5 border-2 border-white/10 text-left">
                 <p className="text-label text-gray-400 mb-3 font-bold">Analysis includes:</p>
                 <ul className="text-body-sm text-gray-400 space-y-2">
                   <li className="flex items-center gap-2">
@@ -465,7 +465,7 @@ export default function AnalysisPanel({
               <button
                 onClick={handleAnalyze}
                 disabled={!account || credits < 1 || isAnalyzing || isTransferring}
-                className={`w-full min-h-[56px] rounded-xl font-bold text-body text-white transition-all focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-gray-900 ${
+                className={`w-full min-h-[48px] rounded-xl font-bold text-body text-white transition-all focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-gray-900 ${
                   !account || credits < 1 || isAnalyzing || isTransferring
                     ? "bg-gray-800 cursor-not-allowed opacity-50 border-2 border-gray-700"
                     : "bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 border-2 border-cyan-400/40 shadow-lg shadow-cyan-500/30 hover:shadow-xl hover:shadow-cyan-500/40 hover:scale-[1.02]"
@@ -495,7 +495,7 @@ export default function AnalysisPanel({
       ) : (
         <div className="space-y-6 flex-1 overflow-y-auto min-h-0">
           {/* Market Info */}
-          <div className="bg-gray-900/60 rounded-2xl p-6 border-2 border-white/10">
+          <div className="bg-gray-900/60 rounded-3xl p-6 border-2 border-white/10">
             <div className="flex items-center justify-between mb-4">
               <span className="text-label text-gray-400 font-semibold">Asset</span>
               <span className="text-h4 font-bold text-white">{selectedMarket.name}</span>
@@ -531,7 +531,7 @@ export default function AnalysisPanel({
           </div>
 
           {/* Tendency & Risk */}
-          <div className={`p-6 rounded-2xl border-2 ${getTendencyColor(analysis.tendency)}`}>
+          <div className={`p-6 rounded-3xl border-2 ${getTendencyColor(analysis.tendency)}`}>
             <div className="flex items-center justify-between mb-4">
               <span className="text-label font-semibold">Tendency</span>
               <span className="text-h4 font-bold">{analysis.tendency}</span>
@@ -546,7 +546,7 @@ export default function AnalysisPanel({
 
           {/* RSI Details */}
           {analysis.detailedIndicators && (
-            <div className="bg-gray-900/60 rounded-2xl border-2 border-white/10 overflow-hidden">
+            <div className="bg-gray-900/60 rounded-3xl border-2 border-white/10 overflow-hidden">
               <button
                 onClick={() => setExpandedSections({...expandedSections, rsi: !expandedSections.rsi})}
                 className="w-full p-6 flex items-center justify-between hover:bg-white/5 transition-colors"
@@ -578,7 +578,7 @@ export default function AnalysisPanel({
 
           {/* MACD Details */}
           {analysis.detailedIndicators && (
-            <div className="bg-gray-900/60 rounded-2xl border-2 border-white/10 overflow-hidden">
+            <div className="bg-gray-900/60 rounded-3xl border-2 border-white/10 overflow-hidden">
               <button
                 onClick={() => setExpandedSections({...expandedSections, macd: !expandedSections.macd})}
                 className="w-full p-6 flex items-center justify-between hover:bg-white/5 transition-colors"
@@ -623,7 +623,7 @@ export default function AnalysisPanel({
 
           {/* EMA Details */}
           {analysis.detailedIndicators && (
-            <div className="bg-gray-900/60 rounded-2xl border-2 border-white/10 overflow-hidden">
+            <div className="bg-gray-900/60 rounded-3xl border-2 border-white/10 overflow-hidden">
               <button
                 onClick={() => setExpandedSections({...expandedSections, ema: !expandedSections.ema})}
                 className="w-full p-6 flex items-center justify-between hover:bg-white/5 transition-colors"
@@ -664,7 +664,7 @@ export default function AnalysisPanel({
 
           {/* Volume Details */}
           {analysis.detailedIndicators && (
-            <div className="bg-gray-900/60 rounded-2xl border-2 border-white/10 overflow-hidden">
+            <div className="bg-gray-900/60 rounded-3xl border-2 border-white/10 overflow-hidden">
               <button
                 onClick={() => setExpandedSections({...expandedSections, volume: !expandedSections.volume})}
                 className="w-full p-6 flex items-center justify-between hover:bg-white/5 transition-colors"
@@ -707,7 +707,7 @@ export default function AnalysisPanel({
 
           {/* Liquidation Zones */}
           {analysis.detailedIndicators && analysis.detailedIndicators.liquidationZones && analysis.detailedIndicators.liquidationZones.length > 0 && (
-            <div className="bg-gray-900/60 rounded-2xl border-2 border-white/10 overflow-hidden">
+            <div className="bg-gray-900/60 rounded-3xl border-2 border-white/10 overflow-hidden">
               <button
                 onClick={() => setExpandedSections({...expandedSections, liquidation: !expandedSections.liquidation})}
                 className="w-full p-6 flex items-center justify-between hover:bg-white/5 transition-colors"
@@ -722,7 +722,7 @@ export default function AnalysisPanel({
                   {analysis.detailedIndicators.liquidationZones.map((zone, index) => (
                     <div
                       key={index}
-                      className={`p-5 rounded-xl border-2 ${
+                      className={`p-5 rounded-3xl border-2 ${
                         zone.type === "long"
                           ? "bg-red-500/10 border-red-500/30"
                           : "bg-emerald-500/10 border-emerald-500/30"
@@ -756,7 +756,7 @@ export default function AnalysisPanel({
           )}
 
           {/* Reasoning */}
-          <div className="bg-gray-900/60 rounded-2xl p-6 border-2 border-white/10">
+          <div className="bg-gray-900/60 rounded-3xl p-6 border-2 border-white/10">
             <h4 className="text-h4 font-bold text-white mb-4">AI Analysis Reasoning</h4>
             <p className="text-body text-gray-300 leading-relaxed">{analysis.reasoning}</p>
           </div>
@@ -769,7 +769,7 @@ export default function AnalysisPanel({
                 navigator.clipboard.writeText(analysisText);
                 // Optional: Toast notification
               }}
-              className="min-h-[56px] rounded-xl text-body-sm font-bold text-white bg-white/10 hover:bg-white/20 border-2 border-white/20 transition-all flex items-center justify-center gap-2 hover:scale-[1.02]"
+              className="min-h-[48px] rounded-xl text-body-sm font-bold text-white bg-white/10 hover:bg-white/20 border-2 border-white/20 transition-all flex items-center justify-center gap-2 hover:scale-[1.02]"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
@@ -778,7 +778,7 @@ export default function AnalysisPanel({
             </button>
             <button
               onClick={handlePostToX}
-              className="min-h-[56px] rounded-xl text-body-sm font-bold text-white bg-[#1DA1F2] hover:bg-[#1a8cd8] border-2 border-[#1DA1F2]/40 transition-all flex items-center justify-center gap-2 shadow-lg shadow-[#1DA1F2]/30 hover:shadow-xl hover:shadow-[#1DA1F2]/40 hover:scale-[1.02]"
+              className="min-h-[48px] rounded-xl text-body-sm font-bold text-white bg-[#1DA1F2] hover:bg-[#1a8cd8] border-2 border-[#1DA1F2]/40 transition-all flex items-center justify-center gap-2 shadow-lg shadow-[#1DA1F2]/30 hover:shadow-xl hover:shadow-[#1DA1F2]/40 hover:scale-[1.02]"
             >
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
@@ -794,7 +794,7 @@ export default function AnalysisPanel({
               handleAnalyze();
             }}
             disabled={!account || credits < 1 || isAnalyzing}
-            className="w-full min-h-[56px] rounded-xl text-body font-bold text-white bg-white/10 hover:bg-white/20 border-2 border-white/20 transition-all mt-4 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-[1.02]"
+            className="w-full min-h-[48px] rounded-xl text-body font-bold text-white bg-white/10 hover:bg-white/20 border-2 border-white/20 transition-all mt-4 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-[1.02]"
           >
             Start New Analysis
           </button>
@@ -820,13 +820,13 @@ export default function AnalysisPanel({
                   setShowWantToTrade(false);
                   onOpenJupiter?.(); // Wechsle zum Jupiter Tab im ChartPanel
                 }}
-                className="flex-1 min-h-[56px] rounded-xl text-body font-bold text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 border-2 border-cyan-400/40 transition-all shadow-lg shadow-cyan-500/30 hover:shadow-xl hover:shadow-cyan-500/40 hover:scale-[1.02]"
+                className="flex-1 min-h-[48px] rounded-xl text-body font-bold text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 border-2 border-cyan-400/40 transition-all shadow-lg shadow-cyan-500/30 hover:shadow-xl hover:shadow-cyan-500/40 hover:scale-[1.02]"
               >
                 Yes, Trade Now
               </button>
               <button
                 onClick={() => setShowWantToTrade(false)}
-                className="flex-1 min-h-[56px] rounded-xl text-body font-bold text-white bg-white/10 hover:bg-white/20 border-2 border-white/20 transition-all hover:scale-[1.02]"
+                className="flex-1 min-h-[48px] rounded-xl text-body font-bold text-white bg-white/10 hover:bg-white/20 border-2 border-white/20 transition-all hover:scale-[1.02]"
               >
                 Maybe Later
               </button>

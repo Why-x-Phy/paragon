@@ -84,7 +84,7 @@ export default function CreditStatus({ credits: creditsProp }: CreditStatusProps
       <div className="flex items-center justify-between mb-8">
         <h3 className="text-label text-gray-400">Credits & Balance</h3>
         <div className="flex items-center gap-3">
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border-2 border-cyan-500/30 flex items-center justify-center shadow-lg shadow-cyan-500/20">
+          <div className="w-16 h-16 rounded-3xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border-2 border-cyan-500/30 flex items-center justify-center shadow-lg shadow-cyan-500/20">
             <span className="text-lg font-bold text-cyan-400">PARA</span>
           </div>
           <span className={`text-label font-bold px-5 py-2 rounded-xl ${getStatusColor()} ${getStatusBg()} border-2`}>
@@ -100,7 +100,7 @@ export default function CreditStatus({ credits: creditsProp }: CreditStatusProps
         </div>
         
         {/* Token Balance Info */}
-        <div className="bg-gray-900/60 rounded-2xl p-5 border-2 border-white/10">
+        <div className="bg-gray-900/60 rounded-3xl p-5 border-2 border-white/10">
           <div className="flex items-center justify-between mb-3">
             <span className="text-label text-gray-400 font-semibold">Token Balance</span>
             <span className="text-h4 font-bold text-white text-number">{formattedBalance} PARA</span>
