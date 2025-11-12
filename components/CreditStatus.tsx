@@ -42,7 +42,7 @@ export default function CreditStatus({ credits: creditsProp }: CreditStatusProps
 
   if (!account) {
     return (
-      <div className="glass rounded-3xl p-8 h-full flex items-center justify-center">
+      <div className="glass rounded-3xl p-[calc(1.5rem+5px)] sm:p-[calc(2rem+5px)] h-full flex items-center justify-center">
         <div className="text-center">
           <p className="text-body text-gray-300 mb-2 font-medium">Please connect your wallet</p>
           <p className="text-body-sm text-gray-400">to view your credits</p>
@@ -53,7 +53,7 @@ export default function CreditStatus({ credits: creditsProp }: CreditStatusProps
 
   if (isLoading) {
     return (
-      <div className="glass rounded-3xl p-8 h-full flex items-center justify-center">
+      <div className="glass rounded-3xl p-[calc(1.5rem+5px)] sm:p-[calc(2rem+5px)] h-full flex items-center justify-center">
         <div className="text-center">
           <p className="text-body text-gray-300">Loading credits...</p>
         </div>
@@ -80,10 +80,10 @@ export default function CreditStatus({ credits: creditsProp }: CreditStatusProps
   };
 
   return (
-    <div className="glass rounded-3xl p-8 h-full flex flex-col">
-      <div className="flex items-center justify-between mb-8">
-        <h3 className="text-label text-gray-400">Credits & Balance</h3>
-        <div className="flex items-center gap-3">
+    <div className="glass rounded-3xl p-8 sm:p-10 h-full flex flex-col">
+      <div className="flex items-center mb-6 sm:mb-8 gap-6 px-[5px]">
+        <h3 className="text-label text-gray-400 flex-1">Credits & Balance</h3>
+        <div className="flex items-center gap-3 flex-shrink-0">
           <div className="w-16 h-16 rounded-3xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border-2 border-cyan-500/30 flex items-center justify-center shadow-lg shadow-cyan-500/20">
             <span className="text-lg font-bold text-cyan-400">PARA</span>
           </div>
@@ -100,14 +100,14 @@ export default function CreditStatus({ credits: creditsProp }: CreditStatusProps
         </div>
         
         {/* Token Balance Info */}
-        <div className="bg-gray-900/60 rounded-3xl p-5 border-2 border-white/10">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-label text-gray-400 font-semibold">Token Balance</span>
-            <span className="text-h4 font-bold text-white text-number">{formattedBalance} PARA</span>
+        <div className="bg-gray-900/60 rounded-3xl p-[calc(1rem+5px)] sm:p-[calc(1.25rem+5px)] border-2 border-white/10">
+          <div className="flex items-center mb-3 gap-6 px-[5px]">
+            <span className="text-label text-gray-400 font-semibold flex-1">Token Balance</span>
+            <span className="text-h4 font-bold text-white text-number flex-shrink-0">{formattedBalance} PARA</span>
           </div>
-          <div className="flex items-center justify-between">
-            <span className="text-label text-gray-400 font-semibold">USD Value</span>
-            <span className="text-body-lg font-semibold text-gray-300">≈ ${usdValue}</span>
+          <div className="flex items-center gap-6 px-[5px]">
+            <span className="text-label text-gray-400 font-semibold flex-1">USD Value</span>
+            <span className="text-body-lg font-semibold text-gray-300 flex-shrink-0">≈ ${usdValue}</span>
           </div>
         </div>
         

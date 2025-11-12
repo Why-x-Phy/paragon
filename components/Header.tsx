@@ -31,9 +31,9 @@ export default function Header() {
 
   return (
     <header className="w-full glass border-b-2 border-white/10 backdrop-blur-xl" role="banner">
-      <div className="w-full px-6 sm:px-8 lg:px-12 xl:px-20 2xl:px-32">
+      <div className="w-full px-6 sm:px-8 md:px-10 lg:px-16 xl:px-24 2xl:px-40">
         <div className="flex items-center justify-between h-20">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 flex-shrink-0">
             <Image 
               src="/image/logo5.png" 
               alt="Paragon AI Logo" 
@@ -42,13 +42,13 @@ export default function Header() {
               className="object-contain"
               priority
             />
-            <div>
+            <div className="min-w-0">
               <h1 className="text-h3 font-bold text-white tracking-tight">Paragon AI</h1>
               <p className="text-label text-gray-400 font-medium">The On-Chain AI Chart Analyst</p>
             </div>
           </div>
           
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-6 flex-shrink-0">
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center gap-8" aria-label="Main navigation">
               <a 

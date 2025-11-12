@@ -183,7 +183,7 @@ export default function TokenPurchase() {
 
   if (!account) {
     return (
-      <div className="glass rounded-3xl p-6 border-2 border-white/10">
+      <div className="glass rounded-3xl p-[calc(1.5rem+5px)] sm:p-[calc(2rem+5px)] border-2 border-white/10">
         <div className="text-center py-6">
           <p className="text-sm text-gray-300 mb-1 font-medium">Please connect your wallet</p>
           <p className="text-xs text-gray-400">to purchase token packages</p>
@@ -193,13 +193,13 @@ export default function TokenPurchase() {
   }
 
   return (
-    <div className="glass rounded-3xl p-8 border-2 border-white/10 hover:border-white/20 transition-all">
-      <div className="mb-8">
+    <div className="glass rounded-3xl p-8 sm:p-10 border-2 border-white/10 hover:border-white/20 transition-all">
+      <div className="mb-6 sm:mb-8 px-[5px]">
         <h3 className="text-h2 font-bold text-white mb-3 tracking-tight">Purchase Tokens</h3>
         <p className="text-body-sm text-gray-400 font-medium">Choose a package and pay with Thirdweb Pay</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
         {PACKAGES.map((pkg, index) => (
           <div
             key={index}
@@ -208,7 +208,7 @@ export default function TokenPurchase() {
                 handlePurchase(pkg);
               }
             }}
-            className={`relative premium-card rounded-3xl p-6 border-2 transition-all cursor-pointer ${
+            className={`relative premium-card rounded-3xl p-[calc(1.25rem+5px)] sm:p-[calc(1.5rem+5px)] border-2 transition-all cursor-pointer ${
               isPurchasing || isLoadingPrice || isSendingTransaction
                 ? "opacity-50 cursor-not-allowed"
                 : "hover:border-white/30 hover:bg-white/10 hover:scale-[1.02]"
@@ -269,7 +269,7 @@ export default function TokenPurchase() {
         ))}
       </div>
 
-      <div className="mt-6 p-5 bg-cyan-500/10 border-2 border-cyan-500/30 rounded-3xl">
+      <div className="mt-6 p-[calc(1rem+5px)] sm:p-[calc(1.25rem+5px)] bg-cyan-500/10 border-2 border-cyan-500/30 rounded-3xl">
         <p className="text-body-sm text-cyan-300 font-medium">
           💡 Payments via Base, BSC, Polygon, Arbitrum and more possible via Universal Bridge
         </p>

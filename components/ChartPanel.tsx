@@ -59,10 +59,10 @@ export default function ChartPanel({
   const jupiterPerpsUrl = "https://jup.ag/perps";
 
   return (
-    <div className="glass rounded-3xl p-8 h-full flex flex-col min-h-0">
+    <div className="glass rounded-3xl p-8 sm:p-10 h-full flex flex-col min-h-0">
       {/* Header with Tabs */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 mb-8 flex-shrink-0">
-        <div className="flex-1">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 mb-6 sm:mb-8 flex-shrink-0">
+        <div className="flex-1 min-w-0 pl-[5px]">
           <h3 className="text-h2 font-bold text-white tracking-tight mb-2">
             {activeView === "chart" ? "Live Chart" : "Jupiter Perps"}
           </h3>
@@ -75,7 +75,7 @@ export default function ChartPanel({
         </div>
         
         {/* Tab Switcher & Quick Actions */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 flex-shrink-0 ml-auto">
           {activeView === "chart" && (
             <div className="flex gap-2">
               <button
@@ -122,8 +122,8 @@ export default function ChartPanel({
 
       {/* AI Analysis Context - nur bei Jupiter View */}
       {activeView === "jupiter" && analysis && (
-        <div className="mb-6 px-6 py-4 border-2 border-white/10 bg-gradient-to-r from-cyan-500/10 via-blue-500/5 to-transparent rounded-3xl flex-shrink-0 shadow-lg">
-          <div className="flex items-center gap-8 flex-wrap">
+        <div className="mb-6 px-[calc(1.25rem+5px)] sm:px-[calc(1.5rem+5px)] py-4 border-2 border-white/10 bg-gradient-to-r from-cyan-500/10 via-blue-500/5 to-transparent rounded-3xl flex-shrink-0 shadow-lg">
+          <div className="flex items-center gap-6 sm:gap-8 flex-wrap">
             <div className="flex items-center gap-3">
               <span className="text-label text-gray-400">Tendency:</span>
               <span className={`text-body font-bold ${
