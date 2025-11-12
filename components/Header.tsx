@@ -103,7 +103,7 @@ export default function Header() {
                   label: "Connect Wallet",
                   className: "!bg-white/10 !text-white !font-semibold !px-6 !py-3 !rounded-xl hover:!bg-white/20 !border-2 !border-white/20 transition-all shadow-lg hover:shadow-xl !text-body-sm !min-h-[48px] focus:!outline-none focus:!ring-2 focus:!ring-cyan-400 focus:!ring-offset-2 focus:!ring-offset-gray-900",
                 }}
-                
+                connectModal={{ showThirdwebBranding: false }}
               />
             </div>
           </div>
@@ -157,7 +157,7 @@ export default function Header() {
                     label: "Connect Wallet",
                     className: "!w-full !bg-white/10 !text-white !font-semibold !px-6 !py-3 !rounded-xl hover:!bg-white/20 !border-2 !border-white/20 transition-all shadow-lg hover:shadow-xl !text-body-sm !min-h-[48px] focus:!outline-none focus:!ring-2 focus:!ring-cyan-400 focus:!ring-offset-2 focus:!ring-offset-gray-900",
                   }}
-                  
+                  connectModal={{ showThirdwebBranding: false }}
                 />
               </div>
             </div>
